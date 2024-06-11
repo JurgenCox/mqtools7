@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34601.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MqApi", "MqApi\MqApi.csproj", "{BDE7E127-DED8-4A8F-83C5-5ABC4833BA18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MqApi", "MqApi\MqApi.csproj", "{BDE7E127-DED8-4A8F-83C5-5ABC4833BA18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MqUtil", "MqUtil\MqUtil.csproj", "{E8EEC68D-A14F-4C13-9DF8-C165A4731B4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerseusPluginLib", "PerseusPluginLib\PerseusPluginLib.csproj", "{253B2986-4E69-4F8C-9AA5-49622CDCB9F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginInterop", "PluginInterop\PluginInterop.csproj", "{30D5B1E7-FB89-44AE-AE2E-41112345589F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{BDE7E127-DED8-4A8F-83C5-5ABC4833BA18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDE7E127-DED8-4A8F-83C5-5ABC4833BA18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDE7E127-DED8-4A8F-83C5-5ABC4833BA18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8EEC68D-A14F-4C13-9DF8-C165A4731B4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8EEC68D-A14F-4C13-9DF8-C165A4731B4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8EEC68D-A14F-4C13-9DF8-C165A4731B4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8EEC68D-A14F-4C13-9DF8-C165A4731B4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{253B2986-4E69-4F8C-9AA5-49622CDCB9F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{253B2986-4E69-4F8C-9AA5-49622CDCB9F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{253B2986-4E69-4F8C-9AA5-49622CDCB9F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{253B2986-4E69-4F8C-9AA5-49622CDCB9F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30D5B1E7-FB89-44AE-AE2E-41112345589F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30D5B1E7-FB89-44AE-AE2E-41112345589F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30D5B1E7-FB89-44AE-AE2E-41112345589F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30D5B1E7-FB89-44AE-AE2E-41112345589F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
