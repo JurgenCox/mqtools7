@@ -19,14 +19,17 @@ namespace PerseusPluginLib.Export{
 		public void Export(Parameters parameters, IMatrixData data, ProcessInfo processInfo){
 			string filename = parameters.GetParam<string>("File name").Value;
 			bool addtlMatrices = parameters.GetParam<bool>("Write quality and imputed matrices").Value;
-			addtlMatrices = addtlMatrices && data.IsImputed != null && data.Quality != null &&
+			bool exportAnnotations = parameters.GetParam<bool>("Export with annotations").Value;
+            addtlMatrices = addtlMatrices && data.IsImputed != null && data.Quality != null &&
 			                data.IsImputed.IsInitialized() &&
 			                data.Quality.IsInitialized();
-			PerseusUtils.WriteMatrixToFile(data, filename, addtlMatrices);
+			if(exportAnnotations){PerseusUtils.WriteMatrixToFile(data, filename, addtlMatrices);}
+			else{PerseusUtils.WriteMatrixNoAnnotation(data, filename, addtlMatrices); }
+			
 		}
 		public Parameters GetParameters(IMatrixData matrixData, ref string errorString){
 			return new Parameters(new FileParam("File name"){Filter = "Tab separated file (*.txt)|*.txt", Save = true},
-				new BoolParam("Write quality and imputed matrices", false));
+				new BoolParam("Write quality and imputed matrices", false), new BoolParam("Export with annotations",true));
 		}
 	}
 }
