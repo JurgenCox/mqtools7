@@ -259,7 +259,7 @@ namespace MqUtil{
 		/// <param name="writer"></param>
 		/// <param name="addtlMatrices"></param>
 		public static void WriteMatrix(IMatrixData data, StreamWriter writer, bool addtlMatrices = false){
-			IEnumerable<string> columnNames = PerseusUtil.ColumnNames(data);
+			IEnumerable<string> columnNames = PerseusUtil.GetColumnNames(data);
 			writer.WriteLine(StringUtils.Concat("\t", columnNames));
 			IEnumerable<string> columnTypes = PerseusUtil.ColumnTypes(data);
 			writer.WriteLine("#!{Type}" + StringUtils.Concat("\t", columnTypes));
