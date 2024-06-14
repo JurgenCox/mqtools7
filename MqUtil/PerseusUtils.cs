@@ -259,7 +259,7 @@ namespace MqUtil{
 		/// <param name="writer"></param>
 		/// <param name="addtlMatrices"></param>
 		public static void WriteMatrix(IMatrixData data, StreamWriter writer, bool addtlMatrices = false){
-			IEnumerable<string> columnNames = PerseusUtil.ColumnNames(data);
+			IEnumerable<string> columnNames = PerseusUtil.GetColumnNames(data);
 			writer.WriteLine(StringUtils.Concat("\t", columnNames));
 			IEnumerable<string> columnTypes = PerseusUtil.ColumnTypes(data);
 			writer.WriteLine("#!{Type}" + StringUtils.Concat("\t", columnTypes));
@@ -273,13 +273,30 @@ namespace MqUtil{
 			}
 			WriteDataRows(data, addtlMatrices, writer);
 		}
-		/// <summary>
-		/// Write matrix to file with tab separation
-		/// </summary>
-		/// <param name="data"></param>
-		/// <param name="filename"></param>
-		/// <param name="addtlMatrices">if true numbers are converted to triples <code>value;imputed;quality</code></param>
-		public static void WriteMatrixToFile(IMatrixData data, string filename, bool addtlMatrices = false){
+		public static void WriteMatrixNoAnnotation(IMatrixData data, string filename, bool addtlMatrices = false) {
+            using (StreamWriter writer = new StreamWriter(filename, false, Encoding.UTF8)) {
+				IEnumerable<string> columnNames = PerseusUtil.GetColumnNames(data);
+				writer.WriteLine(StringUtils.Concat("\t", columnNames));
+				for (int j = 0; j < data.RowCount; j++) {
+					List<string> words = new List<string>();
+					for (int i = 0; i < data.ColumnCount; i++) {
+						string s1 = Parser.ToString(data.Values.Get(j, i));
+						words.Add(s1);
+					}
+					IEnumerable<string> row =
+						words.Concat(PerseusUtil.DataAnnotationRow((IDataWithAnnotationColumns)data, j));
+					writer.WriteLine(StringUtils.Concat("\t", row));
+				}
+				WriteDataRows(data, addtlMatrices, writer);
+			}
+		}
+        /// <summary>
+        /// Write matrix to file with tab separation
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="filename"></param>
+        /// <param name="addtlMatrices">if true numbers are converted to triples <code>value;imputed;quality</code></param>
+        public static void WriteMatrixToFile(IMatrixData data, string filename, bool addtlMatrices = false){
 			using (StreamWriter writer = new StreamWriter(filename, false, Encoding.UTF8)){
 				WriteMatrix(data, writer, addtlMatrices);
 			}

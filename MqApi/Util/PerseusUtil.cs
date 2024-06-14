@@ -611,7 +611,7 @@ namespace MqApi.Util{
 		}
 		public static IEnumerable<string> ColumnNames(IDataWithAnnotationColumns data){
 			List<string> words = new List<string>();
-			for (int i = 0; i < data.CategoryColumnCount; i++){
+            for (int i = 0; i < data.CategoryColumnCount; i++){
 				words.Add(data.CategoryColumnNames[i]);
 			}
 			for (int i = 0; i < data.NumericColumnCount; i++){
@@ -625,7 +625,29 @@ namespace MqApi.Util{
 			}
 			return words;
 		}
-		private static IEnumerable<string> ColumnNames(IDataWithAnnotationRows data){
+		public static IEnumerable<string> GetColumnNames(IMatrixData data) {
+			List<string> words = new List<string>();
+			for (int i = 0; i < data.ColumnNames.Count; i++) {
+				words.Add(data.ColumnNames[i]);
+			}
+            for (int i = 0; i < data.CategoryColumnCount; i++) {
+				words.Add(data.CategoryColumnNames[i]);
+			}
+			for (int i = 0; i < data.NumericColumnCount; i++) {
+				words.Add(data.NumericColumnNames[i]);
+			}
+			for (int i = 0; i < data.StringColumnCount; i++) {
+				words.Add(data.StringColumnNames[i]);
+			}
+			for (int i = 0; i < data.MultiNumericColumnCount; i++) {
+				words.Add(data.MultiNumericColumnNames[i]);
+			}
+			return words;
+		}
+
+
+
+        private static IEnumerable<string> ColumnNames(IDataWithAnnotationRows data){
 			List<string> words = new List<string>();
 			for (int i = 0; i < data.CategoryRowCount; i++){
 				words.Add(data.CategoryRowNames[i]);

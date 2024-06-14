@@ -42,6 +42,7 @@ namespace PluginInterop.R{
 		/// <param name="exeName"></param>
 		/// <returns></returns>
 		public static bool CheckRInstallation(string exeName){
+			if (!exeName.EndsWith("Rscript.exe")) { return false; }
 			try{
 				Process p = new Process{
 					StartInfo ={
@@ -75,7 +76,7 @@ namespace PluginInterop.R{
 					return new Tuple<string, bool>("R installation was found", true);
 				}
 				return new Tuple<string, bool>(
-					"A valid R installation was not found. Make sure to select a R installation with 'PerseusR' installed",
+					"A valid R installation was not found. Make sure to select a R installation with 'PerseusR' installed. Also make sure to select Rscript.exe.",
 					false);
 			}
 			CheckedFileParam fileParam =
