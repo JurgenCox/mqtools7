@@ -69,8 +69,9 @@ namespace PerseusPluginLib.Mods{
 			string mod = param.GetParam<int>("Modification").StringValue;
 			PhosphoSitePlusParser.ParseKnownMod(mod, out string[] seqWins, out string[] accs, out string[] pubmedLtp,
 				out string[] pubmedMs2, out string[] cstMs2, out string[] species);
-			if (seqWins == null){
-				processInfo.ErrString = "File does not exist.";
+			if (seqWins == null) {
+				processInfo.ErrString = "File does not exist. Please download all PSP files at https://www.phosphosite.org/staticDownloads "
+				                        + @"and add them to Perseus\bin\conf\PSP";
 				return;
 			}
 			string[] up = mdata.StringColumns[param.GetParam<int>("Uniprot column").Value];

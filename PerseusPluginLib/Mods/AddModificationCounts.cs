@@ -42,8 +42,9 @@ namespace PerseusPluginLib.Mods{
 			for (int index = 0; index < mods.Length; index++){
 				string mod = mods[index];
 				string filename = PhosphoSitePlusParser.GetFilenameForMod(mod);
-				if (filename == null){
-					processInfo.ErrString = "File does not exist.";
+				if (filename == null) {
+					processInfo.ErrString = "File does not exist. Please download all PSP files at https://www.phosphosite.org/staticDownloads "
+					                        + @"and add them to Perseus\bin\conf\PSP";
 					return;
 				}
 				PhosphoSitePlusParser.ParseKnownMods(filename, out string[] seqWins, out string[] accs,
