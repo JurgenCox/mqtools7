@@ -892,7 +892,7 @@ namespace MqApi.Util{
 			"mass.evidence", "cscore", "decoy.evidence", "decoy.cscore", "ms2.scan", "im", "iim", "predicted.im", 
 			"predicted.iim", "first score", "precursormz", "productmz", "tr_recalibrated", "ionmobility", 
 			"libraryintensity", "qvalue", "pgqvalue", "ms1profilecorr", "fragmentseriesnumber", "precursor <i>m/z</i>", 
-			"precursor rt (mins)", "delta scan index"
+			"precursor rt (mins)", "delta scan index", "c count", "h count", "n count", "o count", "s count", "p count"
 		});
 		public static readonly HashSet<string> multiNumericColDefaultNames = new HashSet<string>(new[]{
 			"mass deviations [da]", "mass deviations [ppm]", "number of phospho (sty)", "fragment.quant.raw",
