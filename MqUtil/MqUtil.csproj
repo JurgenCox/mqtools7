@@ -7,6 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="names.dmp.gz" />
+    <None Remove="nodes.dmp.gz" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="names.dmp.gz" />
+    <EmbeddedResource Include="nodes.dmp.gz" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MqApi\MqApi.csproj" />
   </ItemGroup>
 
