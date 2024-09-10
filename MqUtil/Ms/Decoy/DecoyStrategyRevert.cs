@@ -18,9 +18,7 @@
 			}
 			for (int i = 1; i < protSeq.Length; i++){
 				if (keep.Contains(rev[i])){
-					char c = rev[i - 1];
-					rev[i - 1] = rev[i];
-					rev[i] = c;
+					(rev[i - 1], rev[i]) = (rev[i], rev[i - 1]);
 				}
 			}
 			return new string(rev);
