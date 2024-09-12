@@ -579,5 +579,13 @@ namespace MqApi.Drawing{
 		public override int GetHashCode(){
 			return value.GetHashCode() ^ state.GetHashCode() ^ knownColor.GetHashCode();
 		}
+		private static readonly Color2[] predefinedColors = {
+			Color2.Blue, Color2.FromArgb(255, 144, 144), Color2.FromArgb(255, 0, 255), Color2.FromArgb(168, 156, 82),
+			Color2.LightBlue, Color2.Orange, Color2.Cyan, Color2.Pink, Color2.Turquoise, Color2.LightGreen,
+			Color2.Brown, Color2.DarkGoldenrod, Color2.DeepPink, Color2.LightSkyBlue, Color2.BlueViolet, Color2.Crimson
+		};
+		public static Color2 GetPredefinedColor(int index) {
+			return predefinedColors[Math.Abs(index % predefinedColors.Length)];
+		}
 	}
 }
