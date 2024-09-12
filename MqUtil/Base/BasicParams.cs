@@ -41,5 +41,22 @@ namespace MqUtil.Base {
 			}
 			return -1;
 		}
+		public static Version ReadVersion(string filePath) {
+			using (StreamReader reader = new StreamReader(filePath)) {
+				string line;
+				while ((line = reader.ReadLine()) != null) {
+					line = StringUtils.RemoveWhitespace(line);
+					try {
+						if (line.StartsWith("<maxQuantVersion>")) {
+							int i1 = line.IndexOf(">", StringComparison.InvariantCulture);
+							int i2 = line.IndexOf("</", StringComparison.InvariantCulture);
+							line = line.Substring(i1 + 1, i2 - i1 - 1);
+							return new Version(line);
+						}
+					} catch (Exception) { }
+				}
+			}
+			return null;
+		}
 	}
 }

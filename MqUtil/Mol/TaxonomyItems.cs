@@ -13,7 +13,7 @@ namespace MqUtil.Mol{
 		public Dictionary<string, TaxonomyItem> name2Item;
 
 		public TaxonomyItems(){
-			Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream("BaseLibS.nodes.dmp.gz");
+			Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream("MqUtil.nodes.dmp.gz");
 			StreamReader reader = new StreamReader(new GZipStream(s, CompressionMode.Decompress));
 			string line;
 			List<TaxonomyItem> result = new List<TaxonomyItem>();
@@ -39,7 +39,7 @@ namespace MqUtil.Mol{
 			}
 			reader.Close();
 
-			s = Assembly.GetExecutingAssembly().GetManifestResourceStream("BaseLibS.names.dmp.gz");
+			s = Assembly.GetExecutingAssembly().GetManifestResourceStream("MqUtil.names.dmp.gz");
 			reader = new StreamReader(new GZipStream(s, CompressionMode.Decompress));
 			while ((line = reader.ReadLine()) != null){
 				string[] w = line.Split(new[]{"\t|\t"}, StringSplitOptions.None);
