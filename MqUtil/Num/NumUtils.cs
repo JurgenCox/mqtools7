@@ -1273,5 +1273,25 @@ namespace MqUtil.Num{
 		public static double Determinant2X2(double[,] m){
 			return m[0, 0] * m[1, 1] - m[0, 1] * m[1, 0];
 		}
+		public static T[][] Cut<T>(T[] array, int len) {
+			if (array.Length <= len) {
+				return new[] { array };
+			}
+			int n = array.Length / len;
+			if (array.Length % len > 0) {
+				n++;
+			}
+			T[][] result = new T[n][];
+			for (int i = 0; i < n - 1; i++) {
+				result[i] = new T[len];
+				Array.Copy(array, i * len, result[i], 0, len);
+			}
+			int ll = array.Length - (n - 1) * len;
+			result[n - 1] = new T[ll];
+			Array.Copy(array, (n - 1) * len, result[n - 1], 0, ll);
+			return result;
+		}
+
+
 	}
 }
