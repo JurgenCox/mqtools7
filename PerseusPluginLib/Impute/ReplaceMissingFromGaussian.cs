@@ -74,21 +74,26 @@ namespace PerseusPluginLib.Impute{
 			int[] colInds){
 			List<int> invalidMain = new List<int>();
 			Random2 r = new Random2(7);
-			foreach (int colInd in colInds){
-				bool success = ReplaceMissingsByGaussianForOneColumn(width, shift, data, colInd, r);
+			int[] numImputationsPerRow = new int[data.RowCount];
+            string[][] numImputationsString = new string[data.RowCount][];
+            foreach (int colInd in colInds){
+				bool success = ReplaceMissingsByGaussianForOneColumn(width, shift, data, colInd, r, numImputationsPerRow);
 				if (!success){
 					if (colInd < data.ColumnCount){
 						invalidMain.Add(colInd);
 					}
 				}
-			}
+            }
 			if (invalidMain.Count > 0){
 				data.ExtractColumns(ArrayUtils.Complement(invalidMain, data.ColumnCount));
 			}
-		}
+			for (int i = 0; i < numImputationsString.Length; i++) {
+				numImputationsString[i] = new[] { numImputationsPerRow[i].ToString()};
+			}
+			data.AddCategoryColumn("#Imputations", "", numImputationsString);
+        }
 		private static bool ReplaceMissingsByGaussianForOneColumn(double width, double shift, IMatrixData data,
-			int colInd,
-			Random2 r){
+			int colInd, Random2 r, int[] numImputationsPerRow) {
 			List<double> allValues = new List<double>();
 			for (int i = 0; i < data.RowCount; i++){
 				double x = GetValue(data, i, colInd);
@@ -102,13 +107,14 @@ namespace PerseusPluginLib.Impute{
 			}
 			double m = mean - shift * stddev;
 			double s = stddev * width;
-			for (int i = 0; i < data.RowCount; i++){
+            for (int i = 0; i < data.RowCount; i++){
 				double x = GetValue(data, i, colInd);
 				if (double.IsNaN(x) || double.IsInfinity(x)){
 					if (colInd < data.ColumnCount){
 						data.Values.Set(i, colInd, r.NextGaussian(m, s));
 						data.IsImputed[i, colInd] = true;
-					} else{
+						numImputationsPerRow[i]++;
+                    } else{
 						data.NumericColumns[colInd - data.ColumnCount][i] = r.NextGaussian(m, s);
 					}
 				}
