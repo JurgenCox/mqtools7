@@ -24,8 +24,8 @@ namespace MqApi.Network{
 		/// <param name="processInfo"></param>
 		public static void Read(INetworkData ndata, string folder, ProcessInfo processInfo){
 			ReadMatrixDataInto(ndata, Path.Combine(folder, "networks.txt"), processInfo);
-			string[] guids = ndata.StringRows[ndata.StringRowNames.IndexOf("guid")];
-			string[] names = ndata.StringRows[ndata.StringRowNames.IndexOf("name")];
+			string[] guids = ndata.StringRows[ndata.StringRowNames.IndexOf("GUID")];
+			string[] names = ndata.StringRows[ndata.StringRowNames.IndexOf("Name")]; 
 			for (int i = 0; i < guids.Length; i++){
 				Guid guid = Guid.Parse(guids[i]);
 				DataWithAnnotationColumns nodeTable = new DataWithAnnotationColumns();

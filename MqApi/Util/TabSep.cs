@@ -312,6 +312,12 @@ namespace MqApi.Util{
 				}
 			}
 			string[] titles = line.Split(separator);
+			for (int i = 0; i < titles.Length; i++){
+				string t = titles[i];
+				if (t.Length > 1 && t[0] == '\"' && t[t.Length - 1] == '\"') {
+					titles[i] = t.Substring(1, t.Length - 2);
+				} 
+			}
 			if (annotationRows != null){
 				while ((line = reader.ReadLine()) != null){
 					if (!line.StartsWith("#!{")){
