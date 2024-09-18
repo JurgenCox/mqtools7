@@ -42,15 +42,17 @@ namespace PerseusPluginLib.Impute{
 			if (cols.Length == 0){
 				return;
 			}
-			if (separateColumns){
-				ReplaceMissingsByGaussianByColumn(width, shift, mdata, cols);
+			double[] numImputationsPerRow = new double[mdata.RowCount];
+            if (separateColumns){
+				ReplaceMissingsByGaussianByColumn(width, shift, mdata, cols, numImputationsPerRow);
 			} else{
-				string err = ReplaceMissingsByGaussianWholeMatrix(width, shift, mdata, cols);
+				string err = ReplaceMissingsByGaussianWholeMatrix(width, shift, mdata, cols, numImputationsPerRow);
 				if (err != null){
 					processInfo.ErrString = err;
 				}
 			}
-		}
+			mdata.AddNumericColumn("#Imputations", "", numImputationsPerRow);
+        }
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
 			return
 				new Parameters(
@@ -71,14 +73,12 @@ namespace PerseusPluginLib.Impute{
 					});
 		}
 		public static void ReplaceMissingsByGaussianByColumn(double width, double shift, IMatrixData data,
-			int[] colInds){
-			List<int> invalidMain = new List<int>();
+			int[] colInds, double[] numImputationsPerRow) {
+            List<int> invalidMain = new List<int>();
 			Random2 r = new Random2(7);
-			int[] numImputationsPerRow = new int[data.RowCount];
-            string[][] numImputationsString = new string[data.RowCount][];
             foreach (int colInd in colInds){
 				bool success = ReplaceMissingsByGaussianForOneColumn(width, shift, data, colInd, r, numImputationsPerRow);
-				if (!success){
+                if (!success){
 					if (colInd < data.ColumnCount){
 						invalidMain.Add(colInd);
 					}
@@ -87,14 +87,10 @@ namespace PerseusPluginLib.Impute{
 			if (invalidMain.Count > 0){
 				data.ExtractColumns(ArrayUtils.Complement(invalidMain, data.ColumnCount));
 			}
-			for (int i = 0; i < numImputationsString.Length; i++) {
-				numImputationsString[i] = new[] { numImputationsPerRow[i].ToString()};
-			}
-			data.AddCategoryColumn("#Imputations", "", numImputationsString);
         }
 		private static bool ReplaceMissingsByGaussianForOneColumn(double width, double shift, IMatrixData data,
-			int colInd, Random2 r, int[] numImputationsPerRow) {
-			List<double> allValues = new List<double>();
+			int colInd, Random2 r, double[] numImputationsPerRow) {
+            List<double> allValues = new List<double>();
 			for (int i = 0; i < data.RowCount; i++){
 				double x = GetValue(data, i, colInd);
 				if (!double.IsNaN(x) && !double.IsInfinity(x)){
@@ -129,8 +125,8 @@ namespace PerseusPluginLib.Impute{
 			return data.NumericColumns[colInd][i];
 		}
 		public static string ReplaceMissingsByGaussianWholeMatrix(double width, double shift, IMatrixData data,
-			int[] colInds){
-			List<double> allValues = new List<double>();
+			int[] colInds, double[] numImputationsPerRow) {
+            List<double> allValues = new List<double>();
 			for (int i = 0; i < data.RowCount; i++){
 				foreach (int t in colInds){
 					double x = GetValue(data, i, t);
@@ -153,7 +149,8 @@ namespace PerseusPluginLib.Impute{
 						if (colInd < data.ColumnCount){
 							data.Values.Set(i, colInd, r.NextGaussian(m, s));
 							data.IsImputed[i, colInd] = true;
-						} else{
+							numImputationsPerRow[i]++;
+                        } else{
 							data.NumericColumns[colInd - data.ColumnCount][i] = r.NextGaussian(m, s);
 						}
 					}
