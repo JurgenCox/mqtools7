@@ -38,8 +38,10 @@ namespace PerseusPluginLib.Impute{
 					numInds.Add(ind - mdata.ColumnCount);
 				}
 			}
-			ReplaceMissingsByVal(value, mdata, mainInds, numInds);
-		}
+			double[] numImputationsPerRow = new double[mdata.RowCount];
+            ReplaceMissingsByVal(value, mdata, mainInds, numInds, numImputationsPerRow);
+            mdata.AddNumericColumn("#Imputations", "", numImputationsPerRow);
+        }
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
 			return
 				new Parameters(
@@ -49,13 +51,14 @@ namespace PerseusPluginLib.Impute{
 					});
 		}
 		private static void ReplaceMissingsByVal(double value, IMatrixData data, IEnumerable<int> mainInds,
-			IEnumerable<int> numInds){
+			IEnumerable<int> numInds, double[] numImputationsPerRow) {
 			foreach (int j in mainInds){
 				for (int i = 0; i < data.RowCount; i++){
 					if (double.IsNaN(data.Values.Get(i, j))){
 						data.Values.Set(i, j, value);
 						data.IsImputed[i, j] = true;
-					}
+						numImputationsPerRow[i]++;
+                    }
 				}
 			}
 			foreach (int j in numInds){
