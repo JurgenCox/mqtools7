@@ -116,8 +116,7 @@ namespace MqApi.Generic{
 			StringRowDescriptions = CloneX(other.StringRowDescriptions);
 			CategoryRows = new List<string[][]>();
 			for (int i = 0; i < other.CategoryRowCount; i++){
-				AddCategoryRow(other.CategoryRowNames[i], other.CategoryRowDescriptions[i],
-					other.GetCategoryRowAt(i));
+				AddCategoryRowNoDouble(other.GetCategoryRowAt(i));
 			}
 			NumericRows = new List<double[]>();
 			foreach (double[] s in other.NumericRows){
@@ -185,7 +184,10 @@ namespace MqApi.Generic{
 			CategoryRowNames.Add(name1);
 			CategoryRowDescriptions.Add(description);
 		}
-		public void ClearCategoryRows(){
+		public void AddCategoryRowNoDouble(string[][] vals) {
+			categoryRowData.Add(new CategoryVector(vals));
+		}
+        public void ClearCategoryRows(){
 			CategoryRowNames = new List<string>();
 			CategoryRowDescriptions = new List<string>();
 			categoryRowData.Clear();
