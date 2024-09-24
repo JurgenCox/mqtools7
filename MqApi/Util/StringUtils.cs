@@ -794,11 +794,9 @@ namespace MqApi.Util{
 			"missed cleavages", "library index", "rank", "evidence id", "protein group ids", "raw files", "dn extended",
 			"dn complete", "dn agrees with andromeda", "dn agrees with andromeda complete", "dn any agrees",
 			"dn is dominantly y", "precursor found", "precursor has isotope pattern", "taxonomy ids",
-			"precursor.charge",
-			"proteotypic", "taxonomy names", "dia evidence type", "precursorcharge", "nterm", "cterm", "fragmenttype",
-			"fragmentcharge", "fragmentlosstype", "excludefromassay", "splicing type", "splicing form",
-			"precursor charge",
-			"proteolytic enzyme", "activation", "cell line"
+			"precursor.charge", "proteotypic", "taxonomy names", "dia evidence type", "precursorcharge", "nterm", 
+			"cterm", "fragmenttype", "fragmentcharge", "fragmentlosstype", "excludefromassay", "splicing type", 
+			"splicing form", "precursor charge", "proteolytic enzyme", "activation", "cell line"
 		});
 		public static readonly HashSet<string> textualColDefaultNames = new HashSet<string>(new[]{
 			"protein ids", "protein", "majority protein ids", "protein names", "gene names", "uniprot", "ensembl",
@@ -819,7 +817,8 @@ namespace MqApi.Util{
 			"dn all scores", "dn all agrees", "file.name", "run", "protein.group", "protein.ids", "protein.names",
 			"genes", "modified.sequence", "stripped.sequence", "precursor.id", "first.protein.description",
 			"transition_name", "peptidesequence", "proteingroup", "fullunimodpeptidename", "modifiedpeptide",
-			"peptidegrouplabel", "uniprotid", "gene name", "peptide sequence"
+			"peptidegrouplabel", "uniprotid", "gene name", "peptide sequence", "protein index of crosslink 1", 
+			"protein index of crosslink 2"
 		});
 		public static readonly HashSet<string> numericColDefaultNames = new HashSet<string>(new[]{
 			"length", "length1", "length2", "position", "total position", "peptides (seq)", "razor peptides (seq)",
@@ -892,7 +891,8 @@ namespace MqApi.Util{
 			"mass.evidence", "cscore", "decoy.evidence", "decoy.cscore", "ms2.scan", "im", "iim", "predicted.im", 
 			"predicted.iim", "first score", "precursormz", "productmz", "tr_recalibrated", "ionmobility", 
 			"libraryintensity", "qvalue", "pgqvalue", "ms1profilecorr", "fragmentseriesnumber", "precursor <i>m/z</i>", 
-			"precursor rt (mins)", "delta scan index", "c count", "h count", "n count", "o count", "s count", "p count"
+			"precursor rt (mins)", "delta scan index", "c count", "h count", "n count", "o count", "s count", "p count",
+			"length of protein 1","length of protein 2"
 		});
 		public static readonly HashSet<string> multiNumericColDefaultNames = new HashSet<string>(new[]{
 			"mass deviations [da]", "mass deviations [ppm]", "number of phospho (sty)", "fragment.quant.raw",
