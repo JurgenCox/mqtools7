@@ -210,7 +210,7 @@ namespace MqUtil.Util{
 				}
 			}
 		}
-		private static string[] GetFiles(string[] files, string suffix) {
+		public static string[] GetFiles(string[] files, string suffix) {
 			List<string> result = new List<string>();
 			foreach (string file in files) {
 				if (file.EndsWith(suffix)) {
