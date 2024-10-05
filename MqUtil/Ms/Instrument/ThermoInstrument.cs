@@ -1,12 +1,13 @@
 ﻿using MqApi.Num;
+using MqUtil.Ms.Enums;
 namespace MqUtil.Ms.Instrument{
 	public abstract class ThermoInstrument : MsInstrument{
-		protected ThermoInstrument(int index) : base(index){ }
+		protected ThermoInstrument(int index) : base(index){
+		}
 		public override double IsotopeTimeCorrelationDefault => 0.6;
 		public override double TheorIsotopeCorrelationDefault => 0.6;
 		public override bool IntensityDependentCalibrationDefault => false;
 		public override bool IsotopeMatchTolInPpmDefault => true;
-
 		public override double DiaMinMsmsIntensityForQuantDefault => 0;
 		public override double DiaTopMsmsIntensityQuantileForQuantDefault => 0.85;
 		public override double GetCentroidMatchTolDefault(MsDataType dataType){
@@ -20,13 +21,11 @@ namespace MqUtil.Ms.Instrument{
 					throw new Exception("Never get here.");
 			}
 		}
-
 		public override double PrecursorToleranceFirstSearchDefault => 20;
 		public override double PrecursorToleranceMainSearchDefault => 4.5;
 		public override bool UseMs2CentroidsDefault => false;
 		public override double MinScoreForCalibrationDefault => 70;
 		public override bool CheckMassDeficitDefault => true;
-
 		public override bool GetAdvancedPeakSplittingDefault(MsDataType dataType){
 			switch (dataType){
 				case MsDataType.Peptides:
@@ -38,8 +37,6 @@ namespace MqUtil.Ms.Instrument{
 					throw new Exception("Never get here.");
 			}
 		}
-
-
 		public override double GetIsotopeMatchTolDefault(MsDataType dataType){
 			switch (dataType){
 				case MsDataType.Peptides:
@@ -51,7 +48,6 @@ namespace MqUtil.Ms.Instrument{
 					throw new Exception("Never get here.");
 			}
 		}
-
 		public override IntensityDetermination GetIntensityDeterminationDefault(MsDataType dataType){
 			switch (dataType){
 				case MsDataType.Peptides:
@@ -63,7 +59,6 @@ namespace MqUtil.Ms.Instrument{
 					throw new Exception("Never get here.");
 			}
 		}
-
 		public override int GetMaxChargeDefault(MsDataType dataType){
 			switch (dataType){
 				case MsDataType.Peptides:
@@ -76,7 +71,6 @@ namespace MqUtil.Ms.Instrument{
 					throw new Exception("Never get here.");
 			}
 		}
-
 		public override double GetValleyFactorDefault(MsDataType dataType){
 			switch (dataType){
 				case MsDataType.Proteins:
@@ -89,7 +83,6 @@ namespace MqUtil.Ms.Instrument{
 					throw new Exception("Never get here.");
 			}
 		}
-
 		public override double GetIsotopeValleyFactorDefault(MsDataType dataType){
 			switch (dataType){
 				case MsDataType.Proteins:
@@ -102,7 +95,6 @@ namespace MqUtil.Ms.Instrument{
 					throw new Exception("Never get here.");
 			}
 		}
-
 		public override int GetMinPeakLengthDefault(MsDataType dataType){
 			switch (dataType){
 				case MsDataType.Proteins:
@@ -113,7 +105,6 @@ namespace MqUtil.Ms.Instrument{
 					throw new Exception("Never get here.");
 			}
 		}
-
 		public override int GetDiaMinPeakLengthDefault(MsDataType dataType){
 			switch (dataType){
 				case MsDataType.Proteins:
@@ -124,7 +115,6 @@ namespace MqUtil.Ms.Instrument{
 					throw new Exception("Never get here.");
 			}
 		}
-
 		public override float[] SmoothIntensityProfile(float[] origProfile){
 			float[] result = ArrayUtils.SmoothMedian(origProfile, 1);
 			return ArrayUtils.SmoothMean(result, 2);

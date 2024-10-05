@@ -1,7 +1,7 @@
 ﻿namespace MqUtil.Ms.Decoy{
 	public class DecoyStrategyRevert : DecoyStrategy{
-		public DecoyStrategyRevert(string specialAas) : base(specialAas){ }
-
+		public DecoyStrategyRevert(string specialAas) : base(specialAas){
+		}
 		public override string ProcessProtein(string protSeq, bool isCodon){
 			if (isCodon){
 				char[] rev1 = new char[protSeq.Length];
@@ -23,21 +23,17 @@
 			}
 			return new string(rev);
 		}
-
 		public override string ProcessVariation(string mutaions, string protSeq, bool isCodon){
 			return mutaions;
 		}
-
 		public override string ProcessPeptide(string pepSeq){
 			return pepSeq;
 		}
-
 		public override int GetHashCode(){
 			unchecked{
 				return ((specialAas != null ? MqUtil.Util.HashCode.GetDeterministicHashCode(specialAas) : 3) * 395);
 			}
 		}
-
 		public override DecoyMode DecoyMode => DecoyMode.Revert;
 	}
 }

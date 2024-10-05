@@ -1,8 +1,9 @@
 ﻿using System.Xml.Serialization;
-using MqUtil.Ms;
+using MqUtil.Ms.Enums;
 using MqUtil.Ms.Instrument;
-namespace MqUtil.Base {
-	[Serializable, XmlRoot(ElementName = "BasicGroupParams", IsNullable = false)]
+namespace MqUtil.Base
+{
+    [Serializable, XmlRoot(ElementName = "BasicGroupParams", IsNullable = false)]
 	public abstract class BasicGroupParams {
 		public abstract double CentroidMatchTol { get; }
 		public abstract bool CentroidMatchTolInPpm { get; }

@@ -3,9 +3,8 @@ using MqApi.Num;
 using MqUtil.Mol;
 using MqUtil.Ms.Data;
 using MqUtil.Num;
-namespace MqUtil.Ms.Search
-{
-    public static class DigestionUtil{
+namespace MqUtil.Ms.Search{
+	public static class DigestionUtil{
 		public static int GetNcleave(Enzyme[] enzymes, bool independentEnzymes, string sequence, out bool consecutive){
 			int[][] indices = CleavageIndices(sequence, enzymes, independentEnzymes);
 			if (indices.Length == 1){
@@ -20,7 +19,6 @@ namespace MqUtil.Ms.Search
 			consecutive = GetConsecutive(sequence, indices[ind]);
 			return indices[ind].Length;
 		}
-
 		public static int[][] CleavageIndices(string s, Enzyme[] enzymes, bool independentEnzymes){
 			if (enzymes.Length == 0){
 				return new int[0][];
@@ -34,7 +32,6 @@ namespace MqUtil.Ms.Search
 			}
 			return independentEnzymes ? x : new[]{ArrayUtils.UniqueValues(ArrayUtils.Concat(x))};
 		}
-
 		public static int CountPeptides(string sequence, Enzyme[] enzymes, bool independentEnzymes, int minLen,
 			int maxLen){
 			int[][] indices = CleavageIndices(sequence, enzymes, independentEnzymes);
@@ -47,7 +44,6 @@ namespace MqUtil.Ms.Search
 			}
 			return ArrayUtils.Min(counts);
 		}
-
 		private static int CountPeptides(string sequence, int[] indices, int minLen, int maxLen){
 			IEnumerable<string> pepSeqs = Digest(sequence, indices);
 			int count = 0;
@@ -59,7 +55,6 @@ namespace MqUtil.Ms.Search
 			}
 			return count;
 		}
-
 		public static bool ValidPeptide(string pep){
 			foreach (char t in pep){
 				if (AminoAcids.SingleLetterAas.IndexOf(t) == -1){
@@ -68,7 +63,6 @@ namespace MqUtil.Ms.Search
 			}
 			return true;
 		}
-
 		public static bool ValidPeptide2(string pep, int minPepLen, int maxPepLen){
 			if (pep.Length > ushort.MaxValue || pep.Length > maxPepLen || pep.Length < minPepLen){
 				return false;
@@ -80,21 +74,24 @@ namespace MqUtil.Ms.Search
 			}
 			return true;
 		}
-
-		public static string[] DigestToArray(string proteinSequence, string proteinAccession, EnzymeMode enzymeMode, int minPepLen,
-			int maxPepLen, int missedCleavages, Enzyme[] enzymes, bool independentEnzymes) {
+		public static string[] DigestToArray(string proteinSequence, string proteinAccession, EnzymeMode enzymeMode,
+			int minPepLen,
+			int maxPepLen, int missedCleavages, Enzyme[] enzymes, bool independentEnzymes){
 			List<string> peptides = new List<string>();
-			Digest(proteinSequence, proteinAccession, enzymeMode, minPepLen, maxPepLen, missedCleavages, enzymes, independentEnzymes, 
+			Digest(proteinSequence, proteinAccession, enzymeMode, minPepLen, maxPepLen, missedCleavages, enzymes,
+				independentEnzymes,
 				(pepSeq, nterm, cterm) => { peptides.Add(pepSeq); });
 			return peptides.ToArray();
 		}
-		public static void DigestToFile(string proteinSequence, string proteinAccession, EnzymeMode enzymeMode, int minPepLen,
-			int maxPepLen, int missedCleavages, Enzyme[] enzymes, bool independentEnzymes, StreamWriter writer) {
-			Digest(proteinSequence, proteinAccession, enzymeMode, minPepLen, maxPepLen, missedCleavages, enzymes, 
+		public static void DigestToFile(string proteinSequence, string proteinAccession, EnzymeMode enzymeMode,
+			int minPepLen,
+			int maxPepLen, int missedCleavages, Enzyme[] enzymes, bool independentEnzymes, StreamWriter writer){
+			Digest(proteinSequence, proteinAccession, enzymeMode, minPepLen, maxPepLen, missedCleavages, enzymes,
 				independentEnzymes, (pepSeq, nterm, cterm) => { writer.WriteLine(pepSeq); });
 		}
 		public static void Digest(string proteinSequence, string proteinAccession, EnzymeMode enzymeMode, int minPepLen,
-			int maxPepLen, int missedCleavages, Enzyme[] enzymes, bool independentEnzymes, Action<string, bool, bool> addPeptide) {
+			int maxPepLen, int missedCleavages, Enzyme[] enzymes, bool independentEnzymes,
+			Action<string, bool, bool> addPeptide){
 			Protein p = new Protein(proteinSequence, proteinAccession, "", "", false, false,
 				"", "", false, false);
 			Digest(p, enzymeMode, minPepLen, maxPepLen, missedCleavages, enzymes, independentEnzymes,
@@ -221,12 +218,10 @@ namespace MqUtil.Ms.Search
 			Action<string, bool, bool, byte, string[], string> addPeptide){
 			addPeptide(proteinSeq, false, false, 0, null, null);
 		}
-
 		private static void DigestNoneNoMutations(string proteinSeq,
 			Action<string, bool, bool, byte, string[], string> addPeptide){
 			addPeptide(proteinSeq, false, false, 0, null, null);
 		}
-
 		private static bool GetConsecutive(string s, IList<int> indices){
 			if (indices.Count == 0){
 				return false;
@@ -244,7 +239,6 @@ namespace MqUtil.Ms.Search
 			}
 			return false;
 		}
-
 		private static int[] CleavageIndices(string s, Enzyme enzyme){
 			List<int> indices = new List<int>();
 			for (int i = 0; i < s.Length - 1; i++){
@@ -254,7 +248,6 @@ namespace MqUtil.Ms.Search
 			}
 			return ArrayUtils.UniqueValues(indices.ToArray());
 		}
-
 		public static void DigestSpecificNoMutations(string protSequence, int minPepLen, int maxPepLen,
 			int maxMissedSites, Enzyme[] enzymes, bool independentEnzymes,
 			Action<string, bool, bool, byte, string[], string> addPeptide){
@@ -265,7 +258,6 @@ namespace MqUtil.Ms.Search
 				}
 			}
 		}
-
 		private static void DigestSpecificAllCodonChanges(string protSequence, byte[] codonInds, int minPepLen,
 			int maxPepLen, int maxMissedSites, Enzyme[] enzymes, bool independentEnzymes,
 			Action<string, bool, bool, byte, string[], string> addPeptide){
@@ -283,7 +275,6 @@ namespace MqUtil.Ms.Search
 				}
 			}
 		}
-
 		private static void DigestSpecificKnownMutations(string protSequence, string[] knownMutationAaBefore,
 			string[] knownMutationAaAfter, IList<int> knownMutationPos, string[] knownMutationNames,
 			Regex variationGroupRegex, int minPepLen, int maxPepLen, int maxMissedSites, Enzyme[] enzymes,
@@ -312,7 +303,6 @@ namespace MqUtil.Ms.Search
 				}
 			}
 		}
-
 		private static void GetAltSequence(string protSequence, IList<string> knownMutationAaBeforeIn,
 			IList<string> knownMutationAaAfterIn, IList<string> knownMutationNamesIn,
 			out string[] knownMutationAaBeforeOut, out string[] knownMutationAaAfterOut,
@@ -331,7 +321,6 @@ namespace MqUtil.Ms.Search
 				}
 			}
 		}
-
 		private static bool Valid(EnzymeMode enzymeMode, int[][] indices, int offset, int len, bool isNterm,
 			bool isCterm){
 			if (enzymeMode == EnzymeMode.Unspecific){
@@ -344,7 +333,6 @@ namespace MqUtil.Ms.Search
 			}
 			return false;
 		}
-
 		private static bool Valid(EnzymeMode enzymeMode, int[] indices, int offset, int len, bool isNterm,
 			bool isCterm){
 			switch (enzymeMode){
@@ -361,7 +349,6 @@ namespace MqUtil.Ms.Search
 					throw new Exception("Never get here.");
 			}
 		}
-
 		private static void DigestUnspecificAllCodonChanges(string protSequence, byte[] codonInds, int minPepLen,
 			int maxPepLen, Action<string, bool, bool, byte, string[], string> addPeptide, EnzymeMode enzymeMode,
 			int[][] indices){
@@ -390,7 +377,6 @@ namespace MqUtil.Ms.Search
 				}
 			}
 		}
-
 		private static void DigestUnspecificNoMutations(string protSequence, int minPepLen, int maxPepLen,
 			Action<string, bool, bool, byte, string[], string> addPeptide, EnzymeMode enzymeMode, int[][] indices){
 			for (int offset = 0; offset < protSequence.Length - minPepLen; offset++){
@@ -407,7 +393,6 @@ namespace MqUtil.Ms.Search
 				}
 			}
 		}
-
 		private static void DigestUnspecificSplicedNoMutations(string protSequence, int minPepLen, int maxPepLen,
 			int minOverhang, int maxIntronLen, Action<string, bool, bool, byte, string[], string> addPeptide){
 			for (int offset = 0; offset < protSequence.Length - minPepLen; offset++){
@@ -432,7 +417,6 @@ namespace MqUtil.Ms.Search
 				}
 			}
 		}
-
 		private static void DigestUnspecificKnownMutations(string protSequence, string[] knownMutationAaBefore,
 			string[] knownMutationAaAfter, IList<int> knownMutationPos, string[] knownVariationNames,
 			Regex variationGroupRegex, int minPepLen, int maxPepLen,
@@ -469,7 +453,6 @@ namespace MqUtil.Ms.Search
 				}
 			}
 		}
-
 		private static byte GetMutationLevel(string[] names, Regex variationGroupRegex){
 			if (variationGroupRegex == null || names == null || names.Length < 1){
 				return 1;
@@ -479,7 +462,6 @@ namespace MqUtil.Ms.Search
 			}
 			return 2;
 		}
-
 		private static string[] GetCodonSequence(string protSequence, IList<byte> codonInds){
 			string[] result = new string[protSequence.Length];
 			for (int i = 0; i < protSequence.Length; i++){
@@ -490,7 +472,6 @@ namespace MqUtil.Ms.Search
 			}
 			return result;
 		}
-
 		private static bool ValidPeptide3(string pep, int minPepLen){
 			if (pep.Length < minPepLen){
 				return false;
@@ -502,11 +483,11 @@ namespace MqUtil.Ms.Search
 			}
 			return true;
 		}
-
 		private static IEnumerable<string> Digest(string s, IList<int> indices){
 			int count = indices.Count;
 			List<string> result = new List<string>();
-			if (count < 0){ } else if (count == 0){
+			if (count < 0){
+			} else if (count == 0){
 				if (ValidPeptide(s)){
 					result.Add(s);
 				}
@@ -528,11 +509,11 @@ namespace MqUtil.Ms.Search
 			}
 			return result.ToArray();
 		}
-
 		private static void DigestSpecificNoMutations(string protSequence, IList<int> indices, int missedSites,
 			int minPepLen, int maxPepLen, Action<string, bool, bool, byte, string[], string> addPeptide){
 			int count = indices.Count;
-			if (count < missedSites){ } else if (count == missedSites){
+			if (count < missedSites){
+			} else if (count == missedSites){
 				if (ValidPeptide2(protSequence, minPepLen, maxPepLen)){
 					addPeptide(protSequence, true, true, 0, null, null);
 					if (protSequence.StartsWith("M") && protSequence.Length > minPepLen){
@@ -560,7 +541,6 @@ namespace MqUtil.Ms.Search
 				}
 			}
 		}
-
 		private static void DigestSpecificKnownMutations(string protSequence, IList<string> knownMutationAaBefore,
 			IList<string> knownMutationAaAfter, IList<string> knownMutationNames, Regex variationGroupRegex,
 			IList<int> indices, int missedCleaves, int maxMissedCleaves, Enzyme[] enzymes, int minPepLen, int maxPepLen,
@@ -641,12 +621,12 @@ namespace MqUtil.Ms.Search
 				}
 			}
 		}
-
 		private static void DigestSpecificAllCodonChanges(string protSequence, IList<string> protCodons,
 			IList<int> indices, int missedCleaves, int maxMissedCleaves, Enzyme[] enzymes, int minPepLen, int maxPepLen,
 			Action<string, bool, bool, byte, string[], string> addPeptide){
 			int count = indices.Count;
-			if (count < missedCleaves){ } else if (count == missedCleaves){
+			if (count < missedCleaves){
+			} else if (count == missedCleaves){
 				if (ValidPeptide3(protSequence, minPepLen)){
 					AddPeptideAllCodonChanges(protSequence, '*', '*', protCodons, true, true, addPeptide, enzymes,
 						missedCleaves, maxMissedCleaves, minPepLen, maxPepLen);
@@ -687,7 +667,6 @@ namespace MqUtil.Ms.Search
 				}
 			}
 		}
-
 		private static int[] GetPositions(int len, IList<string> knownMutationAaBefore,
 			IList<string> knownMutationAaAfter, IList<string> knownMutationNames, out AaMutationType[] types,
 			out int[] oldAaLens, out string[] newAas, out string[] names){
@@ -731,7 +710,6 @@ namespace MqUtil.Ms.Search
 			names = knownMutationNames != null ? names1.ToArray() : null;
 			return positions.ToArray();
 		}
-
 		private static void AddPeptideKnownMutations(string sequence, char previousAa, char nextAa,
 			IList<string> knownMutationAaBefore, IList<string> knownMutationAaAfter, IList<string> knownMutationNames,
 			Regex variationGroupRegex, bool isNterm, bool isCterm,
@@ -769,7 +747,6 @@ namespace MqUtil.Ms.Search
 				}
 			}
 		}
-
 		/// <summary>
 		/// Apply multiple different single amino acid substititions to the same peptide.
 		/// </summary>
@@ -814,7 +791,6 @@ namespace MqUtil.Ms.Search
 				}
 			}
 		}
-
 		private static bool RightSideHasMutations(IEnumerable<int> pos, int ind){
 			//pos contains something > ind+1
 			foreach (int i in pos){
@@ -824,7 +800,6 @@ namespace MqUtil.Ms.Search
 			}
 			return false;
 		}
-
 		private static bool LeftSideHasMutations(IEnumerable<int> pos, int ind){
 			//pos contains something < ind
 			foreach (int i in pos){
@@ -834,7 +809,6 @@ namespace MqUtil.Ms.Search
 			}
 			return false;
 		}
-
 		private static bool[] GetCleavagePattern(string sequence, Enzyme[] enzymes){
 			bool[] result = new bool[sequence.Length - 1];
 			for (int i = 0; i < result.Length; i++){
@@ -842,7 +816,6 @@ namespace MqUtil.Ms.Search
 			}
 			return result;
 		}
-
 		private static int[] GetSingleAaSubstInds(IList<AaMutationType> types){
 			List<int> result = new List<int>();
 			for (int i = 0; i < types.Count; i++){
@@ -852,7 +825,6 @@ namespace MqUtil.Ms.Search
 			}
 			return result.ToArray();
 		}
-
 		/// <summary>
 		/// Apply exhaustively all mutations to a peptide. There can be only one mutation per peptide here.
 		/// </summary>
@@ -1001,7 +973,6 @@ namespace MqUtil.Ms.Search
 					break;
 			}
 		}
-
 		private static void ProcessNewSequence(string newSequence, bool isNterm, bool isCterm,
 			Action<string, bool, bool, byte, string[], string> addPeptide, Enzyme[] enzymes, int missedCleaves,
 			int maxMissedCleaves, int minPepLen, int maxPepLen, string[] names, Regex variationGroupRegex,
@@ -1013,13 +984,13 @@ namespace MqUtil.Ms.Search
 					addPeptide, names, variationGroupRegex, baseSeq);
 			}
 		}
-
 		private static void DigestSpecificSubsequence(string protSequence, bool isNterm, bool isCterm,
 			IList<int> indices, int missedSites, int minPepLen, int maxPepLen,
 			Action<string, bool, bool, byte, string[], string> addPeptide, string[] names, Regex variationGroupRegex,
 			string baseSeq){
 			int count = indices.Count;
-			if (count < missedSites){ } else if (count == missedSites){
+			if (count < missedSites){
+			} else if (count == missedSites){
 				if (ValidPeptide2(protSequence, minPepLen, maxPepLen)){
 					addPeptide(protSequence, isNterm, isCterm, GetMutationLevel(names, variationGroupRegex), names,
 						baseSeq);
@@ -1052,7 +1023,6 @@ namespace MqUtil.Ms.Search
 				}
 			}
 		}
-
 		private static void ProcessSingleAaInsertion(bool cleaveBefore, bool cleaveLeftAfter, bool cleaveRightAfter,
 			int missedCleaves, int maxMissedCleaves, int minPepLen, int maxPepLen, string sequence, int pos, char aa,
 			bool isNterm, bool isCterm, Action<string, bool, bool, byte, string[], string> addPeptide, string[] names,
@@ -1128,7 +1098,6 @@ namespace MqUtil.Ms.Search
 				}
 			}
 		}
-
 		private static void ProcessSingleAaDeletion(bool cleaveLeftBefore, bool cleaveRightBefore, bool cleaveAfter,
 			int missedCleaves, int maxMissedCleaves, int minPepLen, int maxPepLen, string sequence, int pos,
 			bool isNterm, bool isCterm, Action<string, bool, bool, byte, string[], string> addPeptide, string[] names,
@@ -1171,7 +1140,6 @@ namespace MqUtil.Ms.Search
 				}
 			}
 		}
-
 		/// <summary>
 		/// Determine from the amino acid sequences stretches before and after the mutation what the type of the mutation is
 		/// </summary>
@@ -1215,7 +1183,6 @@ namespace MqUtil.Ms.Search
 					}
 			}
 		}
-
 		private static void AddPeptideAllCodonChanges(string sequence, char aaBefore, char aaAfter,
 			IList<string> codons, bool isNterm, bool isCterm,
 			Action<string, bool, bool, byte, string[], string> addPeptide, Enzyme[] enzymes, int missedCleaves,
@@ -1282,7 +1249,6 @@ namespace MqUtil.Ms.Search
 				}
 			}
 		}
-
 		private static void ProcessStopCodonInsertion(string sequence, bool isNterm,
 			Action<string, bool, bool, byte, string[], string> addPeptide, int minPeptideLen, string[] names,
 			Regex variationGroupRegex, string baseSeq){
@@ -1290,7 +1256,6 @@ namespace MqUtil.Ms.Search
 				addPeptide(sequence, isNterm, true, GetMutationLevel(names, variationGroupRegex), names, baseSeq);
 			}
 		}
-
 		private static void ProcessSingleAaSubstitution(bool cleaveLeftBefore, bool cleaveRightBefore,
 			bool cleaveLeftAfter, bool cleaveRightAfter, int missedCleaves, int maxMissedCleaves, int minPepLen,
 			int maxPepLen, string sequence, int pos, char aa, bool isNterm, bool isCterm,
@@ -1328,13 +1293,11 @@ namespace MqUtil.Ms.Search
 				}
 			}
 		}
-
 		private static string MutateSingleAaSubstitution(string sequence, int pos, char aa){
 			char[] x = sequence.ToCharArray();
 			x[pos] = aa;
 			return new string(x);
 		}
-
 		private static string MutateSeveralSingleAaSubstitution(string sequence, int[] pos, char[] aa){
 			char[] x = sequence.ToCharArray();
 			for (int i = 0; i < pos.Length; i++){
@@ -1342,7 +1305,6 @@ namespace MqUtil.Ms.Search
 			}
 			return new string(x);
 		}
-
 		/// <summary>
 		/// Determines if the set of enzymes all applied between the two amimo acids would cleave the protein sequence.
 		/// </summary>

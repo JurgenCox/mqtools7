@@ -1,4 +1,5 @@
 using MqApi.Num;
+using MqUtil.Ms.Utils;
 namespace MqUtil.Ms.Raw{
 	public class RawLayerMs1TimsWindowSummedFrames : RawLayer{
 		private readonly RawFileLayer rawFile;
@@ -11,7 +12,6 @@ namespace MqUtil.Ms.Raw{
 		public readonly double[] rts;
 		private readonly double minMz;
 		private readonly double maxMz;
-
 		public RawLayerMs1TimsWindowSummedFrames(RawFileLayer rawFile, int imsIndexMin, int imsIndexMax,
 			double resolution, double gridSpacing, double minMz, double maxMz){
 			this.rawFile = rawFile;
@@ -23,7 +23,6 @@ namespace MqUtil.Ms.Raw{
 			this.maxMz = maxMz;
 			Prepare(rawFile.Ms1ScanNumbers, rawFile.Ms1Rt, out frameIndMin, out frameIndMax, out rts);
 		}
-
 		public static void Prepare(int[] scanNumbers, double[] ms1Rt, out int[] frameIndMin,
 			out int[] frameIndMax, out double[] newRTs){
 			List<int> current = new List<int>();
@@ -46,16 +45,13 @@ namespace MqUtil.Ms.Raw{
 				newRTs[i] = ms1Rt.SubArray(newInds[i]).Mean();
 			}
 		}
-
 		public override int Count => frameIndMin.Length;
 		public override int MassRangeCount => rawFile.Ms1MassRangeCount;
-
 		public override double[] GetMassRange(int i){
 			double[] result = new double[2];
 			rawFile.GetMs1MassRange(frameIndMin[i], out result[0], out result[1]);
 			return result;
 		}
-
 		public override Spectrum GetSpectrum(int j, bool readCentroids){
 			if (!Buffered){
 				return rawFile.GetMs1Spectrum(frameIndMin[j], frameIndMax[j], imsIndexMin, imsIndexMax, readCentroids,
@@ -72,30 +68,24 @@ namespace MqUtil.Ms.Raw{
 			}
 			return map[j];
 		}
-
 		public override bool HasProfile(int j){
 			return true;
 		}
-
 		public override byte GetMassRangeIndex(int i){
 			return rawFile.GetMs1MassRangeIndex(frameIndMin[i]);
 		}
-
 		public override double[] GetTimeSpan(int i){
 			double[] f1 = rawFile.GetMs1TimeSpan(frameIndMin[i]);
 			double[] f2 = rawFile.GetMs1TimeSpan(frameIndMax[i]);
 			return new[]{f1[0], f2[1]};
 		}
-
 		public override double GetTime(int i){
 			return rawFile.GetMs1Time(frameIndMin[i]);
 		}
-
 		public override int GetIndexFromRt(double time){
 			int indOrig = rawFile.GetMs1IndexFromRt(time);
 			return ArrayUtils.FloorIndex(frameIndMin, indOrig);
 		}
-
 		public override int Capacity => 50;
 	}
 }

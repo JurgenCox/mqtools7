@@ -1,7 +1,7 @@
 ﻿namespace MqUtil.Ms.Decoy{
 	public class DecoyStrategyReward : DecoyStrategy{
-		public DecoyStrategyReward(string specialAas) : base(specialAas){ }
-
+		public DecoyStrategyReward(string specialAas) : base(specialAas){
+		}
 		public override string ProcessProtein(string protSeq, bool isCodon){
 			return protSeq;
 			//char[] rev = new char[protSeq.Length];
@@ -17,11 +17,9 @@
 			//}
 			//return new string(rev);
 		}
-
 		public override string ProcessVariation(string mutaions, string protSeq, bool isCodon){
 			return mutaions;
 		}
-
 		public override string ProcessPeptide(string pepSeq){
 			bool firstHalf = (pepSeq.GetHashCode() / 2) % 2 == 1;
 			//const bool firstHalf = true;
@@ -32,27 +30,23 @@
 				? ProcessPeptideFirstHalf(pepSeq, result, n2)
 				: ProcessPeptideSecondHalf(pepSeq, result, n2, odd);
 		}
-
 		private static string ProcessPeptideSecondHalf(string pepSeq, char[] result, int n2, bool odd){
 			for (int i = 1; i <= n2 - (odd ? 1 : 0); i++){
 				result[n2 + i] = pepSeq[pepSeq.Length - 1 - i];
 			}
 			return new string(result);
 		}
-
 		private static string ProcessPeptideFirstHalf(string pepSeq, char[] result, int n2){
 			for (int i = 1; i <= n2; i++){
 				result[i] = pepSeq[n2 + 1 - i];
 			}
 			return new string(result);
 		}
-
 		public override int GetHashCode(){
 			unchecked{
 				return ((specialAas != null ? MqUtil.Util.HashCode.GetDeterministicHashCode(specialAas) : 3) * 393);
 			}
 		}
-
 		public override DecoyMode DecoyMode{
 			get{ return DecoyMode.Reward; }
 		}

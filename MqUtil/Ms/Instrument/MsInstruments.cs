@@ -9,18 +9,14 @@ namespace MqUtil.Ms.Instrument{
 		public static readonly MsInstrument thermoAstral = new ThermoAstral(5);
 		public static readonly MsInstrument watersTof = new WatersQtof(6);
 		public static readonly MsInstrument shimadzuTof = new ShimadzuQtof(7);
-
-		private static readonly MsInstrument[] allInstrumentsRestricted = {
+		private static readonly MsInstrument[] allInstrumentsRestricted ={
 			thermoOrbi, brukerTof, sciexTof, agilentTof, brukerTims, thermoAstral, watersTof
 		};
-
 		private static readonly MsInstrument[] allInstrumentsExtended =
 			ArrayUtils.Concat(allInstrumentsRestricted, new[]{shimadzuTof});
-
 		public static MsInstrument[] GetAllInstruments(bool extended){
 			return extended ? allInstrumentsExtended : allInstrumentsRestricted;
 		}
-
 		public static string[] GetAllInstrumentsString(bool extended){
 			MsInstrument[] ai = GetAllInstruments(extended);
 			string[] result = new string[ai.Length];
@@ -29,7 +25,6 @@ namespace MqUtil.Ms.Instrument{
 			}
 			return result;
 		}
-
 		public static MsInstrument FromName(string name){
 			if (name == null){
 				return null;

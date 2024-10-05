@@ -1,6 +1,7 @@
-﻿namespace MqUtil.Ms.Analyzer {
-	public class MassAnalyzerAstral : MsmsMassAnalyzer {
-		public MassAnalyzerAstral(int index) : base(index) { }
+﻿namespace MqUtil.Ms.Analyzer{
+	public class MassAnalyzerAstral : MsmsMassAnalyzer{
+		public MassAnalyzerAstral(int index) : base(index){
+		}
 		public override double MatchToleranceDefault => 25;
 		public override bool MatchToleranceInPpmDefault => true;
 		public override double DeNovoToleranceDefault => 25;

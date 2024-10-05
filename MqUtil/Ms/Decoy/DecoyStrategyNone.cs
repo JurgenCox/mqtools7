@@ -1,4 +1,4 @@
-﻿namespace MqUtil.Ms.Decoy {
+﻿namespace MqUtil.Ms.Decoy{
 	public class DecoyStrategyNone : DecoyStrategy{
 		public DecoyStrategyNone() : base(""){
 		}
@@ -12,12 +12,11 @@
 			throw new System.NotImplementedException();
 		}
 		public override DecoyMode DecoyMode{ get; }
-
-		public override int GetHashCode() {
-			unchecked {
-				return ((specialAas != null ? MqUtil.Util.HashCode.GetDeterministicHashCode(specialAas) : 3) * 397 + 868);
+		public override int GetHashCode(){
+			unchecked{
+				return ((specialAas != null ? MqUtil.Util.HashCode.GetDeterministicHashCode(specialAas) : 3) * 397 +
+				        868);
 			}
 		}
-
 	}
 }

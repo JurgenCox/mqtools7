@@ -1,6 +1,7 @@
 ﻿namespace MqUtil.Ms.Analyzer{
 	public class MassAnalyzerItms : MsmsMassAnalyzer{
-		public MassAnalyzerItms(int index) : base(index) {}
+		public MassAnalyzerItms(int index) : base(index){
+		}
 		public override double MatchToleranceDefault => 0.5;
 		public override double DeNovoToleranceDefault => 0.5;
 		public override double DeisotopeToleranceDefault => 0.15;
@@ -11,7 +12,7 @@
 		public override bool HigherChargesDefault => true;
 		public override bool WaterDefault => true;
 		public override bool AmmoniaDefault => true;
-        public override bool WaterCrossDefault => false;
+		public override bool WaterCrossDefault => false;
 		public override bool AmmoniaCrossDefault => false;
 		public override bool DependentLossesDefault => true;
 		public override bool RecalibrationDefault => false;
