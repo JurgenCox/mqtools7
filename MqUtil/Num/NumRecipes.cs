@@ -1,5 +1,6 @@
 ﻿namespace MqUtil.Num{
 	public class NumRecipes{
+		public delegate void RtsaveFunc(double x, out double y, out double dy);
 		public static void Mrqcof(double[] x, double[] y, double[] sig, int ndata, double[] a, double[,] alpha,
 			double[] beta,
 			out double chisq, Func<double, double[], double[], int, double> func){
@@ -168,5 +169,63 @@
 				chisq = ochisq;
 			}
 		}
+		private const int maxitRtsafe = 100;
+
+		public static double Rtsafe(RtsaveFunc func, double x1, double x2, double xacc) {
+			double xh, xl;
+			func(x1, out double fl, out double df);
+			func(x2, out double fh, out df);
+			if ((fl > 0.0 && fh > 0.0) || (fl < 0.0 && fh < 0.0)) {
+				throw new Exception("Root must be bracketed in Rtsafe");
+			}
+			if (fl == 0.0) {
+				return x1;
+			}
+			if (fh == 0.0) {
+				return x2;
+			}
+			if (fl < 0.0) {
+				xl = x1;
+				xh = x2;
+			} else {
+				xh = x1;
+				xl = x2;
+			}
+			double rts = 0.5 * (x1 + x2);
+			double dxold = Math.Abs(x2 - x1);
+			double dx = dxold;
+			func(rts, out double f, out df);
+			for (int j = 0; j < maxitRtsafe; j++) {
+				if ((((rts - xh) * df - f) * ((rts - xl) * df - f) >= 0.0) ||
+				    (Math.Abs(2.0 * f) > Math.Abs(dxold * df))) {
+					dxold = dx;
+					dx = 0.5 * (xh - xl);
+					rts = xl + dx;
+					if (xl == rts) {
+						return rts;
+					}
+				} else {
+					dxold = dx;
+					dx = f / df;
+					double temp = rts;
+					rts -= dx;
+					if (temp == rts) {
+						return rts;
+					}
+				}
+				if (Math.Abs(dx) < xacc) {
+					return rts;
+				}
+				func(rts, out f, out df);
+				if (f < 0.0) {
+					xl = rts;
+				} else {
+					xh = rts;
+				}
+			}
+			throw new Exception("Maximum number of iterations exceeded in Rtsafe");
+		}
+
+
 	}
 }
