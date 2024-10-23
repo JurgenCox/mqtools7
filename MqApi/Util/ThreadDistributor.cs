@@ -11,7 +11,8 @@ namespace MqApi.Util{
 		protected Stack<int> toBeProcessed;
 		private readonly Action<int, int> calculation;
 		private readonly object locker = new object();
-		public Action<double> ReportProgress{ get; set; }
+        public Action<double> ReportProgress { get; set; }
+        public Action<string> Comment { get; set; }
 		public int DelayMs{ get; set; }
 		private int tasksDone;
 		public ThreadDistributor(int nThreads, int nTasks, Action<int> calculation) : this(nThreads, nTasks,
@@ -41,7 +42,7 @@ namespace MqApi.Util{
 			for (int i = 0; i < nThreads; i++){
 				allWorkThreads[i] = new Thread(Work);
 				sources[i] = new CancellationTokenSource();
-				allWorkThreads[i].Start(i);
+                allWorkThreads[i].Start(i);
 				if (DelayMs > 0){
 					Thread.Sleep(DelayMs);
 				}
@@ -69,8 +70,17 @@ namespace MqApi.Util{
 						}
 					}
 				}
-				calculation(x, it);
-				lock (locker){
+
+                try {
+                    calculation(x, it);
+                }catch (Exception e){
+					Comment?.Invoke(e.Message + "\n" + e.StackTrace);
+                    foreach (CancellationTokenSource source in sources) {
+                        source?.Cancel();
+                    }
+					return;
+                }
+                lock (locker){
 					tasksDone++;
 					ReportProgress?.Invoke(tasksDone / (double) nTasks);
 				}
