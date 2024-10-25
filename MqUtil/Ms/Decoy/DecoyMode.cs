@@ -3,6 +3,7 @@
 		None,
 		Revert,
 		Randomize,
-		Reward
+		Reward,
+		Mutate
 	}
 }
