@@ -22,5 +22,5 @@ namespace MqUtil.Util {
 			       "https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads " +
 			       "and install vc_redist.x64.exe";
 		}
-	}
+    }
 }
