@@ -1,4 +1,6 @@
-﻿namespace MqUtil.Ms.Raw {
+﻿using MqApi.Util;
+
+namespace MqUtil.Ms.Raw {
 	public static class RawFileUtil {
 		/// <summary>
 		/// Given a path to raw data, return the RawFile template of the appropriate type
@@ -128,5 +130,34 @@
 			}
 			return result;
 		}
+		public static void WriteDiaWindows(string path, double[] mzMin, double[] mzMax, double[] mzEdge)
+		{
+			StreamWriter writer = new StreamWriter(path);
+			writer.WriteLine("" + mzMin.Length);
+			for (int i = 0; i < mzMin.Length; i++)
+			{
+				writer.WriteLine("" + Parser.ToString(mzMin[i]) + "\t" + Parser.ToString(mzMax[i]) + "\t"
+				                 + Parser.ToString(mzEdge[i]));
+			}
+			writer.Close();
+		}
+
+		public static (double[], double[]) ReadDiaWindows(string path)
+		{
+			StreamReader reader = new StreamReader(path);
+			int len = int.Parse(reader.ReadLine());
+			double[] mzMin = new double[len];
+			double[] mzMax = new double[len];
+			for (int i = 0; i < len; i++)
+			{
+				string s = reader.ReadLine();
+				string[] q = s.Split('\t');
+				mzMin[i] = Parser.Double(q[0]);
+				mzMax[i] = Parser.Double(q[1]);
+			}
+			reader.Close();
+			return (mzMin, mzMax);
+		}
+
 	}
 }
