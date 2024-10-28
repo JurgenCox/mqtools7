@@ -7,7 +7,7 @@ namespace MqUtil.Ms.Utils{
 		public abstract bool IsTims{ get; }
 		public abstract bool IsFaims{ get; }
 		public abstract bool IsDia{ get; }
-		public abstract bool IsReporterQuant{ get; }
+		public bool IsReporterQuant => IsReporterQuantMs2 || IsReporterQuantMs3;
 		public abstract bool IsReporterQuantMs2{ get; }
 		public abstract bool IsReporterQuantMs3{ get; }
 		public abstract bool IsBoxcar{ get; }
