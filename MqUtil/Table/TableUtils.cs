@@ -1,6 +1,8 @@
 ﻿using MqApi.Drawing;
+using MqApi.Num;
 using MqApi.Util;
 using MqUtil.Drawing;
+using MqUtil.Num;
 using MqUtil.Symbol;
 namespace MqUtil.Table {
 	public static class TableUtils {
@@ -248,5 +250,150 @@ namespace MqUtil.Table {
 					return "T";
 			}
 		}
+		public const int ratioSigDigits = 5;
+		public static void SetDouble(DataRow2 row, string name, double value, int digits) {
+			row[name] = NumUtils.RoundSignificantDigits(value, digits);
+		}
+		public static void CollapseFiles(LongList<long> allFilePos, string txtFolder, string serFolder, int nfiles,
+			string txtFile, string serFile)
+		{
+			string bigTxtFilename = Path.Combine(txtFolder, txtFile);
+			string binFilename = Path.Combine(serFolder, serFile);
+			if (File.Exists(bigTxtFilename))
+			{
+				File.Delete(bigTxtFilename);
+			}
+			if (File.Exists(binFilename))
+			{
+				File.Delete(binFilename);
+			}
+			if (File.Exists(binFilename + "_0x") && !File.Exists(binFilename + "x"))
+			{
+				File.Move(binFilename + "_0x", binFilename + "x");
+			}
+			Delete000Files(txtFolder);
+			long lengthTxt = new FileInfo(bigTxtFilename + "_0").Length;
+			File.Move(bigTxtFilename + "_0", bigTxtFilename);
+			long length = new FileInfo(binFilename + "_0").Length;
+			File.Move(binFilename + "_0", binFilename);
+			string filenameTxt = bigTxtFilename + "_0";
+			long[] filePos = ReadFilePos(filenameTxt + "Pos");
+			allFilePos.AddRange(filePos);
+			bool firstTime = true;
+			string origFilename = bigTxtFilename;
+			for (int fileIndex = 1; fileIndex < nfiles; fileIndex++)
+			{
+				filenameTxt = origFilename + "_" + fileIndex;
+				long newTxtLen = new FileInfo(filenameTxt).Length;
+				filePos = ReadFilePos(filenameTxt + "Pos");
+				for (int i = 0; i < filePos.Length; i++)
+				{
+					filePos[i] += length;
+				}
+				allFilePos.AddRange(filePos);
+				if (lengthTxt + newTxtLen > maxTxtFileSize)
+				{
+					if (firstTime)
+					{
+						int x = bigTxtFilename.LastIndexOf('.');
+						string s1 = bigTxtFilename.Substring(0, x);
+						string s2 = bigTxtFilename.Substring(x);
+						File.Move(bigTxtFilename, s1 + "00000" + s2);
+					}
+					bigTxtFilename = GetNextFilename(bigTxtFilename);
+					File.Move(filenameTxt, bigTxtFilename);
+					lengthTxt = 0;
+					firstTime = false;
+				}
+				else
+				{
+					Append(bigTxtFilename, filenameTxt);
+				}
+				length += AppendBin(binFilename, binFilename + "_" + fileIndex);
+				lengthTxt += newTxtLen;
+			}
+		}
+		private const long maxTxtFileSize = 50L * 1024L * 1024L * 1024L;
+		private static void Delete000Files(string txtFolder)
+		{
+			foreach (string file in Directory.GetFiles(txtFolder))
+			{
+				int x = file.LastIndexOf('.');
+				if (x < 0)
+				{
+					continue;
+				}
+				if (x < 3)
+				{
+					continue;
+				}
+				string s1 = file.Substring(x - 3, 3);
+				if (StringUtils.AreDigits(s1))
+				{
+					File.Delete(file);
+				}
+			}
+		}
+		private static string GetNextFilename(string s)
+		{
+			int x = s.LastIndexOf('.');
+			string s1 = s.Substring(0, x);
+			string s2 = s.Substring(x);
+			char c = s1[s1.Length - 1];
+			if (c < '0' || x > '9')
+			{
+				return s1 + "00001" + s2;
+			}
+			int w = int.Parse(s1.Substring(s1.Length - 5));
+			return s1.Substring(0, s1.Length - 5) + StringUtils.IntToStringLeadingZeroes(w + 1, 5) + s2;
+		}
+		private static long[] ReadFilePos(string filename)
+		{
+			BinaryReader reader = FileUtils.GetBinaryReader(filename);
+			long[] filePos = FileUtils.ReadInt64Array(reader);
+			reader.Close();
+			File.Delete(filename);
+			return filePos;
+		}
+
+		public static void Append(string bigFile, string smallFile)
+		{
+			StreamWriter writer = new StreamWriter(bigFile, true);
+			StreamReader reader = new StreamReader(smallFile);
+			string line;
+			while ((line = reader.ReadLine()) != null)
+			{
+				writer.WriteLine(line);
+			}
+			reader.Close();
+			writer.Close();
+			File.Delete(smallFile);
+		}
+		private static long AppendBin(string bigFile, string smallFile)
+		{
+			Stream extra = new FileStream(smallFile, FileMode.Open, FileAccess.Read);
+			long len = extra.Length;
+			byte[] buffer = new byte[32 * 1024];
+			Stream original = new FileStream(bigFile, FileMode.Append);
+			try
+			{
+				int blockSize;
+				while ((blockSize = extra.Read(buffer, 0, buffer.Length)) > 0)
+				{
+					original.Write(buffer, 0, blockSize);
+				}
+			}
+			catch (Exception)
+			{
+			}
+			finally
+			{
+				original.Close();
+			}
+			extra.Close();
+			File.Delete(smallFile);
+			return len;
+		}
+
 	}
 }
