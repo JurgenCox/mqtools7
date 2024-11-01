@@ -553,5 +553,186 @@ namespace MqUtil.Mol{
 			string modName = s.Substring(2, s.Length - 3);
 			return (s[0], Tables.Modifications[modName].Index);
 		}
+		public static int CalcLabelIndex(char aa, PeptideModificationState labelMods, string sequence,
+	byte multiplicity, IList<string[]> labels)
+		{
+			for (int i = 0; i < sequence.Length; i++)
+			{
+				if (sequence[i] != aa)
+				{
+					continue;
+				}
+				ushort m = labelMods.GetModificationAt(i);
+				string[] ls = new string[multiplicity];
+				for (int j = 0; j < multiplicity; j++)
+				{
+					ls[j] = GetMod(aa, labels[j]);
+				}
+				if (!AtMostOneIsUnlabeled(ls))
+				{
+					return -1;
+				}
+				if (AnyAreEqual(ls))
+				{
+					return -1;
+				}
+				for (int j = 0; j < ls.Length; j++)
+				{
+					if (ls[j] == null && (m == ushort.MaxValue ||
+										  Tables.ModificationList[m].ModificationType != ModificationType.Label))
+					{
+						return j;
+					}
+					if (ls[j] != null && new Modification2(ls[j]).Index == m)
+					{
+						return j;
+					}
+				}
+				return -1;
+			}
+			return -1;
+		}
+
+		public static int CalcLabelIndexNterm(PeptideModificationState labelMods, byte multiplicity,
+			IList<string[]> labels)
+		{
+			ushort m = labelMods.NTermModification;
+			string[] ls = new string[multiplicity];
+			for (int j = 0; j < multiplicity; j++)
+			{
+				ls[j] = GetModNterm(labels[j]);
+			}
+			if (!AtMostOneIsUnlabeled(ls))
+			{
+				return -1;
+			}
+			if (AnyAreEqual(ls))
+			{
+				return -1;
+			}
+			for (int j = 0; j < ls.Length; j++)
+			{
+				if (ls[j] == null && (m == ushort.MaxValue ||
+									  Tables.ModificationList[m].ModificationType != ModificationType.Label))
+				{
+					return j;
+				}
+				if (ls[j] != null && Tables.Modifications[ls[j]].Index == m)
+				{
+					return j;
+				}
+			}
+			return -1;
+		}
+
+		public static int CalcLabelIndexCterm(PeptideModificationState labelMods, byte multiplicity,
+			IList<string[]> labels)
+		{
+			ushort m = labelMods.CTermModification;
+			string[] ls = new string[multiplicity];
+			for (int j = 0; j < multiplicity; j++)
+			{
+				ls[j] = GetModCterm(labels[j]);
+			}
+			if (!AtMostOneIsUnlabeled(ls))
+			{
+				return -1;
+			}
+			if (AnyAreEqual(ls))
+			{
+				return -1;
+			}
+			for (int j = 0; j < ls.Length; j++)
+			{
+				if (ls[j] == null && (m == ushort.MaxValue ||
+									  Tables.ModificationList[m].ModificationType != ModificationType.Label))
+				{
+					return j;
+				}
+				if (ls[j] != null && Tables.Modifications[ls[j]].Index == m)
+				{
+					return j;
+				}
+			}
+			return -1;
+		}
+		private static bool AnyAreEqual(IList<string> ls)
+		{
+			for (int i = 0; i < ls.Count; i++)
+			{
+				for (int j = 0; j < i; j++)
+				{
+					if (ls[i] != null && ls[j] != null)
+					{
+						if (ls[i].Equals(ls[j]))
+						{
+							return true;
+						}
+					}
+				}
+			}
+			return false;
+		}
+
+		private static bool AtMostOneIsUnlabeled(IEnumerable<string> l)
+		{
+			int nullCount = 0;
+			foreach (string s in l)
+			{
+				if (s == null)
+				{
+					nullCount++;
+				}
+			}
+			return nullCount < 2;
+		}
+
+		private static string GetMod(char aa, IEnumerable<string> labels)
+		{
+			foreach (string t in labels)
+			{
+				AminoAcid ax = LabelModification.GetAminoAcidFromLabel(t);
+				if (ax?.Letter == aa)
+				{
+					return t;
+				}
+			}
+			return null;
+		}
+
+		private static string GetModNterm(IEnumerable<string> labels)
+		{
+			foreach (string t in labels)
+			{
+				if (!Tables.Modifications.ContainsKey(t))
+				{
+					continue;
+				}
+				Modification m = Tables.Modifications[t];
+				if (m.IsNterminal)
+				{
+					return t;
+				}
+			}
+			return null;
+		}
+
+		private static string GetModCterm(IEnumerable<string> labels)
+		{
+			foreach (string t in labels)
+			{
+				if (!Tables.Modifications.ContainsKey(t))
+				{
+					continue;
+				}
+				Modification m = Tables.Modifications[t];
+				if (m.IsCterminal)
+				{
+					return t;
+				}
+			}
+			return null;
+		}
+
 	}
 }
