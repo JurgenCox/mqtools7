@@ -2,6 +2,7 @@
 using MqApi.Util;
 using MqUtil.Data;
 using MqUtil.Num.Test;
+using System.Numerics;
 namespace MqUtil.Num{
 	public static class NumUtils{
 		/// <summary>
@@ -1291,7 +1292,253 @@ namespace MqUtil.Num{
 			Array.Copy(array, (n - 1) * len, result[n - 1], 0, ll);
 			return result;
 		}
+		public static (double[] w, double[,] v, double[] means, int[] o) Svd(double[,] a)
+		{
+			double[] means = SubtractMeans(a);
+			SingularValueDecomposition(ref a, out double[] w, out double[,] v);
+			for (int i = 0; i < v.GetLength(0); i++)
+			{
+				for (int j = 0; j < v.GetLength(1); j++)
+				{
+					v[i, j] *= w[j];
+				}
+			}
+			double sum = 0;
+			for (int i = 0; i < w.Length; i++)
+			{
+				w[i] = w[i] * w[i];
+				sum += w[i];
+			}
+			for (int i = 0; i < w.Length; i++)
+			{
+				w[i] *= 100.0 / sum;
+			}
+			for (int col = 0; col < v.GetLength(1); col++)
+			{
+				if (LargestIsNegative(v, col))
+				{
+					for (int i = 0; i < a.GetLength(0); i++)
+					{
+						a[i, col] *= -1;
+					}
+					for (int i = 0; i < v.GetLength(0); i++)
+					{
+						v[i, col] *= -1;
+					}
+				}
+			}
+			int[] o = w.Order();
+			ArrayUtils.Revert(o);
+			Array.Resize(ref o, o.Length - 1);
+			return (w, v, means, o);
+		}
+		public static double[] SubtractMeans(double[,] a)
+		{
+			double[] means = new double[a.GetLength(0)];
+			for (int i = 0; i < a.GetLength(0); i++)
+			{
+				double mean = 0;
+				for (int j = 0; j < a.GetLength(1); j++)
+				{
+					mean += a[i, j];
+				}
+				mean /= a.GetLength(1);
+				for (int j = 0; j < a.GetLength(1); j++)
+				{
+					a[i, j] -= mean;
+				}
+				means[i] = mean;
+			}
+			return means;
+		}
 
+		private static bool LargestIsNegative(double[,] v, int col)
+		{
+			double[] x = new double[v.GetLength(0)];
+			for (int i = 0; i < x.Length; i++)
+			{
+				x[i] = Math.Abs(v[i, col]);
+			}
+			int[] o = x.Order();
+			int ind = o[o.Length - 1];
+			return v[ind, col] < 0;
+		}
+		public static void SingularValueDecomposition(ref double[,] a, out double[] w, out double[,] v)
+		{
+			int m = a.GetLength(0);
+			int n = a.GetLength(1);
+			if (m >= n)
+			{
+				NumRecipes.Svdcmp(a, out w, out v);
+				return;
+			}
+			a = MatrixUtils.Transpose(a);
+			NumRecipes.Svdcmp(a, out w, out var v1);
+			v = a;
+			a = v1;
+		}
+		/// <summary>
+		/// Calculates the coefficients of the polynomials which leading coefficients are each one of the input array
+		/// This function uses complex numbers as input
+		/// </summary>
+		public static double[] CalcPolyComplex(Complex[] roots)
+		{
+			int N = roots.Length;
+			Complex[] coefs = new Complex[N + 1];
+			coefs[0] = -roots[0];
+			coefs[1] = 1.0;
+
+			for (int k = 2; k <= N; k++)
+			{
+				coefs[k] = 1.0;
+				for (int i = k - 2; i >= 0; i--)
+				{
+					coefs[i + 1] = coefs[i] - roots[k - 1] * coefs[i + 1];
+				}
+				coefs[0] *= -roots[k - 1];
+
+			}
+
+			double[] realCoefs = new double[N + 1];
+			for (int i = 0; i < N + 1; i++)
+				realCoefs[i] = coefs[i].Real;
+
+			return realCoefs;
+		}
+
+		/// <summary>
+		/// Calculates the coefficients of the polynomials which leading coefficients are each one of the input array
+		/// Same as before but input is an integer array
+		/// </summary>
+		public static double[] CalcPoly(int[] roots)
+		{
+			int N = roots.Length;
+			Complex[] coefs = new Complex[N + 1];
+			coefs[0] = -roots[0];
+			coefs[1] = 1.0;
+
+			for (int k = 2; k <= N; k++)
+			{
+				coefs[k] = 1.0;
+				for (int i = k - 2; i >= 0; i--)
+				{
+					coefs[i + 1] = coefs[i] - roots[k - 1] * coefs[i + 1];
+				}
+				coefs[0] *= -roots[k - 1];
+
+			}
+
+			double[] realCoefs = new double[N + 1];
+			for (int i = 0; i < N + 1; i++)
+				realCoefs[i] = coefs[i].Real;
+
+			return realCoefs;
+		}
+		/// <summary>
+		/// Computes the solution of a linear equation system using Gauss-Jordan elimination.
+		/// Calculates the result of Ax = B, where A is a square matrix and B is a vector with size equal to matrix rows number.
+		/// The input is a matrix containing A and B in the last column.
+		/// The output is a boolean value that means if the system has a solution or not.
+		/// The solution will substitute vector B, so will be in the last row of the input matrix.
+		/// </summary>
+		public static bool GaussElimination(double[,] M)
+		{
+			// input checks
+			int rowCount = M.GetUpperBound(0) + 1;
+			if (M == null || M.Length != rowCount * (rowCount + 1))
+				throw new ArgumentException("The algorithm must be provided with a (n x n+1) matrix.");
+			if (rowCount < 1)
+				throw new ArgumentException("The matrix must at least have one row.");
+
+			// pivoting
+			for (int col = 0; col + 1 < rowCount; col++)
+			{
+				if (M[col, col] == 0)
+				// check for zero coefficients
+				{
+					// find non-zero coefficient
+					int swapRow = col + 1;
+					for (; swapRow < rowCount; swapRow++)
+						if (M[swapRow, col] != 0)
+							break;
+
+					if (M[swapRow, col] != 0) // found a non-zero coefficient?
+					{
+						// yes, then swap it with the above
+						double[] tmp = new double[rowCount + 1];
+						for (int i = 0; i < rowCount + 1; i++)
+						{
+							tmp[i] = M[swapRow, i];
+							M[swapRow, i] = M[col, i];
+							M[col, i] = tmp[i];
+						}
+					}
+					else return false; // no, then the matrix has no unique solution
+				}
+			}
+
+			// elimination
+			for (int sourceRow = 0; sourceRow + 1 < rowCount; sourceRow++)
+			{
+				for (int destRow = sourceRow + 1; destRow < rowCount; destRow++)
+				{
+					double df = M[sourceRow, sourceRow];
+					double sf = M[destRow, sourceRow];
+					for (int i = 0; i < rowCount + 1; i++)
+						M[destRow, i] = M[destRow, i] * df - M[sourceRow, i] * sf;
+				}
+			}
+
+			// back-insertion
+			for (int row = rowCount - 1; row >= 0; row--)
+			{
+				double f = M[row, row];
+				if (f == 0) return false;
+
+				for (int i = 0; i < rowCount + 1; i++) M[row, i] /= f;
+				for (int destRow = 0; destRow < row; destRow++)
+				{
+					M[destRow, rowCount] -= M[destRow, row] * M[row, rowCount];
+					M[destRow, row] = 0;
+				}
+			}
+
+			return true;
+		}
+
+		/// <summary>
+		/// This function filters the signal using a digital IIR (infinite impulse response) filter.
+		/// Input x: is the array containing the signal to be filtered (float)
+		///		  a: numerator coefficients for the filter
+		///		  b: denominator coefficients for the filter (a and b must have the same length)
+		///		  zi: initial state (steady state of step response)
+		/// Output: the filtered signal (float)
+		/// </summary>
+		public static float[] lfilter(float[] x, double[] a, double[] b, double[] zi)
+		{
+			if (a.Length != b.Length)
+				throw new ArgumentOutOfRangeException("A and B filter coefficents should have the same length");
+			double[] y = new double[x.Length];
+			int N = a.Length;
+			double[] d = new double[N];
+			zi.CopyTo(d, 0);
+			for (int n = 0; n < x.Length; ++n)
+			{
+				y[n] = b[0] * x[n] + d[0];
+				for (int f = 1; f < N; ++f)
+				{
+					d[f - 1] = b[f] * x[n] - a[f] * y[n] + d[f];
+				}
+			}
+
+			// convert the output into float
+			float[] Y = new float[y.Length];
+			for (int i = 0; i < y.Length; i++)
+			{
+				Y[i] = Convert.ToSingle(y[i]);
+			}
+			return Y;
+		}
 
 	}
 }
