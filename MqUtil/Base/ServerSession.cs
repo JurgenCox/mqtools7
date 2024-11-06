@@ -117,8 +117,15 @@ namespace MqUtil.Base{
 					return $"Cannot delete folder {infoFolder}. Please make sure no other processes are accessing it.";
 				}
 			}
-			if (!FileUtils.IsUnix() && !MqUtil.Util.Utils.XgboostDllRunsFine()){
-				return MqUtil.Util.Utils.GetXgboostMessage();
+			if (!FileUtils.IsUnix()){
+				try {
+					MqUtil.Util.Utils.XgboostDllRunsFine();
+				}
+				catch {
+					return MqUtil.Util.Utils.GetXgboostMessage();
+
+
+				}
 			}
 			if (!string.IsNullOrEmpty(infoFolder)){
 				Directory.CreateDirectory(infoFolder);
