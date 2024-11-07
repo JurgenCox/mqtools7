@@ -138,7 +138,7 @@ namespace MqUtil.Base{
 			if (jobInds != null){
 				jobs = jobs.SubList(jobInds);
 			}
-			workThreadSource = new CancellationTokenSource();
+			workThreadSource = tokenSource;
 			workThread = new Thread(() => DoWork(jobs, numThreads, wmodel, fileName, password, 
 				workThreadSource, deleteFinishedPerformanceFiles));
 			workThread.Start();
