@@ -23,6 +23,8 @@ namespace MqUtil.Ms.Fragment{
 		public static PeakAnnotation[] ySeriesAmmonia;
 		public static PeakAnnotation[] ySeriesLoss;
 		public static PeakAnnotation[] ySeriesLoss2;
+		public static PeakAnnotation[] ySeriesLossWater;
+		public static PeakAnnotation[] ySeriesLossAmmonia;
 		public static PeakAnnotation[] zSeriesAnnot;
 		public static PeakAnnotation[] z2SeriesAnnot;
 		public static PeakAnnotation[] zSeriesWater;
@@ -41,6 +43,8 @@ namespace MqUtil.Ms.Fragment{
 		public static PeakAnnotation[] bSeriesAmmonia;
 		public static PeakAnnotation[] bSeriesLoss;
 		public static PeakAnnotation[] bSeriesLoss2;
+		public static PeakAnnotation[] bSeriesLossWater;
+		public static PeakAnnotation[] bSeriesLossAmmonia;
 		public static PeakAnnotation[] cSeriesAnnot;
 		public static PeakAnnotation[] c2SeriesAnnot;
 		public static PeakAnnotation[] cSeriesWater;
@@ -70,6 +74,8 @@ namespace MqUtil.Ms.Fragment{
 				ySeriesAmmonia = new PeakAnnotation[annotLen];
 				ySeriesLoss = new PeakAnnotation[annotLen];
 				ySeriesLoss2 = new PeakAnnotation[annotLen];
+				ySeriesLossWater = new PeakAnnotation[annotLen];
+				ySeriesLossAmmonia = new PeakAnnotation[annotLen];
 				zSeriesAnnot = new PeakAnnotation[annotLen];
 				z2SeriesAnnot = new PeakAnnotation[annotLen];
 				zSeriesWater = new PeakAnnotation[annotLen];
@@ -88,6 +94,8 @@ namespace MqUtil.Ms.Fragment{
 				bSeriesAmmonia = new PeakAnnotation[annotLen];
 				bSeriesLoss = new PeakAnnotation[annotLen];
 				bSeriesLoss2 = new PeakAnnotation[annotLen];
+				bSeriesLossWater = new PeakAnnotation[annotLen];
+				bSeriesLossAmmonia = new PeakAnnotation[annotLen];
 				cSeriesAnnot = new PeakAnnotation[annotLen];
 				c2SeriesAnnot = new PeakAnnotation[annotLen];
 				cSeriesWater = new PeakAnnotation[annotLen];
@@ -112,6 +120,8 @@ namespace MqUtil.Ms.Fragment{
 					ySeriesAmmonia[i] = new LossPeakAnnotation(ySeriesAnnot[i], MolUtil.ammoniaLossLib);
 					ySeriesLoss[i] = new MsmsPeakAnnotation(new YIon(), i + 1, 1, 0, 1);
 					ySeriesLoss2[i] = new MsmsPeakAnnotation(new YIon(), i + 1, 1, 0, 2);
+					ySeriesLossWater[i] = new LossPeakAnnotation(ySeriesLoss[i], MolUtil.waterLossLib);
+					ySeriesLossAmmonia[i] = new LossPeakAnnotation(ySeriesLoss[i], MolUtil.ammoniaLossLib);
 					zSeriesAnnot[i] = new MsmsPeakAnnotation(new ZIon(), i + 1, 1, 0, 0);
 					z2SeriesAnnot[i] = new MsmsPeakAnnotation(new ZIon(), i + 1, 2, 0, 0);
 					zSeriesWater[i] = new LossPeakAnnotation(zSeriesAnnot[i], MolUtil.waterLossLib);
@@ -130,6 +140,8 @@ namespace MqUtil.Ms.Fragment{
 					bSeriesAmmonia[i] = new LossPeakAnnotation(bSeriesAnnot[i], MolUtil.ammoniaLossLib);
 					bSeriesLoss[i] = new MsmsPeakAnnotation(new BIon(), i + 1, 1, 0, 1);
 					bSeriesLoss2[i] = new MsmsPeakAnnotation(new BIon(), i + 1, 1, 0, 2);
+					bSeriesLossWater[i] = new LossPeakAnnotation(bSeriesLoss[i], MolUtil.waterLossLib);
+					bSeriesLossAmmonia[i] = new LossPeakAnnotation(bSeriesLoss[i], MolUtil.ammoniaLossLib);
 					cSeriesAnnot[i] = new MsmsPeakAnnotation(new CIon(), i + 1, 1, 0, 0);
 					c2SeriesAnnot[i] = new MsmsPeakAnnotation(new CIon(), i + 1, 2, 0, 0);
 					cSeriesWater[i] = new LossPeakAnnotation(cSeriesAnnot[i], MolUtil.waterLossLib);
@@ -916,7 +928,7 @@ namespace MqUtil.Ms.Fragment{
 			PeakAnnotation[] annotations, short[] dependents, bool calcNeighbors, short[] left, short[] right,
 			string sequence, PeptideModificationState varMods, double[] ctermSeriesMasses, bool secondLoss,
 			bool includeWater, int ctermWaterLossInd, bool includeAmmonia, int ctermNh3LossInd, bool dependentLosses,
-			PeakAnnotation[] ctermSeriesLoss, PeakAnnotation[] ctermSeriesWater, PeakAnnotation[] ctermSeriesAmmonia,
+			PeakAnnotation[] ctermSeriesLoss, PeakAnnotation[] ctermSeriesLossWater, PeakAnnotation[] ctermSeriesLossAmmonia,
 			PeakAnnotation[] ctermSeriesLoss2, bool sequenceBasedMod){
 			ModificationSite neutralLossSite1 = null;
 			int neutralLossIndex1 = -1;
@@ -978,7 +990,7 @@ namespace MqUtil.Ms.Fragment{
 							if (ind >= start && ctermWaterLossInd >= 0 && i >= ctermWaterLossInd){
 								double m = ctermSeriesMasses[i] - loss1;
 								masses[pos] = m - Molecule.massWater;
-								annotations[pos] = ind >= annotLen ? null : ctermSeriesWater[ind];
+								annotations[pos] = ind >= annotLen ? null : ctermSeriesLossWater[ind];
 								//TODO
 								dependents[pos] = (short) (dependentLosses ? indStart + i - start : -1);
 								if (calcNeighbors){
@@ -995,7 +1007,7 @@ namespace MqUtil.Ms.Fragment{
 							if (ind >= start && ctermNh3LossInd >= 0 && i >= ctermNh3LossInd){
 								double m = ctermSeriesMasses[i] - loss1;
 								masses[pos] = m - Molecule.massAmmonia;
-								annotations[pos] = ind >= annotLen ? null : ctermSeriesAmmonia[ind];
+								annotations[pos] = ind >= annotLen ? null : ctermSeriesLossAmmonia[ind];
 								//TODO
 								dependents[pos] = (short) (dependentLosses ? indStart + i - start : -1);
 								if (calcNeighbors){
@@ -1210,7 +1222,7 @@ namespace MqUtil.Ms.Fragment{
 			PeakAnnotation[] annotations, short[] dependents, bool calcNeighbors, short[] left, short[] right,
 			string sequence, PeptideModificationState varMods, double[] ntermSeriesMasses, bool secondLoss,
 			bool includeWater, int ntermWaterLossInd, bool includeAmmonia, int ntermNh3LossInd, bool dependentLosses,
-			PeakAnnotation[] ntermSeriesLoss, PeakAnnotation[] ntermSeriesWater, PeakAnnotation[] ntermSeriesAmmonia,
+			PeakAnnotation[] ntermSeriesLoss, PeakAnnotation[] ntermSeriesLossWater, PeakAnnotation[] ntermSeriesLossAmmonia,
 			PeakAnnotation[] ntermSeriesLoss2, bool sequenceBasedMod){
 			ModificationSite neutralLossSite1 = null;
 			int neutralLossIndex1 = -1;
@@ -1272,7 +1284,7 @@ namespace MqUtil.Ms.Fragment{
 							if (ind >= start && ntermWaterLossInd >= 0 && i >= ntermWaterLossInd){
 								double m = ntermSeriesMasses[i] - loss1;
 								masses[pos] = m - Molecule.massWater;
-								annotations[pos] = ind >= annotLen ? null : ntermSeriesWater[ind];
+								annotations[pos] = ind >= annotLen ? null : ntermSeriesLossWater[ind];
 								//TODO
 								dependents[pos] = (short) (dependentLosses ? indStart + i - start : -1);
 								if (calcNeighbors){
@@ -1289,7 +1301,7 @@ namespace MqUtil.Ms.Fragment{
 							if (ind >= start && ntermNh3LossInd >= 0 && i >= ntermNh3LossInd){
 								double m = ntermSeriesMasses[i] - loss1;
 								masses[pos] = m - Molecule.massAmmonia;
-								annotations[pos] = ind >= annotLen ? null : ntermSeriesAmmonia[ind];
+								annotations[pos] = ind >= annotLen ? null : ntermSeriesLossAmmonia[ind];
 								//TODO
 								dependents[pos] = (short) (dependentLosses ? indStart + i - start : -1);
 								if (calcNeighbors){
