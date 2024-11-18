@@ -1,4 +1,6 @@
 ﻿using MqApi.Util;
+using System.IO.Compression;
+using System.Reflection;
 
 namespace MqUtil.Mol{
 	public static class SpeciesItems{
@@ -6,9 +8,8 @@ namespace MqUtil.Mol{
 		public static List<SpeciesItem> Species => species ?? (species = Init());
 
 		private static List<SpeciesItem> Init(){
-			string folder = FileUtils.GetConfigPath() + Path.DirectorySeparatorChar+"data"+ Path.DirectorySeparatorChar;
-			string file = folder + "species.txt.gz";
-			StreamReader reader = FileUtils.GetReader(file);
+			Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream("MqUtil.species.txt.gz");
+			StreamReader reader = new StreamReader(new GZipStream(s, CompressionMode.Decompress));
 			reader.ReadLine();
 			string line;
 			List<SpeciesItem> result = new List<SpeciesItem>();
@@ -76,5 +77,6 @@ namespace MqUtil.Mol{
 		public static string[] SArray(string s){
 			return string.IsNullOrEmpty(s) ? new string[0] : s.Split(';');
 		}
+
 	}
 }

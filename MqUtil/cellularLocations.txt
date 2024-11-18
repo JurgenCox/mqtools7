@@ -1,0 +1,77 @@
+Name
+cytosol
+plasma membrane
+phagocytic vesicle membrane
+lysosomal lumen
+extracellular region
+endoplasmic reticulum membrane
+endoplasmic reticulum lumen
+nucleoplasm
+endosome membrane
+lipid particle
+photoreceptor disc membrane
+phagocytic vesicle lumen
+Golgi lumen
+lysosomal membrane
+mitochondrial outer membrane
+mitochondrial matrix
+Golgi membrane
+integral to cytosolic side of endoplasmic reticulum membrane
+integral to lumenal side of endoplasmic reticulum membrane
+endoplasmic reticulum quality control compartment
+ER to Golgi transport vesicle membrane
+mitochondrial intermembrane space
+mitochondrial inner membrane
+synaptic vesicle
+endosome lumen
+secretory granule lumen
+platelet dense tubular network lumen
+cytoplasmic side of plasma membrane
+external side of plasma membrane
+late endosome lumen
+sperm flagellum
+peroxisomal matrix
+early endosome membrane
+late endosome membrane
+early endosome
+Golgi-associated vesicle membrane
+endocytic vesicle membrane
+endocytic vesicle lumen
+phagocytic vesicle
+phagolysosome
+early endosome lumen
+clathrin-coated endocytic vesicle membrane
+trans-Golgi network membrane
+transport vesicle membrane
+endolysosome membrane
+cytoplasmic vesicle membrane
+endosome
+cell junction
+platelet dense tubular network membrane
+photoreceptor outer segment membrane
+nuclear envelope
+clathrin-sculpted monoamine transport vesicle lumen
+clathrin-sculpted acetylcholine transport vesicle lumen
+clathrin-sculpted gamma-aminobutyric acid transport vesicle membrane
+clathrin-sculpted gamma-aminobutyric acid transport vesicle
+clathrin-sculpted gamma-aminobutyric acid transport vesicle lumen
+peroxisomal membrane
+transport vesicle
+sarcoplasmic reticulum lumen
+sarcoplasmic reticulum membrane
+chromosome
+chromosome, centromeric region
+endoplasmic reticulum-Golgi intermediate compartment
+clathrin-coated endocytic vesicle
+clathrin-sculpted monoamine transport vesicle membrane
+clathrin-sculpted glutamate transport vesicle membrane
+clathrin-sculpted glutamate transport vesicle lumen
+secretory granule membrane
+clathrin-sculpted acetylcholine transport vesicle membrane
+intracellular
+cytoplasmic membrane-bounded vesicle lumen
+viral envelope
+platelet dense granule lumen
+periplasmic space
+cell wall
+plastid stroma

@@ -1,4 +1,6 @@
 ﻿using MqApi.Util;
+using System.IO.Compression;
+using System.Reflection;
 
 namespace MqUtil.Mol{
 	public static class CellularLocations{
@@ -6,9 +8,8 @@ namespace MqUtil.Mol{
 		public static List<CellularLocation> AllLocations => locations ?? (locations = Init());
 
 		private static List<CellularLocation> Init(){
-			string folder = FileUtils.GetConfigPath() + Path.DirectorySeparatorChar+"data"+ Path.DirectorySeparatorChar;
-			string file = folder + "cellularLocations.txt";
-			StreamReader reader = FileUtils.GetReader(file);
+			Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream("MqUtil.cellularLocations.txt");
+			StreamReader reader = new StreamReader(s);
 			reader.ReadLine();
 			string line;
 			List<CellularLocation> result = new List<CellularLocation>();
