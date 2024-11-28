@@ -14,7 +14,8 @@ namespace MqUtil.Base{
 		public readonly DataTable2 fileTable;
 		private readonly MaxQuantWorkspace workspace;
 		public HeatMapData HeatMapData{ get; internal set; }
-		private CancellationTokenSource workThreadSource;
+        public CancellationTokenSource cancelThreadSource;
+        private CancellationTokenSource workThreadSource;
 		private CancellationTokenSource updateThreadSource;
 		private Thread workThread;
 		private Thread updateThread;
@@ -104,7 +105,8 @@ namespace MqUtil.Base{
 			}
 		}
 		public string RunAnalysis(int numThreads, int[] jobInds, IWorkflowModel wmodel, string fileName,
-			string password, CancellationTokenSource tokenSource, bool deleteFinishedPerformanceFiles) {
+			string password, CancellationTokenSource tokenSource, bool deleteFinishedPerformanceFiles, 
+            CancellationTokenSource cancelSourcePerformance = null) {
 			string x = StartAnalysis(wmodel);
 			if (x != null){
 				return x;
@@ -140,7 +142,7 @@ namespace MqUtil.Base{
 			}
 			workThreadSource = tokenSource;
 			workThread = new Thread(() => DoWork(jobs, numThreads, wmodel, fileName, password, 
-				workThreadSource, deleteFinishedPerformanceFiles));
+				workThreadSource, deleteFinishedPerformanceFiles, cancelSourcePerformance));
 			workThread.Start();
 			return null;
 		}
@@ -438,7 +440,8 @@ namespace MqUtil.Base{
 			}
 		}
 		private void UpdateLoop(bool deleteFinishedPerformanceFiles) {
-			while (true){
+			while (cancelThreadSource == null || !cancelThreadSource.Token.IsCancellationRequested)
+            {
 				if (updateThreadSource != null && updateThreadSource.Token.IsCancellationRequested){
 					return;
 				}
@@ -448,15 +451,16 @@ namespace MqUtil.Base{
 			// ReSharper disable FunctionNeverReturns
 		}
 		// ReSharper restore FunctionNeverReturns
-		private void StartPerformanceTable(bool deleteFinishedPerformanceFiles) {
+		private void StartPerformanceTable(bool deleteFinishedPerformanceFiles, CancellationTokenSource cancelSourcePerformance) {
 			StopPerformanceTable();
-			updateThreadSource = new CancellationTokenSource();
-			updateThread = new Thread(() => UpdateLoop(deleteFinishedPerformanceFiles));
+            cancelThreadSource = cancelSourcePerformance;
+            updateThreadSource = new CancellationTokenSource();
+            updateThread = new Thread(() => UpdateLoop(deleteFinishedPerformanceFiles));
 			updateThread.Start();
 		}
 		private void DoWork(List<WorkDispatcher> jobs, int numThreads, IWorkflowModel wmodel, string fileName,
-			string password, CancellationTokenSource tokenSource, bool deleteFinishedPerformanceFiles) {
-			StartPerformanceTable(deleteFinishedPerformanceFiles);
+			string password, CancellationTokenSource tokenSource, bool deleteFinishedPerformanceFiles, CancellationTokenSource cancelSourcePerformance) {
+			StartPerformanceTable(deleteFinishedPerformanceFiles, cancelSourcePerformance);
 			try{
 				workspace.SetJobs(jobs);
 				workspace.numThreads = numThreads;
