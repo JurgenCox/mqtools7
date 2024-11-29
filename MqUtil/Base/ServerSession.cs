@@ -106,7 +106,7 @@ namespace MqUtil.Base{
 		}
 		public string RunAnalysis(int numThreads, int[] jobInds, IWorkflowModel wmodel, string fileName,
 			string password, CancellationTokenSource tokenSource, bool deleteFinishedPerformanceFiles, 
-            CancellationTokenSource cancelSourcePerformance = null) {
+            CancellationTokenSource cancelSourcePerformance) {
 			string x = StartAnalysis(wmodel);
 			if (x != null){
 				return x;
@@ -440,7 +440,7 @@ namespace MqUtil.Base{
 			}
 		}
 		private void UpdateLoop(bool deleteFinishedPerformanceFiles) {
-			while (cancelThreadSource == null || !cancelThreadSource.Token.IsCancellationRequested)
+			while (!cancelThreadSource.Token.IsCancellationRequested)
             {
 				if (updateThreadSource != null && updateThreadSource.Token.IsCancellationRequested){
 					return;
@@ -474,7 +474,8 @@ namespace MqUtil.Base{
 				}
 				FinishCode = workspace.Work(infoFolder, tokenSource);
 				if (FinishCode != 0){
-					return;
+					cancelThreadSource.Cancel();
+                    return;
 				}
 				if (wmodel.BasicParams.SendEmail && ValidEmail(wmodel.BasicParams.EmailAddress) &&
 				    ValidEmail(wmodel.BasicParams.EmailFromAddress)){
@@ -489,7 +490,8 @@ namespace MqUtil.Base{
 						wmodel.BasicParams.SmtpHost, wmodel.BasicParams.EmailFromAddress, password);
 				}
 				IsDone = true;
-			} catch (ThreadAbortException){
+				cancelThreadSource.Cancel();
+            } catch (ThreadAbortException){
 			}
 		}
 		/// <returns>If row is valid.</returns>
