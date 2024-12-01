@@ -113,6 +113,19 @@ namespace MqApi.Param{
 			reader.ReadEndElement();
 			reader.ReadEndElement();
 		}
+		public override void Read(BinaryReader reader)
+		{
+			base.Read(reader);
+			Value = FileUtils.ReadStringArray(reader);
+			Default = FileUtils.ReadStringArray(reader);
+		}
+		public override void Write(BinaryWriter writer)
+		{
+			base.Write(writer);
+			FileUtils.Write(Value, writer);
+			FileUtils.Write(Default, writer);
+		}
+
 		public override ParamType Type => ParamType.Server;
 	}
 }
