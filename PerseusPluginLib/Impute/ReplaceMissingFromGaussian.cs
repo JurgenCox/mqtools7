@@ -51,7 +51,7 @@ namespace PerseusPluginLib.Impute{
 					processInfo.ErrString = err;
 				}
 			}
-			mdata.AddNumericColumn("#Imputations", "", numImputationsPerRow);
+			mdata.AddNumericColumn("Number Of Imputations", "", numImputationsPerRow);
         }
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
 			return

@@ -40,7 +40,7 @@ namespace PerseusPluginLib.Impute{
 			}
 			double[] numImputationsPerRow = new double[mdata.RowCount];
             ReplaceMissingsByVal(value, mdata, mainInds, numInds, numImputationsPerRow);
-            mdata.AddNumericColumn("#Imputations", "", numImputationsPerRow);
+            mdata.AddNumericColumn("Number Of Imputations", "", numImputationsPerRow);
         }
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
 			return
