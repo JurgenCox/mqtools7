@@ -310,8 +310,11 @@ namespace MqUtil.Ms.Search {
 		public bool IsHalfDecoy(ProteinSet proteinSet) {
 			return HasAHalfDecoyHit(proteinSet);
 		}
+		public bool IsBothDecoy(ProteinSet proteinSet) {
+			return HasBothDecoyHit(proteinSet);
+		}
 
-		private bool HasAHalfDecoyHit(ProteinSet proteinSet) {
+        private bool HasAHalfDecoyHit(ProteinSet proteinSet) {
 			bool isTargetA = false;
 			bool isTargetB = false;
 			foreach (int t1 in Peptide1.ProteinIndices) {
@@ -334,8 +337,28 @@ namespace MqUtil.Ms.Search {
 			}
 			return false;
 		}
+		private bool HasBothDecoyHit(ProteinSet proteinSet) {
+			bool isTargetA = false;
+			bool isTargetB = false;
+			foreach (int t1 in Peptide1.ProteinIndices) {
+				if (!proteinSet.GetIsDecoy(t1)) {
+					isTargetA = true;
+				}
+			}
+			if (Peptide2 != null) {
+				foreach (int t2 in Peptide2.ProteinIndices) {
+					if (!proteinSet.GetIsDecoy(t2)) {
+						isTargetB = true;
+					}
+				}
+				if (!isTargetA && !isTargetB) {
+					return true;
+				}
+			}
+			return false;
+		}
 
-		public string[] GetProteinIds(ProteinSet proteinSet) {
+        public string[] GetProteinIds(ProteinSet proteinSet) {
 			string[] result = new string[Peptide1.ProteinIndices.Length];
 			for (int i = 0; i < result.Length; i++) {
 				result[i] = proteinSet.GetName(Peptide1.ProteinIndices[i]);
