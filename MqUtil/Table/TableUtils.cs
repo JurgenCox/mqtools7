@@ -9,7 +9,7 @@ namespace MqUtil.Table {
 		public static void WriteElement(BinaryWriter writer, object o, ColumnType columnType) {
 			switch (columnType) {
 				case ColumnType.Boolean:
-					if (o is DBNull) {
+					if (o is DBNull || o == null) {
 						writer.Write(false);
 					} else if (o is string) {
 						string x = (string)o;
@@ -145,10 +145,17 @@ namespace MqUtil.Table {
 					}
 					break;
 				case ColumnType.MultiNumeric:
-					writer.Write((string)o);
+					if (o == null || o is DBNull) {
+						writer.Write("");
+					}else {
+						writer.Write((string)o);
+					}
 					break;
 				case ColumnType.MultiInteger:
-					if (o is int[]) {
+					if (o == null || o is DBNull) {
+						writer.Write("");
+					}
+					else if (o is int[]) {
 						int[] x = (int[])o;
 						string s = StringUtils.Concat(";", x);
 						writer.Write(s);
@@ -157,17 +164,32 @@ namespace MqUtil.Table {
 					}
 					break;
 				case ColumnType.DateTime:
-					writer.Write(((DateTime)o).Ticks);
+					if (o == null || o is DBNull) {
+						writer.Write(long.MaxValue);
+					}else {
+						writer.Write(((DateTime)o).Ticks);
+					}
 					break;
 				case ColumnType.Color:
-					writer.Write(((Color2)o).Value);
+					if (o == null || o is DBNull) {
+						writer.Write(int.MaxValue);
+					}else {
+						writer.Write(((Color2)o).Value);
+					}
 					break;
 				case ColumnType.DashStyle:
-					writer.Write((int)o);
+					if (o == null || o is DBNull) {
+						writer.Write(int.MaxValue);
+					}else {
+						writer.Write((int)o);
+					}
 					break;
 				case ColumnType.SymbolType:
-					int w = (int)o;
-					writer.Write(w);
+					if (o == null || o is DBNull) {
+						writer.Write(int.MaxValue);
+					}else {
+						writer.Write((int)o);
+					}
 					break;
 				default:
 					throw new Exception("Never get here.");
