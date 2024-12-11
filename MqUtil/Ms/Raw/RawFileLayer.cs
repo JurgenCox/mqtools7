@@ -553,8 +553,8 @@ namespace MqUtil.Ms.Raw{
 		}
 
 		// no usages
-		public bool HasMs2Centroid(int index){
-			return ms2HasCentroid[index];
+		public bool HasMs2Centroid(int index) {
+			return index >= ms2HasCentroid.Length || ms2HasCentroid[index];
 		}
 		public bool HasMs2Profile(int index){
 			return ms2HasProfile[index];
@@ -567,8 +567,8 @@ namespace MqUtil.Ms.Raw{
 		public bool HasMs1Centroid(int index){
 			return ms1HasCentroid[index];
 		}
-		public bool HasMs1Profile(int index){
-			return ms1HasProfile[index];
+		public bool HasMs1Profile(int index) {
+			return index >= ms1HasProfile.Length || ms1HasProfile[index];
 		}
 		public MassAnalyzerEnum GetMs2MassAnalyzer(int index){
 			return ms2Analyzer[index];

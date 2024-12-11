@@ -307,7 +307,7 @@
 					case estonian: return "Osaline töötlemine";
 					case finnish: return "Osittainen käsittely";
 					case french: return "Traitement partiel";
-					case german: return "Teilverarbeitung";
+					case german: return "Partielle Prozessierung";
 					case greek: return "Μερική επεξεργασία";
 					case hebrew: return "עיבוד חלקי";
 					case hindi: return "आंशिक प्रसंस्करण";
