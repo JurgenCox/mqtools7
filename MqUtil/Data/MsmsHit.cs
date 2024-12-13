@@ -54,7 +54,10 @@ namespace MqUtil.Data{
 		public ReporterResult ReporterResult{ get; set; }
 		public IsotopeCalculationResult IsotopeCalculationResult{ get; set; }
 		public AndromedaPeptide[] Peptides{ get; set; }
-
+		public double[] IntensitiesChargeSplit { get; set; } = new double[0];
+		public PeakAnnotation[] AnnotationChargeSplit { get; set; } = new PeakAnnotation[0];
+		public double[] MassDiffsChargeSplit { get; set; } = new double[0];
+		public double[] MassesChargeSplit { get; set; } = new double[0];
 		public MsmsHit(AndromedaPeptide[] peptides, int scanNumber, int scanEventIndex, int fileIndex, QueryType type,
 			int multipletIndex, double retentionTime, double mz, double monoisotopicMz, object fixedMods,
 			byte multiplicity, string[][] labels, int fragTypeIndex, int massAnalyzerIndex,
@@ -379,6 +382,15 @@ namespace MqUtil.Data{
 			for (int i = 0; i < len; i++){
 				Ms3Hits.Add(new Ms3Hit(reader));
 			}
+			IntensitiesChargeSplit = FileUtils.ReadDoubleArray(reader);
+			len = reader.ReadInt32();
+			AnnotationChargeSplit = new PeakAnnotation[len];
+			for (int i = 0; i < len; i++) {
+				int annotType = reader.ReadInt32();
+				AnnotationChargeSplit[i] = ReadAnnotation(annotType, reader);
+			}
+			MassDiffsChargeSplit = FileUtils.ReadDoubleArray(reader);
+			MassesChargeSplit = FileUtils.ReadDoubleArray(reader);
 		}
 
 		private static PeakAnnotation ReadAnnotation(int type, BinaryReader reader){
@@ -625,6 +637,15 @@ namespace MqUtil.Data{
 			foreach (Ms3Hit hit in Ms3Hits){
 				hit.Write(writer);
 			}
+			FileUtils.Write(IntensitiesChargeSplit, writer);
+			writer.Write(AnnotationChargeSplit.Length);
+			foreach (PeakAnnotation t1 in AnnotationChargeSplit) {
+				int annotType = GetAnnotType(t1);
+				writer.Write(annotType);
+				t1.Write(writer);
+			}
+			FileUtils.Write(MassDiffsChargeSplit, writer);
+			FileUtils.Write(MassesChargeSplit, writer);
 		}
 
 		public PeptideModificationState GetFixedAndLabelModifications(string[] fixedModifications, string sequence){
