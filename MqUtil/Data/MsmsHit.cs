@@ -58,6 +58,8 @@ namespace MqUtil.Data{
 		public PeakAnnotation[] AnnotationChargeSplit { get; set; } = new PeakAnnotation[0];
 		public double[] MassDiffsChargeSplit { get; set; } = new double[0];
 		public double[] MassesChargeSplit { get; set; } = new double[0];
+		public double[] IntensitiesChargeSplitComplele { get; set; } = new double[0];
+		public double[] MassesChargeSplitComplele { get; set; } = new double[0];
 		public MsmsHit(AndromedaPeptide[] peptides, int scanNumber, int scanEventIndex, int fileIndex, QueryType type,
 			int multipletIndex, double retentionTime, double mz, double monoisotopicMz, object fixedMods,
 			byte multiplicity, string[][] labels, int fragTypeIndex, int massAnalyzerIndex,
@@ -391,6 +393,8 @@ namespace MqUtil.Data{
 			}
 			MassDiffsChargeSplit = FileUtils.ReadDoubleArray(reader);
 			MassesChargeSplit = FileUtils.ReadDoubleArray(reader);
+			IntensitiesChargeSplitComplele = FileUtils.ReadDoubleArray(reader);
+			MassesChargeSplitComplele = FileUtils.ReadDoubleArray(reader);
 		}
 
 		private static PeakAnnotation ReadAnnotation(int type, BinaryReader reader){
@@ -646,6 +650,8 @@ namespace MqUtil.Data{
 			}
 			FileUtils.Write(MassDiffsChargeSplit, writer);
 			FileUtils.Write(MassesChargeSplit, writer);
+			FileUtils.Write(IntensitiesChargeSplitComplele, writer);
+			FileUtils.Write(MassesChargeSplitComplele, writer);
 		}
 
 		public PeptideModificationState GetFixedAndLabelModifications(string[] fixedModifications, string sequence){
