@@ -18,6 +18,10 @@ namespace PerseusPluginLib.Export{
 		public string Url => "https://cox-labs.github.io/coxdocs/tabseparatedexport.html";
 		public void Export(Parameters parameters, IMatrixData data, ProcessInfo processInfo){
 			string filename = parameters.GetParam<string>("File name").Value;
+			if (string.IsNullOrEmpty(filename)) {
+				processInfo.ErrString = "File name cannot be empty.";
+				return;
+			}
 			bool addtlMatrices = parameters.GetParam<bool>("Write quality and imputed matrices").Value;
 			bool exportAnnotations = parameters.GetParam<bool>("Export with annotations").Value;
             addtlMatrices = addtlMatrices && data.IsImputed != null && data.Quality != null &&

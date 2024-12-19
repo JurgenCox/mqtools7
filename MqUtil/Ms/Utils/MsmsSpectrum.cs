@@ -9,7 +9,7 @@ namespace MqUtil.Ms.Utils{
 		public double[] masses;
 		public float[] intensities;
 		public int[] charges;
-		public bool[] reporter;
+		private bool[] reporter;
 		public double[] origMasses = new double[0];
 		public float[] origIntensities = new float[0];
 		public int[] origCharges = new int[0];
@@ -66,13 +66,15 @@ namespace MqUtil.Ms.Utils{
 			writer.Write(massAnalyzer);
 			writer.Write(fragType);
 		}
-		public void SortMasses(){
+		public MsmsSpectrum SortMasses2(){
 			int[] o = masses.Order();
-			masses = masses.SubArray(o);
-			intensities = intensities.SubArray(o);
-			charges = charges?.SubArray(o);
-			reporter = reporter?.SubArray(o);
+			return ExtractSpectrum(o);
 		}
+
+		public double[] Masses => masses;
+		public float[] Intensities => intensities;
+		public int[] Charges => charges;
+		public bool[] Reporter => reporter;
 		public int Count => masses?.Length ?? 0;
 		public double MinMass => GetMass(0);
 		public double MaxMass => GetMass(Count - 1);
@@ -109,11 +111,28 @@ namespace MqUtil.Ms.Utils{
 			masses = null;
 			intensities = null;
 		}
-		public MsmsSpectrum TopX(int topX, double window){
+		public MsmsSpectrum TopX(int topX, double window) {
 			int[] index = TopXIndices(topX, window, lowerMassCutoff);
-			return new MsmsSpectrum(masses.SubArray(index), intensities.SubArray(index), charges.SubArray(index),
-				massAnalyzer, fragType);
+			return ExtractSpectrum(index);
 		}
+		public MsmsSpectrum ExtractSpectrum(int[] index) {
+			return new MsmsSpectrum(masses.SubArray(index), intensities.SubArray(index), charges.SubArray(index),
+				origMasses, origIntensities, origCharges, Transform(origToNew, index), massAnalyzer, fragType);
+		}
+
+		private static int[] Transform(int[] origToNew, int[] index) {
+			Dictionary<int, int> m = ArrayUtils.InverseMap(index);
+			int[] result = new int[origToNew.Length];
+			for (int i = 0; i < origToNew.Length; i++) {
+				if (m.ContainsKey(origToNew[i])) {
+					result[i] = m[origToNew[i]];
+				}else {
+					result[i] = -1;
+				}
+			}
+			return result;
+		}
+
 		private int[] TopXIndices(int topx, double window, double minThreshold){
 			if (masses.Length == 0){
 				return new int[0];
@@ -167,39 +186,29 @@ namespace MqUtil.Ms.Utils{
 			return -1;
 		}
 		public MsmsSpectrum RemoveAt(HashSet<int> removeInds){
-			return Extract(ArrayUtils.Complement(removeInds, masses.Length));
-		}
-		public MsmsSpectrum Extract(int[] inds){
-			return new MsmsSpectrum(masses.SubArray(inds), intensities.SubArray(inds), charges.SubArray(inds),
-				massAnalyzer, fragType);
+			return ExtractSpectrum(ArrayUtils.Complement(removeInds, masses.Length));
 		}
 		/// <summary>
 		/// Remove from the spectrum any peaks with m/z below the given value.
 		/// </summary>
 		/// <param name="mz"></param>
-		public void RemoveBelow(double mz){
+		public MsmsSpectrum RemoveBelow2(double mz){
 			List<int> valids = new List<int>();
 			for (int i = 0; i < masses.Length; i++){
 				if (masses[i] >= mz){
 					valids.Add(i);
 				}
 			}
-			masses = masses.SubArray(valids);
-			intensities = intensities.SubArray(valids);
-			charges = charges.SubArray(valids);
-			reporter = reporter.SubArray(valids);
+			return ExtractSpectrum(valids.ToArray());
 		}
-		public void IntensityThreshold(double intens){
+		public MsmsSpectrum IntensityThreshold2(double intens){
 			List<int> valids = new List<int>();
 			for (int i = 0; i < masses.Length; i++){
 				if (intensities[i] >= intens){
 					valids.Add(i);
 				}
 			}
-			masses = masses.SubArray(valids);
-			intensities = intensities.SubArray(valids);
-			charges = charges.SubArray(valids);
-			reporter = reporter.SubArray(valids);
+			return ExtractSpectrum(valids.ToArray());
 		}
 	}
 }
