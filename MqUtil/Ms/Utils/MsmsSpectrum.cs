@@ -9,7 +9,6 @@ namespace MqUtil.Ms.Utils{
 		public double[] masses;
 		public float[] intensities;
 		public int[] charges;
-		private bool[] reporter;
 		public double[] origMasses = new double[0];
 		public float[] origIntensities = new float[0];
 		public int[] origCharges = new int[0];
@@ -22,7 +21,6 @@ namespace MqUtil.Ms.Utils{
 			this.masses = masses;
 			this.intensities = intensities;
 			this.charges = charges;
-			reporter = new bool[masses.Length];
 			this.origMasses = origMasses;
 			this.origIntensities = origIntensities;
 			this.origCharges = origCharges;
@@ -35,7 +33,6 @@ namespace MqUtil.Ms.Utils{
 			this.masses = masses;
 			this.intensities = intensities;
 			this.charges = charges;
-			reporter = new bool[masses.Length];
 			this.massAnalyzer = massAnalyzer;
 			this.fragType = fragType;
 			tic = intensities.DefaultIfEmpty(0).Sum();
@@ -45,7 +42,6 @@ namespace MqUtil.Ms.Utils{
 			masses = FileUtils.ReadDoubleArray(reader);
 			intensities = FileUtils.ReadFloatArray(reader);
 			charges = FileUtils.ReadInt32Array(reader);
-			reporter = FileUtils.ReadBooleanArray(reader);
 			origMasses = FileUtils.ReadDoubleArray(reader);
 			origIntensities = FileUtils.ReadFloatArray(reader);
 			origCharges = FileUtils.ReadInt32Array(reader);
@@ -58,7 +54,6 @@ namespace MqUtil.Ms.Utils{
 			FileUtils.Write(masses, writer);
 			FileUtils.Write(intensities, writer);
 			FileUtils.Write(charges, writer);
-			FileUtils.Write(reporter, writer);
 			FileUtils.Write(origMasses, writer);
 			FileUtils.Write(origIntensities, writer);
 			FileUtils.Write(origCharges, writer);
@@ -74,7 +69,6 @@ namespace MqUtil.Ms.Utils{
 		public double[] Masses => masses;
 		public float[] Intensities => intensities;
 		public int[] Charges => charges;
-		public bool[] Reporter => reporter;
 		public int Count => masses?.Length ?? 0;
 		public double MinMass => GetMass(0);
 		public double MaxMass => GetMass(Count - 1);
