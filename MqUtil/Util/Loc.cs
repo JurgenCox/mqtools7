@@ -70,7 +70,7 @@ namespace MqUtil.Util{
 					case dutch: return "Annuleer";
 					case estonian: return "Tühista";
 					case finnish: return "Peruuttaa";
-					case french: return "Annuler";
+					case french: return "Abbrechen";
 					case german: return "Annulieren";
 					case greek: return "Ματαίωση";
 					case hebrew: return "לְבַטֵל";

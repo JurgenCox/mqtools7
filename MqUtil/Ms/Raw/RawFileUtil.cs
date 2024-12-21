@@ -96,6 +96,9 @@ namespace MqUtil.Ms.Raw {
 		/// <param name="filenames"></param>
 		/// <returns></returns>
 		public static string AreSuitableFiles(IEnumerable<string> filenames) {
+			if (AllIndexFiles(filenames)) {
+				return "";
+			}
 			string errMessages = "";
 			foreach (string filename in filenames) {
 				Tuple<RawFile, int> result = FindSuitableTemplate(filename);
@@ -112,6 +115,16 @@ namespace MqUtil.Ms.Raw {
 			}
 			return errMessages;
 		}
+
+		private static bool AllIndexFiles(IEnumerable<string> filenames) {
+			foreach (string filename in filenames) {
+				if (!filename.EndsWith(".index")) {
+					return false;
+				}
+			}
+			return true;
+		}
+
 		/// <summary>
 		/// A list of names and suffixes of available file-based RawFile types, in a format suitable for
 		/// use as a Filter in OpenFileDialog. (Folder-based types are excluded because it is difficult

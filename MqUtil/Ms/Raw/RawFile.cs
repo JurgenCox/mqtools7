@@ -10,7 +10,7 @@ namespace MqUtil.Ms.Raw{
 		/// <summary>
 		/// Counter incremented when format used for index files is changed, to avoid using stale index files.
 		/// </summary>
-		private const int indexVersion = 31;
+		private const int indexVersion = 32;
 		/// <summary>
 		/// Backing field to the Path property.
 		/// </summary>
@@ -116,28 +116,9 @@ namespace MqUtil.Ms.Raw{
 		/// 1/k0 is however transferable between runs.
 		/// </summary>
 		protected internal abstract double[] Index2K0(int scanNumber, double[] imsInds);
-		/// <summary>
-		/// Default implementation does nothing more than to call PathIsValid, which examines three conditions:
-		/// (1) the path exists, (2) it is a file or folder as expected by IsFolderBased, and (3) it ends with
-		/// the string given in Suffix. When this is not sufficient to distinguish every vendor, this method
-		/// must be overridden in the concrete implementations. In particular, raw data from both Agilent and
-		/// Bruker is stored in folders with the suffix .d, so AgilentRawFile overrides this method to check for
-		/// the existence of a sub-directory named AcqData, and BrukerRawFileSqlite checks for the existence of
-		/// a file named analysis.baf. Used only by FindSuitableTemplate.
-		/// </summary>
-		/// <param name="path1"></param>
-		/// <returns></returns>
 		public virtual bool IsSuitableFile(string path1){
 			return PathIsValid(path1);
 		}
-		/// <summary>
-		/// Examines argument to determine if it has the characteristics expected of a valid raw data file or folder.
-		/// true is returned if and only if three conditions are met: (1) the path exists, (2) it is a file or folder
-		/// as expected by IsFolderBased, and (3) it ends with the string given in Suffix. Used only by IsSuitableFile,
-		/// which may be overridden to remove ambiguity between some pairs of vendors.
-		/// </summary>
-		/// <param name="path1">path to be examined</param>
-		/// <returns>true if the argument looks like a raw data file or folder of the right type, false otherwise</returns>
 		public bool PathIsValid(string path1){
 			FileSystemInfo info;
 			if (IsFolderBased){
@@ -298,6 +279,7 @@ namespace MqUtil.Ms.Raw{
 				writer = FileUtils.GetBinaryWriter(IndexFilename);
 				writer.Write(indexVersion);
 				writer.Write("1.0.0.0");
+				writer.Write(System.IO.Path.GetFileName(path));
 				posLayer.Write(writer);
 				negLayer.Write(writer);
 			} finally{
@@ -335,9 +317,7 @@ namespace MqUtil.Ms.Raw{
 				int indexVers =
 					reader.ReadInt32(); // dummy var because we already know the answer from IndexVersionIsCurrent()
 				string version = reader.ReadString(); // dummy var because the following if-block is commented out
-				//if (!version.Equals(Application.ProductVersion)){
-				//    throw new Exception("Wrong version");
-				//}
+				string filename = reader.ReadString();
 				posLayer = new RawFileLayer(reader, this, true);
 				negLayer = new RawFileLayer(reader, this, false);
 			} finally{
