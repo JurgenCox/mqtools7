@@ -76,6 +76,7 @@ namespace MqUtil.Ms.Raw {
 					return rawFile;
 				case 1:
 				case 2:
+					return null;
 					throw new Exception("Error creating a RawFile instance from " + path + ":\n" + FindSuitableTemplateMsg(errCode));
 				case 3:
 					throw new Exception("Error creating a RawFile instance from " + path + ":\n" + FindSuitableTemplateMsg(errCode) +

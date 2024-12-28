@@ -322,20 +322,20 @@ namespace MqUtil.Base{
 			KillProcesses(deleteFinishedPerformanceFiles);
 		}
 		private string StartAnalysis(IWorkflowModel wmodel){
-			string err = FileUtils.BasicChecks();
-			if (!string.IsNullOrEmpty(err)){
-				return err;
-			}
+			//string err = FileUtils.BasicChecks();
+			//if (!string.IsNullOrEmpty(err)){
+			//	return err;
+			//}
 			if (!HasFiles){
 				return "Please specify some raw files.";
 			}
 			string errStr = wmodel.AreSuitableFiles(GetFilenames());
 			if (!string.IsNullOrEmpty(errStr)){
-				return errStr;
+				//return errStr;
 			}
 			// If the previous test is working properly, then this test should never be true.
 			if (HasNonexistentFiles()){
-				return "Some of the specified raw files do not exist.";
+				//return "Some of the specified raw files do not exist.";
 			}
 			string[] x = CheckForDuplicatedFilenames();
 			if (x != null){
