@@ -1,6 +1,5 @@
 using MqApi.Util;
 namespace MqApi.Generic{
-	[Serializable]
 	public class Settings{
 		public int Nthreads{ get; set; }
 		public string TempFolder{ get; set; }

@@ -2,7 +2,6 @@
 using MqUtil.Mol;
 
 namespace MqUtil.Api{
-	[Serializable]
 	public abstract class SequenceRegressionModel{
 		public virtual double[] Predict(string sequence, PeptideModificationState modifications, BaseVector metadata){
 			return Predict(new[]{sequence}, new[]{modifications}, metadata == null ? null : new[]{metadata})[0];

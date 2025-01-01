@@ -3,7 +3,6 @@ using MqApi.Param;
 using MqUtil.Api;
 
 namespace MqUtil.Num.Distance {
-	[Serializable]
 	public class EuclideanDistance : AbstractDistance {
 		public override Parameters Parameters {
 			set { }

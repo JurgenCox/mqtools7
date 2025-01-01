@@ -2,7 +2,6 @@
 using MqUtil.Mol;
 
 namespace MqUtil.Parse.Chebi{
-	[Serializable]
 	public class ChebiEntry{
 		public int CompoundId{ get; set; }
 		public double MonoisotopicMass{ get; set; }

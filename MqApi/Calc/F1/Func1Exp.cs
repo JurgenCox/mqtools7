@@ -3,7 +3,6 @@ using MqApi.Calc.Func;
 using MqApi.Calc.Util;
 using MqApi.Util;
 namespace MqApi.Calc.F1{
-	[Serializable]
 	internal class Func1Exp : Func1{
 		internal override double NumEvaluateDouble(double x){
 			return Math.Exp(x);

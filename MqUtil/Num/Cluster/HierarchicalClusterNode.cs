@@ -1,5 +1,4 @@
 namespace MqUtil.Num.Cluster{
-	[Serializable]
 	public class HierarchicalClusterNode{
 		/// <summary>
 		/// The distance between the two children.

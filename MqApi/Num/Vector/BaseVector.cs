@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using MqApi.Util;
 namespace MqApi.Num.Vector{
-	[Serializable]
 	public abstract class BaseVector : ICloneable, IDisposable, IEnumerable<double>{
 		/// <summary>
 		/// Determines the scalar product of this vector with another one passed as the argument. 

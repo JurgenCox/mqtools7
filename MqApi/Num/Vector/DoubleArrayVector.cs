@@ -1,6 +1,5 @@
 ﻿using MqApi.Util;
 namespace MqApi.Num.Vector{
-	[Serializable]
 	public class DoubleArrayVector : BaseVector{
 		internal double[] values;
 		public DoubleArrayVector(double[] values){

@@ -7,7 +7,6 @@ namespace MqUtil.Num.Cluster{
 	/// The dendrogram is represented by the list of <see cref="nodes"/>.
 	/// A clustering of (n+1) items is represented by n <see cref="nodes"/>.
 	/// </summary>
-	[Serializable]
 	public class HierarchicalClusterData{
 		public readonly HierarchicalClusterNode[] nodes;
 		private int[] itemOrder;

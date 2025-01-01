@@ -1,6 +1,5 @@
 ﻿using MqApi.Util;
 namespace MqApi.Num.Vector{
-	[Serializable]
 	public class BoolArrayVector : BaseVector{
 		/// <summary>
 		/// These boolean values are encoding 0 and 1 values.

@@ -2,7 +2,6 @@
 using MqApi.Calc.Util;
 using MqApi.Util;
 namespace MqApi.Calc.Func{
-	[Serializable]
 	internal class Variable : GenericFunc{
 		internal int id;
 		internal ReturnType type;

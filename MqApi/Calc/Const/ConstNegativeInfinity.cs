@@ -2,7 +2,6 @@
 using MqApi.Calc.Util;
 using MqApi.Util;
 namespace MqApi.Calc.Const{
-	[Serializable]
 	internal class ConstNegativeInfinity : Constant{
 		internal override double NumEvaluateDouble => double.NegativeInfinity;
 		internal override string ShortName => "-inf";

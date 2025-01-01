@@ -3,7 +3,6 @@ using MqApi.Param;
 using MqUtil.Api;
 
 namespace MqUtil.Num.Kernel{
-	[Serializable]
 	public class RbfKernelFunction : IKernelFunction{
 		private double Sigma{ get; set; }
 		public RbfKernelFunction() : this(1){ }

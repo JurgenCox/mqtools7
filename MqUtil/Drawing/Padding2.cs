@@ -4,7 +4,6 @@ using System.Globalization;
 using MqApi.Drawing;
 
 namespace MqUtil.Drawing{
-	[Serializable]
 	public struct Padding2{
 		private bool _all;
 		private int _top;

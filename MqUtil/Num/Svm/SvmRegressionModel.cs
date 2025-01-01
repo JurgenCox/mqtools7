@@ -4,7 +4,6 @@ using MqUtil.Api;
 using MqUtil.Num.Svm.Impl;
 
 namespace MqUtil.Num.Svm{
-	[Serializable]
 	public class SvmRegressionModel : RegressionModel{
 		private SvmModel model;
 

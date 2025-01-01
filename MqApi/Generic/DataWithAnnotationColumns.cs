@@ -4,7 +4,6 @@ using MqApi.Data.Category;
 using MqApi.Num;
 using MqApi.Util;
 namespace MqApi.Generic{
-	[Serializable]
 	public class DataWithAnnotationColumns : IDataWithAnnotationColumns{
 		public List<string> CategoryColumnNames{ get; set; }
 		public List<string> NumericColumnNames{ get; set; }

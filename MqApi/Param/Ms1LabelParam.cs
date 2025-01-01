@@ -2,7 +2,6 @@
 using MqApi.Num;
 using MqApi.Util;
 namespace MqApi.Param{
-	[Serializable]
 	public class Ms1LabelParam : Parameter<int[][]>{
 		public int Multiplicity{ get; set; }
 		public string[] Values{ get; set; }

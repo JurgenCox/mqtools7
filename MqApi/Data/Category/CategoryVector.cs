@@ -3,7 +3,6 @@
 	/// Wrapper class around <see cref="ICategoryVectorData"/>
 	/// It is used to provide a common implementation of the interface
 	/// </summary>
-	[Serializable]
 	public class CategoryVector{
 		private readonly ICategoryVectorData data;
 		internal CategoryVector(ICategoryVectorData data){

@@ -2,7 +2,6 @@
 using System.Xml.Serialization;
 using MqApi.Util;
 namespace MqApi.Param{
-	[Serializable]
 	public class DictionaryIntValueParam : Parameter<Dictionary<string, int>>{
 		protected string[] keys;
 		public int DefaultValue{ get; set; }

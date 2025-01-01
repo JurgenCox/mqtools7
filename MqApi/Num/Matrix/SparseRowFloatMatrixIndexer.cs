@@ -1,6 +1,5 @@
 ﻿using MqApi.Num.Vector;
 namespace MqApi.Num.Matrix{
-	[Serializable]
 	public class SparseRowFloatMatrixIndexer : MatrixIndexer{
 		private SparseFloatVector[] vals;
 		private int ncolumns;

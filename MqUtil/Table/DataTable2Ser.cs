@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 namespace MqUtil.Table{
-	[Serializable]
 	public class DataTable2Ser{
 		private readonly Dictionary<string, int> nameMapping;
 		private readonly DataTable2Col[] dataCols;

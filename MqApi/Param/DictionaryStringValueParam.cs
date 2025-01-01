@@ -2,7 +2,6 @@
 using System.Xml.Serialization;
 using MqApi.Util;
 namespace MqApi.Param{
-	[Serializable]
 	public class DictionaryStringValueParam : Parameter<Dictionary<string, string>>{
 		/// <summary>
 		/// for xml serialization only

@@ -1,5 +1,4 @@
 ﻿namespace MqUtil.Ms.Utils{
-	[Serializable]
 	public class PasefFrameMsMsInfo{
 		public double CollisionEnergy{ get; set; }
 		public int Frame{ get; set; }

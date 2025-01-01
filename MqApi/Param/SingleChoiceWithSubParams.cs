@@ -2,7 +2,6 @@
 using System.Xml.Serialization;
 using MqApi.Util;
 namespace MqApi.Param{
-	[Serializable]
 	public class SingleChoiceWithSubParams : ParameterWithSubParams<int>{
 		public IList<string> Values{ get; set; }
 		public IList<Parameters> SubParams{ get; set; }

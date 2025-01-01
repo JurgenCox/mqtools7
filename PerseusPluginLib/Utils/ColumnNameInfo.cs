@@ -4,7 +4,6 @@ using MqApi.Matrix;
 using MqApi.Num;
 using MqApi.Util;
 namespace PerseusPluginLib.Utils{
-	[Serializable]
 	public class ColumnNameInfo : INameInfo{
 		public bool CutNames{ get; set; }
 		public bool CutNames2{ get; set; }

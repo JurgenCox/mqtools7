@@ -1,5 +1,4 @@
 ﻿namespace MqUtil.Ms.Utils{
-	[Serializable]
 	public class PasefPrecursorInfo{
 		public int Id{ get; set; }
 		public int Parent{ get; set; }

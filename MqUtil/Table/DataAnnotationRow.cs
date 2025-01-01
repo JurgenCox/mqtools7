@@ -1,5 +1,4 @@
 ﻿namespace MqUtil.Table{
-	[Serializable]
 	public class DataAnnotationRow{
 		public object[] ItemArray { get; set; }
 		private readonly Dictionary<string, int> nameMapping;

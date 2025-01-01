@@ -3,7 +3,6 @@ using System.Security.Permissions;
 using MqApi.Num;
 using MqApi.Util;
 namespace MqApi.Data{
-	[Serializable]
 	public class StringVectors : ISerializable{
 		public List<string[]> StringVecs{ get; set; } = new List<string[]>();
 		public StringVectors(){

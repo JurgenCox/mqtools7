@@ -2,7 +2,6 @@
 using System.Xml.Schema;
 using System.Xml.Serialization;
 namespace MqApi.Param{
-	[Serializable]
 	public class ParameterGroup : IXmlSerializable, ICloneable{
 		private readonly List<Parameter> parameters = new List<Parameter>();
 		private string name = "";

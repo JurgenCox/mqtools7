@@ -2,7 +2,6 @@
 using MqApi.Calc.Util;
 using MqApi.Util;
 namespace MqApi.Calc.Const{
-	[Serializable]
 	internal class ConstPi : Constant{
 		internal override double NumEvaluateDouble => Math.PI;
 		internal override string ShortName => "pi";

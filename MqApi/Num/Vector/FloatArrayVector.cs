@@ -1,6 +1,5 @@
 ﻿using MqApi.Util;
 namespace MqApi.Num.Vector{
-	[Serializable]
 	public class FloatArrayVector : BaseVector{
 		internal float[] values;
 		public FloatArrayVector(float[] values){

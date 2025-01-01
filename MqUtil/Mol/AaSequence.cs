@@ -1,6 +1,5 @@
 ﻿using System.Text;
 namespace MqUtil.Mol{
-	[Serializable]
 	public class AaSequence : IComparable, IDisposable, ICloneable {
 		public const int aasPerLong = 12;
 		private const int basis = 32;

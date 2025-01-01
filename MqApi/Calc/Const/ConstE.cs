@@ -2,7 +2,6 @@
 using MqApi.Calc.Util;
 using MqApi.Util;
 namespace MqApi.Calc.Const{
-	[Serializable]
 	internal class ConstE : Constant{
 		internal override double NumEvaluateDouble => Math.E;
 		internal override string ShortName => "e";

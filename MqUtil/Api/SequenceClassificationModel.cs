@@ -3,7 +3,6 @@ using MqApi.Num.Vector;
 using MqUtil.Mol;
 
 namespace MqUtil.Api{
-	[Serializable]
 	public abstract class SequenceClassificationModel{
 		public virtual double[] PredictStrength(string sequence, PeptideModificationState modifications,
 			BaseVector metadata){

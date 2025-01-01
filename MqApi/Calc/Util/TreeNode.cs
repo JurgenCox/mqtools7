@@ -1,7 +1,6 @@
 ﻿using MqApi.Calc.Func;
 namespace MqApi.Calc.Util{
 	//TODO: equality members
-	[Serializable]
 	internal class TreeNode{
 		internal GenericFunc Func{ get; set; }
 		internal TreeNode[] arguments;

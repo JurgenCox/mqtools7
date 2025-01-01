@@ -1,6 +1,5 @@
 ﻿using MqApi.Util;
 namespace MqUtil.Num{
-	[Serializable]
 	public class LinearInterpolatorMixed{
 		public double[] xvals;
 		private float[] yvals;

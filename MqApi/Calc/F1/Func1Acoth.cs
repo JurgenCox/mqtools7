@@ -3,7 +3,6 @@ using MqApi.Calc.Func;
 using MqApi.Calc.Util;
 using MqApi.Util;
 namespace MqApi.Calc.F1{
-	[Serializable]
 	internal class Func1Acoth : Func1{
 		internal override double NumEvaluateDouble(double x){
 			return 0.5 * Math.Log((x + 1.0) / (x - 1.0));

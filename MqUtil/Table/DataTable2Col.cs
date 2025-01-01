@@ -1,6 +1,5 @@
 ﻿using MqApi.Drawing;
 namespace MqUtil.Table{
-	[Serializable]
 	internal class DataTable2Col{
 		private readonly object data;
 		private readonly ColumnType type;

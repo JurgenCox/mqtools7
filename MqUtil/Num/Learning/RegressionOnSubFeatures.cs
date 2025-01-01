@@ -2,7 +2,6 @@
 using MqUtil.Api;
 
 namespace MqUtil.Num.Learning{
-	[Serializable]
 	public class RegressionOnSubFeatures : RegressionModel{
 		private readonly RegressionModel regressionModel;
 		private readonly int[] featureInds;

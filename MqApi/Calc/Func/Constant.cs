@@ -1,6 +1,5 @@
 ﻿using MqApi.Calc.Util;
 namespace MqApi.Calc.Func{
-	[Serializable]
 	internal abstract class Constant : GenericFunc{
 		internal abstract double NumEvaluateDouble{ get; }
 		internal abstract ReturnType ReturnType{ get; }

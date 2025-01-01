@@ -1,6 +1,5 @@
 ﻿using MqApi.Util;
 namespace MqApi.Calc{
-	[Serializable]
 	public class Relation{
 		private readonly RelationType type;
 		private readonly Function leftSide;

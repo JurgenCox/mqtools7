@@ -1,6 +1,5 @@
 ﻿using MqApi.Util;
 namespace MqApi.Num.Vector{
-	[Serializable]
 	public class SparseFloatVector : BaseVector{
 		/// <summary>
 		/// Indices of nonzero elements. Indices are sorted.

@@ -6,7 +6,6 @@ namespace MqUtil.Api{
 	/// Class storing the information resulting from the training process of a classification algorithm.
 	/// Each classifier will have its own implementation of <code>ClassificationModel</code>.
 	/// </summary>
-	[Serializable]
 	public abstract class ClassificationModel{
 		/// <summary>
 		/// Class prediction for a single instance.

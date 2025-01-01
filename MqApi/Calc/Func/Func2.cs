@@ -1,7 +1,6 @@
 ﻿using MqApi.Calc.Except;
 using MqApi.Calc.Util;
 namespace MqApi.Calc.Func{
-	[Serializable]
 	internal abstract class Func2 : GenericFunc{
 		internal abstract double NumEvaluateDouble(double x, double y);
 		internal abstract ReturnType GetValueType(ReturnType returnType1, ReturnType returnType2);

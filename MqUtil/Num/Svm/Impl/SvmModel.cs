@@ -2,7 +2,6 @@
 using MqApi.Util;
 
 namespace MqUtil.Num.Svm.Impl{
-	[Serializable]
 	public class SvmModel{
 		public SvmParameter param; // parameter
 		public int nrClass; // number of classes, = 2 in regression/one class svm

@@ -4,7 +4,6 @@ namespace MqUtil.Num.NdArray{
 	/// this cannot be implemented for the generic NdArray type because
 	/// operators are not applicable to generic types.
 	/// </summary>
-	[Serializable]
 	public class NdArrayDouble : NdArray<double>{
 		public NdArrayDouble(double[] data) : base(data){ }
 		public NdArrayDouble(double[] data, int[] shape) : base(data, shape){ }

@@ -1,5 +1,4 @@
 ﻿namespace MqApi.Data.Category{
-	[Serializable]
 	internal class EmptyCategoryVectorData : ICategoryVectorData{
 		public int Length{ get; }
 		internal EmptyCategoryVectorData(int len){

@@ -5,7 +5,6 @@ using MqUtil.Api;
 using MqUtil.Num.Distance;
 
 namespace MqUtil.Num.Classification{
-	[Serializable]
 	public class KnnClassificationModel : ClassificationModel{
 		private BaseVector[] x;
 		private int[][] y;

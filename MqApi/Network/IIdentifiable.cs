@@ -8,7 +8,6 @@
 	/// <summary>
 	/// Identified by Guid
 	/// </summary>
-	[Serializable]
 	public abstract class Identifiable : IIdentifiable{
 		/// <summary>
 		/// Unique key

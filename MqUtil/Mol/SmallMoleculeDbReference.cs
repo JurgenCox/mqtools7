@@ -1,7 +1,6 @@
 ﻿using System.Text;
 
 namespace MqUtil.Mol{
-	[Serializable]
 	public class SmallMoleculeDbReference{
 		public string ReferenceId{ get; set; }
 		public string LocationInRef{ get; set; }

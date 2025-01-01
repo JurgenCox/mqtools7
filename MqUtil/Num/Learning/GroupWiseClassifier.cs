@@ -2,7 +2,6 @@
 using MqUtil.Api;
 
 namespace MqUtil.Num.Learning{
-	[Serializable]
 	public class GroupWiseClassifier : ClassificationModel{
 		//This will not work for classifiers that are not serializable.
 		private readonly ClassificationModel[] classifiers;

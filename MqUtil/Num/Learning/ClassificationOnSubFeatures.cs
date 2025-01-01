@@ -2,7 +2,6 @@
 using MqUtil.Api;
 
 namespace MqUtil.Num.Learning{
-	[Serializable]
 	public class ClassificationOnSubFeatures : ClassificationModel{
 		private readonly ClassificationModel classifier;
 		private readonly int[] featureInds;

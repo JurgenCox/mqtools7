@@ -1,6 +1,5 @@
 ﻿using MqApi.Util;
 namespace MqUtil.Parse.Uniprot{
-	[Serializable]
 	public class UniprotFeature{
 		public string FeatureId{ get; set; }
 		public string FeatureDescription{ get; set; }

@@ -1,5 +1,4 @@
 ﻿namespace MqApi.Network{
-	[Serializable]
 	public sealed class Edge : Identifiable, IEdge{
 		public INode Target{ get; }
 		public INode Source{ get; }

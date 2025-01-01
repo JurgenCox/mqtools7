@@ -3,7 +3,6 @@ using MqApi.Param;
 using MqUtil.Api;
 
 namespace MqUtil.Num.Distance {
-	[Serializable]
 	public class LpDistance : AbstractDistance {
 		private double P { get; set; }
 		public LpDistance() : this(1.5) { }

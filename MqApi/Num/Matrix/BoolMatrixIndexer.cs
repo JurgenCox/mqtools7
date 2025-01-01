@@ -1,6 +1,5 @@
 ﻿using MqApi.Util;
 namespace MqApi.Num.Matrix{
-	[Serializable]
 	public class BoolMatrixIndexer : IBoolMatrixIndexer{
 		private bool[,] vals;
 		private bool isConstant;

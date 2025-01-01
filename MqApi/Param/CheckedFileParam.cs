@@ -1,5 +1,4 @@
 ﻿namespace MqApi.Param{
-	[Serializable]
 	public class CheckedFileParam : FileParam{
 		public Func<string, Tuple<string, bool>> checkFileName;
 		public CheckedFileParam() : this("", null){

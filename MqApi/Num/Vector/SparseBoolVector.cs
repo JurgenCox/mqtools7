@@ -1,6 +1,5 @@
 ﻿using MqApi.Util;
 namespace MqApi.Num.Vector{
-	[Serializable]
 	public class SparseBoolVector : BaseVector{
 		/// <summary>
 		/// Indices of elements with value 1. Values not covered by the indices are 0. Indices are sorted.

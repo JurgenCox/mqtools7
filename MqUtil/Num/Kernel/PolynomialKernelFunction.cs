@@ -3,7 +3,6 @@ using MqApi.Param;
 using MqUtil.Api;
 
 namespace MqUtil.Num.Kernel{
-	[Serializable]
 	public class PolynomialKernelFunction : IKernelFunction{
 		public int Degree{ get; set; }
 		public double Gamma{ get; set; }

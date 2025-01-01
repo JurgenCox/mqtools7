@@ -1,5 +1,4 @@
 ﻿namespace MqUtil.Data{
-	[Serializable]
 	public class ThreadSafeArray<T>{
 		private readonly object locker = new object();
 

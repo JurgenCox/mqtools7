@@ -2,7 +2,6 @@ using MqApi.Util;
 using MqUtil.Parse;
 using MqUtil.Parse.Uniprot;
 namespace MqUtil.Mol{
-	[Serializable]
 	public class ProteinAnnotation : IDisposable{
 		public string ProteinName { get; set; }
 		public string Accession { get; set; }

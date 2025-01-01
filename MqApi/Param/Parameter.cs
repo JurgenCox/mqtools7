@@ -3,7 +3,6 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 namespace MqApi.Param{
 	public delegate void ValueChangedHandler();
-	[Serializable]
 	public abstract class Parameter : IXmlSerializable, ICloneable{
 		public const int paramHeight = 23;
 		[field: NonSerialized] public event ValueChangedHandler ValueChanged;
@@ -68,7 +67,6 @@ namespace MqApi.Param{
 		public abstract void WriteXml(XmlWriter writer);
 		public abstract object Clone();
 	}
-	[Serializable]
 	public abstract class Parameter<T> : Parameter{
 		public T Value{ get; set; }
 		public T Default{ get; set; }

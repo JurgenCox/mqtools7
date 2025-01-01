@@ -3,7 +3,6 @@ using MqApi.Calc.Func;
 using MqApi.Calc.Util;
 using MqApi.Util;
 namespace MqApi.Calc.Const{
-	[Serializable]
 	internal class ConstInteger : Constant{
 		private readonly BigInteger number;
 		internal ConstInteger(string text){

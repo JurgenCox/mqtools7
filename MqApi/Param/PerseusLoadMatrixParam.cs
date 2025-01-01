@@ -10,7 +10,6 @@ namespace MqApi.Param{
 	/// [2-6] main, num, cat, text, multi-numeric: integers separated by ';'
 	/// [7] shorten column names: bool
 	/// </summary>
-	[Serializable]
 	public class PerseusLoadMatrixParam : Parameter<string[]>{
 		public string Filter{ get; set; }
 		/// <summary>

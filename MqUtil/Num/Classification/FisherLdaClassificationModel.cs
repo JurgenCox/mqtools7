@@ -4,7 +4,6 @@ using MqUtil.Api;
 using MqUtil.Num.Distance;
 
 namespace MqUtil.Num.Classification{
-	[Serializable]
 	public class FisherLdaClassificationModel : ClassificationModel{
 		private double[,] projection;
 		private double[][] projectedGroupMeans;

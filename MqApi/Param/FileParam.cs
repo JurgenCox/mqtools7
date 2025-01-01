@@ -1,5 +1,4 @@
 namespace MqApi.Param{
-	[Serializable]
 	public class FileParam : Parameter<string>{
 		public string Filter{ get; set; }
 		public Func<string, string> ProcessFileName{ get; set; }

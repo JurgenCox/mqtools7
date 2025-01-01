@@ -1,6 +1,5 @@
 ﻿using MqApi.Num;
 namespace MqUtil.Parse.Uniprot{
-	[Serializable]
 	public class DbReferenceType{
 		public static DbReferenceType go = new DbReferenceType("go");
 		public static DbReferenceType kegg = new DbReferenceType("kegg");

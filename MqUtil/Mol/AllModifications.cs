@@ -1,6 +1,5 @@
 ﻿using MqApi.Util;
 namespace MqUtil.Mol{
-	[Serializable]
 	public class AllModifications{
 		public Dictionary<char, ushort[]> Modifications{ get; set; }
 		public ushort[] NTermModifications{ get; set; }

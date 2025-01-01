@@ -1,5 +1,4 @@
 ﻿namespace MqUtil.Data{
-	[Serializable]
 	public class ThreadSafeDictionary<Tk, Tv>{
 		private readonly Dictionary<Tk, Tv> hashSet;
 		private readonly object locker = new object();

@@ -1,7 +1,6 @@
 using System.Xml;
 using MqApi.Util;
 namespace MqApi.Param{
-	[Serializable]
 	public class SingleChoiceParam : Parameter<int>{
 		public IList<string> Values{ get; set; }
 		/// <summary>

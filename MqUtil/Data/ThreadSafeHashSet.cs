@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 namespace MqUtil.Data{
-	[Serializable]
 	public class ThreadSafeHashSet<T> : ISet<T>{
 		private readonly HashSet<T> hashSet;
 		private readonly object locker = new object();

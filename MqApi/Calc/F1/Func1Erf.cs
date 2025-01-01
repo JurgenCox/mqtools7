@@ -4,7 +4,6 @@ using MqApi.Calc.Util;
 using MqApi.Num;
 using MqApi.Util;
 namespace MqApi.Calc.F1{
-	[Serializable]
 	internal class Func1Erf : Func1{
 		internal override string ShortName => "erf";
 		internal override string Name => "error function";

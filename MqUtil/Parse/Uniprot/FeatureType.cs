@@ -1,6 +1,5 @@
 ﻿using MqApi.Num;
 namespace MqUtil.Parse.Uniprot{
-	[Serializable]
 	public class FeatureType : IComparable<FeatureType>{
 		public static FeatureType chain = new FeatureType("chain");
 		public static FeatureType compositionallyBiasedRegion = new FeatureType("compositionally biased region");

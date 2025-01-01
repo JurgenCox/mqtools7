@@ -1,5 +1,4 @@
 ﻿namespace MqApi.Param{
-	[Serializable]
 	public class LabelParam : Parameter<string>{
 		/// <summary>
 		/// only for xml serialization

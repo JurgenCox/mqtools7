@@ -2,7 +2,6 @@ using System.Xml;
 using MqApi.Num;
 using MqApi.Util;
 namespace MqApi.Param{
-	[Serializable]
 	public class MultiChoiceMultiBinParam : Parameter<int[][]>{
 		public IList<string> Values{ get; set; }
 		public IList<string> Bins{ get; set; }

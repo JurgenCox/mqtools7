@@ -1,5 +1,4 @@
 ﻿namespace MqApi.Param{
-	[Serializable]
 	public class SaveFolderParam : Parameter<string>{
 		public Action<string> WriteAction{ get; set; }
 		public SaveFolderParam() : this(""){

@@ -3,7 +3,6 @@ using MqApi.Param;
 using MqUtil.Api;
 
 namespace MqUtil.Num.Kernel{
-	[Serializable]
 	public class LinearKernelFunction : IKernelFunction{
 		public bool UsesSquares => false;
 		public string Name => "Linear";

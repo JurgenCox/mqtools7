@@ -5,7 +5,6 @@ using MqApi.Calc.FN;
 using MqApi.Calc.Util;
 using MqApi.Util;
 namespace MqApi.Calc.Func{
-	[Serializable]
 	internal abstract class GenericFunc{
 		internal const char sep = ';';
 		internal static readonly Constant minusOneConst = new ConstInteger("-1");

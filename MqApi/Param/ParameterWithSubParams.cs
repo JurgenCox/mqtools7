@@ -4,7 +4,6 @@
 		float ParamNameWidth{ get; set; }
 		float TotalWidth{ get; set; }
 	}
-	[Serializable]
 	public abstract class ParameterWithSubParams<T> : Parameter<T>, IParameterWithSubParams{
 		protected ParameterWithSubParams(string name) : base(name){
 		}

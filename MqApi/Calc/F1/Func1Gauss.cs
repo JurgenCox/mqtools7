@@ -3,7 +3,6 @@ using MqApi.Calc.Func;
 using MqApi.Calc.Util;
 using MqApi.Util;
 namespace MqApi.Calc.F1{
-	[Serializable]
 	internal class Func1Gauss : Func1{
 		internal override string ShortName => "gauss";
 		internal override string Name => "Normal distribution";

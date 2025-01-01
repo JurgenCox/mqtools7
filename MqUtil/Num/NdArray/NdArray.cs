@@ -3,7 +3,6 @@ using System.Text;
 using MqUtil.Num.NdArray.Slice;
 
 namespace MqUtil.Num.NdArray{
-	[Serializable]
 	public class NdArray<T> : IEnumerable<T>{
 		public T[] Data;
 		public int[] Shape;

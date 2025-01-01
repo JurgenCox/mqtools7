@@ -3,7 +3,6 @@ using System.Security.Permissions;
 using MqApi.Num;
 using MqApi.Util;
 namespace MqApi.Data{
-	[Serializable]
 	public class MultiNumericVectors : ISerializable{
 		public List<double[][]> MultiNumericVecs{ get; set; } = new List<double[][]>();
 		public MultiNumericVectors(){

@@ -3,7 +3,6 @@ using MqApi.Util;
 using MqUtil.Mol;
 
 namespace MqUtil.Parse.Chebi{
-	[Serializable]
 	public class ChebiModel{
 		private readonly ChebiEntry[] main;
 		private readonly ChebiEntry[] series;

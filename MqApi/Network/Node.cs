@@ -1,5 +1,4 @@
 ﻿namespace MqApi.Network{
-	[Serializable]
 	public sealed class Node : Identifiable, INode{
 		public List<IEdge> InEdges{ get; }
 		public List<IEdge> OutEdges{ get; }

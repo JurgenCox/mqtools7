@@ -1,5 +1,4 @@
 ﻿namespace MqApi.Param{
-	[Serializable]
 	public class SaveFileParam : Parameter<string>{
 		public string FileName{ get; set; }
 		public string Filter{ get; set; }

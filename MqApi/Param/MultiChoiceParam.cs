@@ -2,7 +2,6 @@ using System.Xml;
 using MqApi.Num;
 using MqApi.Util;
 namespace MqApi.Param{
-	[Serializable]
 	public class MultiChoiceParam : Parameter<int[]>{
 		public bool Repeats{ get; set; }
 		public IList<string> Values{ get; set; }

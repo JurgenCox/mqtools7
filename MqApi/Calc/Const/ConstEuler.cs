@@ -2,7 +2,6 @@
 using MqApi.Calc.Util;
 using MqApi.Util;
 namespace MqApi.Calc.Const{
-	[Serializable]
 	internal class ConstEuler : Constant{
 		private const double value = 0.5772156649015328606065120900824024310421;
 		internal override double NumEvaluateDouble => value;

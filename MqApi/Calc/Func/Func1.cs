@@ -1,7 +1,6 @@
 ﻿using MqApi.Calc.Except;
 using MqApi.Calc.Util;
 namespace MqApi.Calc.Func{
-	[Serializable]
 	internal abstract class Func1 : GenericFunc{
 		internal sealed override TreeNode Derivative(int index, TreeNode[] args){
 			TreeNode arg = args[0];

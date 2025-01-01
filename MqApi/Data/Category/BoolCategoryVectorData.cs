@@ -1,7 +1,6 @@
 ﻿using MqApi.Num;
 using MqApi.Util;
 namespace MqApi.Data.Category{
-	[Serializable]
 	internal class BoolCategoryVectorData : ICategoryVectorData{
 		private bool[] vector;
 		private string value = "";

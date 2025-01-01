@@ -3,7 +3,6 @@ using MqApi.Param;
 using MqUtil.Api;
 
 namespace MqUtil.Num.Distance {
-	[Serializable]
 	public abstract class AbstractDistance : IDistance {
 		public abstract object Clone();
 		public abstract string Name { get; }

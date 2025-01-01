@@ -1,6 +1,5 @@
 using MqApi.Util;
 namespace MqApi.Param{
-	[Serializable]
 	public class IntParam : Parameter<int>{
 		/// <summary>
 		/// only for xml serialization

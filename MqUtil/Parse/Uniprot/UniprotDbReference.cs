@@ -1,5 +1,4 @@
 namespace MqUtil.Parse.Uniprot{
-	[Serializable]
 	public class UniprotDbReference{
 		public readonly Dictionary<string, List<string>> properties = new Dictionary<string, List<string>>();
 		public void AddProperty(string type, string value){

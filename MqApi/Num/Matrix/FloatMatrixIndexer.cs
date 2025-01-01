@@ -1,7 +1,6 @@
 ﻿using MqApi.Num.Vector;
 using MqApi.Util;
 namespace MqApi.Num.Matrix{
-	[Serializable]
 	public class FloatMatrixIndexer : MatrixIndexer{
 		private float[][,] vals;
 		private bool isConstant;

@@ -2,7 +2,6 @@
 using MqApi.Calc.Util;
 using MqApi.Util;
 namespace MqApi.Calc.F2{
-	[Serializable]
 	internal class Func2Atan : Func2{
 		internal override string ShortName => "atan2";
 		internal override string Name => throw new NotImplementedException();

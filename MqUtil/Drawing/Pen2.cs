@@ -1,6 +1,5 @@
 ﻿using MqApi.Drawing;
 namespace MqUtil.Drawing{
-	[Serializable]
 	public class Pen2{
 		public Pen2(Color2 color) : this(color, 1f){}
 

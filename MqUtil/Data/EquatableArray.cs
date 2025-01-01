@@ -1,6 +1,5 @@
 ﻿using MqApi.Num;
 namespace MqUtil.Data{
-	[Serializable]
 	public class EquatableArray<T>{
 		public T[] Array { get; }
 

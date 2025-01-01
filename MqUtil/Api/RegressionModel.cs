@@ -1,7 +1,6 @@
 ﻿using MqApi.Num.Vector;
 
 namespace MqUtil.Api{
-	[Serializable]
 	public abstract class RegressionModel{
 		public virtual double Predict(BaseVector x){
 			return Predict(new []{x})[0];

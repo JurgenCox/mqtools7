@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 namespace MqApi.Num{
-	[Serializable]
 	public class LongList<T> : IEnumerable<T>, IEnumerator<T>{
 		private const long maxLen = 1L << 24;
 		private readonly List<List<T>> lists = new List<List<T>>();

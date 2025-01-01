@@ -3,7 +3,6 @@ using MqApi.Param;
 using MqUtil.Api;
 
 namespace MqUtil.Num.Kernel{
-	[Serializable]
 	public class SigmoidKernelFunction : IKernelFunction{
 		private double Gamma { get; set; }
 		private double Offset { get; set; }

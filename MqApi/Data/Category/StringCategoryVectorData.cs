@@ -3,7 +3,6 @@ using System.Security.Permissions;
 using MqApi.Num;
 using MqApi.Util;
 namespace MqApi.Data.Category{
-	[Serializable]
 	internal class StringCategoryVectorData : ICategoryVectorData, ISerializable{
 		private string[][] categoryData;
 		public string[] Values{ get; private set; }

@@ -1,7 +1,6 @@
 using System.Text.RegularExpressions;
 using System.Xml;
 namespace MqApi.Param{
-	[Serializable]
 	public class RegexMatchParam : Parameter<Regex>{
 		/// <summary>
 		/// for xml serialization only

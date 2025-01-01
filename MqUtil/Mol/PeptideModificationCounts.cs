@@ -1,7 +1,6 @@
 using MqApi.Num;
 using MqApi.Util;
 namespace MqUtil.Mol{
-	[Serializable]
 	public class PeptideModificationCounts{
 		private int hash;
 		public ushort[] ModificationTypes { get; private set; }

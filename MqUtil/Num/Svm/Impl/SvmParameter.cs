@@ -2,7 +2,6 @@
 using MqUtil.Num.Kernel;
 
 namespace MqUtil.Num.Svm.Impl{
-	[Serializable]
 	public class SvmParameter : ICloneable{
 		public SvmType svmType = SvmType.CSvc;
 		public IKernelFunction kernelFunction = new LinearKernelFunction();

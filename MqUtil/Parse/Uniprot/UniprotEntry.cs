@@ -1,6 +1,5 @@
 using MqApi.Num;
 namespace MqUtil.Parse.Uniprot{
-	[Serializable]
 	public class UniprotEntry{
 		private Dictionary<DbReferenceType, Dictionary<string, UniprotDbReference>> dbEntries;
 		private Dictionary<FeatureType, List<UniprotFeature>> features;

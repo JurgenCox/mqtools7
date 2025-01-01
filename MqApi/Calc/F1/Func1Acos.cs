@@ -4,7 +4,6 @@ using MqApi.Calc.Util;
 using MqApi.Util;
 //TODO: from here
 namespace MqApi.Calc.F1{
-	[Serializable]
 	internal class Func1Acos : Func1{
 		internal override double NumEvaluateDouble(double x){
 			return Math.Acos(x);

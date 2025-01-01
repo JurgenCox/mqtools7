@@ -1,6 +1,5 @@
 ﻿using MqApi.Num.Vector;
 namespace MqApi.Num.Matrix{
-	[Serializable]
 	public abstract class MatrixIndexer : ICloneable, IDisposable, IEquatable<MatrixIndexer>{
 		public abstract void Init(int nrows, int ncols);
 		public abstract bool IsInitialized();

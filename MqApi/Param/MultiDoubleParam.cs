@@ -1,7 +1,6 @@
 ﻿using MqApi.Num;
 using MqApi.Util;
 namespace MqApi.Param{
-	[Serializable]
 	public class MultiDoubleParam : Parameter<double[]>{
 		/// <summary>
 		/// for xml serialization only

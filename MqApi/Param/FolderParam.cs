@@ -1,5 +1,4 @@
 ﻿namespace MqApi.Param{
-	[Serializable]
 	public class FolderParam : Parameter<string>{
 		/// <summary>
 		/// for xml serialization only

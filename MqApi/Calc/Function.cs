@@ -1,7 +1,6 @@
 ﻿using MqApi.Calc.Util;
 using MqApi.Util;
 namespace MqApi.Calc{
-	[Serializable]
 	public class Function{
 		private TreeNode root;
 		private string[] realVariableNames;

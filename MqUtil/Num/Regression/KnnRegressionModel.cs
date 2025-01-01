@@ -4,7 +4,6 @@ using MqUtil.Api;
 using MqUtil.Num.Classification;
 
 namespace MqUtil.Num.Regression{
-	[Serializable]
 	public class KnnRegressionModel : RegressionModel{
 		private readonly BaseVector[] x;
 		private readonly double[] y;

@@ -3,11 +3,6 @@ namespace MqApi.Network{
 	/// <summary>
 	/// Graph data structure with nodes and edges. Provides consistent removal of
 	/// nodes and edges.
-	/// 
-	/// Graph is not marked as [Serializable] since default binary serialization produces
-	/// too many references, limiting the size of network that can be serialized.
-	/// <see cref="NetworkInfo"/> implements a custom binary serialization that can handle
-	/// large graphs.
 	/// </summary>
 	public class Graph : IGraph{
 		public IReadOnlyCollection<INode> Nodes => nodes;

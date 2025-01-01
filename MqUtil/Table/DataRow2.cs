@@ -1,5 +1,4 @@
 ﻿namespace MqUtil.Table{
-	[Serializable]
 	public class DataRow2{
 		public object[] ItemArray { get; set; }
 		internal readonly Dictionary<string, int> nameMapping;

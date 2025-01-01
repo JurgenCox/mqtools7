@@ -6,7 +6,6 @@ using MqUtil.Api;
 using MqUtil.Util;
 
 namespace MqUtil.Num.Learning{
-	[Serializable]
 	public class ClassificationWithRanking{
 		private readonly ClassificationMethod classifier;
 		private readonly ClassificationFeatureRankingMethod ranker;

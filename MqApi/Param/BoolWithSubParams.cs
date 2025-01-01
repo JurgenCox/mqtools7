@@ -2,7 +2,6 @@ using System.Xml;
 using System.Xml.Serialization;
 using MqApi.Util;
 namespace MqApi.Param{
-	[Serializable]
 	public class BoolWithSubParams : ParameterWithSubParams<bool>{
 		public Parameters SubParamsFalse{ get; set; }
 		public Parameters SubParamsTrue{ get; set; }

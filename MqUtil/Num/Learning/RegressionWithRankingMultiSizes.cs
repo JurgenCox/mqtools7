@@ -4,7 +4,6 @@ using MqApi.Param;
 using MqUtil.Api;
 
 namespace MqUtil.Num.Learning{
-	[Serializable]
 	public class RegressionWithRankingMultiSizes{
 		private readonly RegressionMethod classifier;
 		private readonly RegressionFeatureRankingMethod ranker;

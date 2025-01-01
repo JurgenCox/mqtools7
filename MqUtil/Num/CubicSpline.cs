@@ -1,6 +1,5 @@
 using MqApi.Util;
 namespace MqUtil.Num {
-	[Serializable]
 	public class CubicSpline {
 		public readonly double[] x;
 		public double[] y { get; }

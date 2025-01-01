@@ -3,7 +3,6 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 namespace MqApi.Param{
-	[Serializable]
 	public class RegexReplaceParam : Parameter<Tuple<Regex, string>>{
 		public List<string> Previews{ get; set; }
 		/// <summary>

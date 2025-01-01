@@ -2,7 +2,6 @@
 using MqApi.Num;
 using MqApi.Util;
 namespace MqApi.Param{
-	[Serializable]
 	public class MultiFileParam : Parameter<string[]>{
 		public string Filter{ get; set; }
 		/// <summary>

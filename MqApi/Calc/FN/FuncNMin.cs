@@ -3,7 +3,6 @@ using MqApi.Calc.Util;
 using MqApi.Num;
 using MqApi.Util;
 namespace MqApi.Calc.FN{
-	[Serializable]
 	internal class FuncNMin : FuncN{
 		internal override double NumEvaluateDouble(double[] x){
 			return ArrayUtils.Min(x);
