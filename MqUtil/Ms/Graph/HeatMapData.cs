@@ -114,7 +114,6 @@ namespace MqUtil.Ms.Graph{
 		public abstract string[] AllVarMods{ get; }
 		public abstract bool HasMsms{ get; }
 		public abstract bool HasTims{ get; }
-		public abstract bool IsCustomQuantification{ get; }
 		public abstract int GetImsStep(int index);
         public abstract bool IsBoxCar(int index);
         public abstract bool IsDia(int index);
