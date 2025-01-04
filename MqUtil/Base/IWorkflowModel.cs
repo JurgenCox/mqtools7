@@ -1,6 +1,7 @@
 ﻿using MqApi.Param;
 using MqUtil.Ms.Enums;
 using MqUtil.Ms.Graph;
+using MqUtil.Ms.Instrument;
 using MqUtil.Util;
 namespace MqUtil.Base{
 	public interface IWorkflowModel{
@@ -50,5 +51,6 @@ namespace MqUtil.Base{
 		MsDataType DataType { get; }
 		Version Version { get; }
 		HeatMapData CreateHeatMapData();
+		void SetInstrumentType(MsInstrument instrument, Parameters gp);
 	}
 }
