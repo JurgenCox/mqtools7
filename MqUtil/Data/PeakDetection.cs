@@ -245,7 +245,7 @@ namespace MqUtil.Data{
 				}
 			}
 		}
-		private static bool Matches(int j, Ms1CentroidList centroidList, int i, int minInd,
+		public static bool Matches(int j, Ms1CentroidList centroidList, int i, int minInd,
 			IList<Ms1CentroidList> cache, double matchTol, bool matchInPpm, int missingScans, int maxInd){
 			double centerMass = centroidList.GetMzCentroid(j);
             double minMass = centroidList.MzMin[j];
@@ -287,7 +287,7 @@ namespace MqUtil.Data{
 			}
 			return match;
 		}
-        private static bool MassMatch(double centerMass, double minMass, double maxMass, double newMass,
+        public static bool MassMatch(double centerMass, double minMass, double maxMass, double newMass,
             double matchTol, bool matchInPpm) {
             if (matchInPpm) {
                 double match = 2 * Math.Abs(centerMass - newMass) / (centerMass + newMass) * 1e+6;
@@ -311,7 +311,7 @@ namespace MqUtil.Data{
         /// Each peak kept is added to a list of WritablePeak, and a count is incremented.
         /// </summary>
         /// <param name="minPeakLen">The minimum number of retention times (scans) required to keep a peak.</param>
-        private static void Process(GrowablePeak gpeak, int minPeakLen, RawLayer rawFile, double valleyFactor,
+        public static void Process(GrowablePeak gpeak, int minPeakLen, RawLayer rawFile, double valleyFactor,
 			bool advancedPeakSplitting, bool split, ref int peakCount, MsInstrument msInstrument,
 			ICollection<WritablePeak> toBeWritten, bool skipBeginning, IntensityDetermination intensDet,
 			bool processPeaks){
