@@ -125,6 +125,6 @@ namespace MqUtil.Ms.Instrument{
 		public override LfqRatioType DiaLfqRatioTypeDefault => LfqRatioType.Median;
 		public override bool DiaChargeNormalizationLibraryDefault => true;
 		public override bool DiaChargeNormalizationSampleDefault => true;
-		public override int DiaNumNonleadingMatchesDefault => 0;
+		public override int DiaNumNonleadingMatchesDefault => 1;
 	}
 }
