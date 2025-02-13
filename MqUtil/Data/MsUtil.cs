@@ -16,6 +16,13 @@ namespace MqUtil.Data{
             string posLayerFolder = Path.Combine(rawFileFolder, rawFileName, "p0");
             return Path.Combine(posLayerFolder, rawFileName);
         }
+        public static string GetPosLayerBasePath(string rawFilePath, int sliceIndex, bool hasFaims) {
+	        string rawFileName = Path.GetFileNameWithoutExtension(rawFilePath);
+	        string rawFileFolder = Path.GetDirectoryName(rawFilePath);
+	        string posLayerFolder = Path.Combine(rawFileFolder, rawFileName, "p0");
+	        return hasFaims ? Path.Combine(posLayerFolder, "sl" + sliceIndex, rawFileName) : 
+		        Path.Combine(posLayerFolder, rawFileName);
+        }
         public static ColumnType[] ReadColTypes(string name, string serFolder) {
             BinaryReader reader = FileUtils.GetBinaryReader(Path.Combine(serFolder, name + "x"));
             int n = reader.ReadInt32();
