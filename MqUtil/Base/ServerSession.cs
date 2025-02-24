@@ -142,7 +142,7 @@ namespace MqUtil.Base{
 			}
 			workThreadSource = tokenSource;
 			workThread = new Thread(() => DoWork(jobs, numThreads, wmodel, fileName, password, 
-				workThreadSource, deleteFinishedPerformanceFiles, cancelSourcePerformance));
+				workThreadSource, deleteFinishedPerformanceFiles, cancelSourcePerformance, true));
 			workThread.Start();
 			return null;
 		}
@@ -458,8 +458,9 @@ namespace MqUtil.Base{
             updateThread = new Thread(() => UpdateLoop(deleteFinishedPerformanceFiles));
 			updateThread.Start();
 		}
-		private void DoWork(List<WorkDispatcher> jobs, int numThreads, IWorkflowModel wmodel, string fileName,
-			string password, CancellationTokenSource tokenSource, bool deleteFinishedPerformanceFiles, CancellationTokenSource cancelSourcePerformance) {
+		public void DoWork(List<WorkDispatcher> jobs, int numThreads, IWorkflowModel wmodel, string fileName,
+			string password, CancellationTokenSource tokenSource, bool deleteFinishedPerformanceFiles, CancellationTokenSource cancelSourcePerformance,
+			bool stopWithError) {
 			StartPerformanceTable(deleteFinishedPerformanceFiles, cancelSourcePerformance);
 			try{
 				workspace.SetJobs(jobs);
@@ -472,7 +473,7 @@ namespace MqUtil.Base{
 						return;
 					}
 				}
-				FinishCode = workspace.Work(infoFolder, tokenSource);
+				FinishCode = workspace.Work(infoFolder, tokenSource, stopWithError);
 				if (FinishCode != 0){
 					cancelThreadSource.Cancel();
                     return;
