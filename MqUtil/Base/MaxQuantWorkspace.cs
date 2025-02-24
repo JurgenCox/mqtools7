@@ -17,7 +17,7 @@ namespace MqUtil.Base{
 		/// <summary>
 		/// Call the Start method on each WorkDispatcher in jobs List, writing runningTimes.txt as you go.
 		/// </summary>
-		public int Work(string infoFolder1, CancellationTokenSource tokenSource) {
+		public int Work(string infoFolder1, CancellationTokenSource tokenSource, bool stopWithError) {
 			this.infoFolder = infoFolder1;
 			if (InfoFolderValid){
 				runningTimesWriter = new StreamWriter(RunningTimesFile(this.infoFolder));
@@ -39,13 +39,16 @@ namespace MqUtil.Base{
 						runningTimesWriter.Flush();
 					} catch (Exception){ }
 				}
-				string[] allFiles = Directory.GetFiles(infoFolder);
-				string[] errorFiles = MqProcessInfo.GetFiles(allFiles, ".error.txt");
-				if (errorFiles.Length > 0) {
-					tokenSource.Cancel();
-					jobs = null;
-					return 2;
-				}
+				if (stopWithError){
+					string[] allFiles = Directory.GetFiles(infoFolder);
+					string[] errorFiles = MqProcessInfo.GetFiles(allFiles, ".error.txt");
+					if (errorFiles.Length > 0) {
+						tokenSource.Cancel();
+						jobs = null;
+						return 2;
+					}
+                }
+				
             }
             runningTimesWriter?.Close();
 			workDone?.Invoke(this,null);
