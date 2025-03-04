@@ -7,16 +7,23 @@ namespace MqUtil.Util{
 			int nTasks = n*(n - 1)/2;
 			nThreads = Math.Min(nThreads, nTasks);
 			td = new ThreadDistributor(nThreads, nTasks, i =>{
-				int j;
-				int k;
-				GetIndices(i, out j, out k);
+				GetIndices(i, out var j, out var k);
 				calculation(j, k);
 			});
 		}
 
+		public Action<string> Comment {
+			get {
+				return td?.Comment;
+			}
+			set {
+				td.Comment = value;
+			}
+		}
+
 		private static void GetIndices(int i, out int j, out int k){
 			j = (int) (0.5 + Math.Sqrt(0.25 + 2*i) + 1e-6);
-			k = i - j*(j - 1)/2;
+			k = i - j*(j - 1)/2 - 1;
 		}
 
 		public void Abort(){
