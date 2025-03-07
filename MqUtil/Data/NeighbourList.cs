@@ -60,11 +60,39 @@ namespace MqUtil.Data{
 			}
 			return cluster.ToArray();
 		}
-		private void Add2(int i, int j){
-			if (!neighborList.ContainsKey(i)){
+		public void Add2(int i, int j)
+		{
+			if (!neighborList.ContainsKey(i))
+			{
+				HashSet<int> x = [j];
+				neighborList.Add(i, x);
+			}
+			else
+			{
+				neighborList[i].Add(j);
+			}
+		}
+		public void Add2(int i, int[] js)
+		{
+			if (js.Length == 0)
+			{
+				return;
+			}
+			if (!neighborList.ContainsKey(i))
+			{
 				neighborList.Add(i, new HashSet<int>());
 			}
-			neighborList[i].Add(j);
+
+			foreach (int j in js)
+			{
+				neighborList[i].Add(j);
+			}
+		}
+		public bool GetAt(int i, int j) {
+			if (!neighborList.ContainsKey(i)) {
+				return false;
+			}
+			return neighborList[i].Contains(j);
 		}
 	}
 }
