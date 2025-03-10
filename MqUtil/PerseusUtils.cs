@@ -277,16 +277,6 @@ namespace MqUtil{
             using (StreamWriter writer = new StreamWriter(filename, false, Encoding.UTF8)) {
 				IEnumerable<string> columnNames = PerseusUtil.GetColumnNames(data);
 				writer.WriteLine(StringUtils.Concat("\t", columnNames));
-				for (int j = 0; j < data.RowCount; j++) {
-					List<string> words = new List<string>();
-					for (int i = 0; i < data.ColumnCount; i++) {
-						string s1 = Parser.ToString(data.Values.Get(j, i));
-						words.Add(s1);
-					}
-					IEnumerable<string> row =
-						words.Concat(PerseusUtil.DataAnnotationRow((IDataWithAnnotationColumns)data, j));
-					writer.WriteLine(StringUtils.Concat("\t", row));
-				}
 				WriteDataRows(data, addtlMatrices, writer);
 			}
 		}
