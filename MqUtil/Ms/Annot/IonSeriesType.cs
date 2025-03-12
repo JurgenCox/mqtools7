@@ -16,6 +16,8 @@
 		yNH3,
 		bMod,
 		yMod,
+		bModMod,
+		yModMod,
 		bModH2O,
 		yModH2O,
 		bModNH3,
