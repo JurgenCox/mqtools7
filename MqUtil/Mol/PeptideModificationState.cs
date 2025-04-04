@@ -527,14 +527,13 @@ namespace MqUtil.Mol{
 			}
 			return q.ToArray();
 		}
-
-		private static (string, PeptideModificationState) FromString(string nt, string ct, string s){
+		public static (string, PeptideModificationState) FromString(string nt, string ct, string s){
 			return FromString(nt, ct, SplitMainSequence(s));
 		}
 
-		private static (string, PeptideModificationState) FromString(string nt, string ct, string[] q){
+		public static (string, PeptideModificationState) FromString(string nt, string ct, string[] q){
 			PeptideModificationState result = new PeptideModificationState(q.Length);
-			(char _, ushort mod) = GetAaAndMod(nt);
+			(_, ushort mod) = GetAaAndMod(nt);
 			result.NTermModification = mod;
 			(_, mod) = GetAaAndMod(ct);
 			result.CTermModification = mod;
@@ -546,7 +545,10 @@ namespace MqUtil.Mol{
 		}
 
 		private static (char, ushort) GetAaAndMod(string s){
-			if (s.Length == 1){
+			if (string.IsNullOrEmpty(s)) {
+				return ('_', ushort.MaxValue);
+			}
+			if (s.Length == 1) {
 				return (s[0], ushort.MaxValue);
 			}
 			string modName = s.Substring(2, s.Length - 3);
