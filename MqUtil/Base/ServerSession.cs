@@ -83,7 +83,7 @@ namespace MqUtil.Base{
 		public string[] GetSampleTableColumn(int col){
 			string[] vals = new string[samplesTable.RowCount];
 			for (int i = 0; i < vals.Length; i++){
-				vals[i] = (string) fileTable.GetEntry(i, col);
+				vals[i] = samplesTable.GetEntry(i, col).ToString() ?? "";
 			}
 			return vals;
 		}
@@ -644,10 +644,11 @@ namespace MqUtil.Base{
 			DataTable2 pt = new DataTable2("Samples", "");
 			pt.AddColumn("Experiment", 180, ColumnType.Text,
 				"Experiment names as specified in the 'Raw files' table.");
-			pt.AddColumn("Channel index", 90, ColumnType.Text, "Channel index from labeling.");
+			pt.AddColumn("Fractions", 180, ColumnType.Text, "Fractions corresponding to the experiment");
+            pt.AddColumn("Channel index", 90, ColumnType.Text, "Channel index from labeling.");
 			pt.AddColumn("Channel", 180, ColumnType.Text, "Channel name from labeling.");
 			pt.AddColumn("Sample name", 180, ColumnType.Text, "User-specifiable name of the sample.");
-			return pt;
+            return pt;
 		}
 		private static DataTable2 CreateFileTable(bool hasFractions, bool hasPtm, bool hasCommonChannel){
 			DataTable2 ft = new DataTable2("File table",
