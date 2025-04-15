@@ -648,6 +648,7 @@ namespace MqUtil.Base{
             pt.AddColumn("Channel index", 90, ColumnType.Text, "Channel index from labeling.");
 			pt.AddColumn("Channel", 180, ColumnType.Text, "Channel name from labeling.");
 			pt.AddColumn("Sample name", 180, ColumnType.Text, "User-specifiable name of the sample.");
+			pt.AddColumn("Raw files", 180, ColumnType.Text, "Raw files corresponding to the fractions and experiment");
             return pt;
 		}
 		private static DataTable2 CreateFileTable(bool hasFractions, bool hasPtm, bool hasCommonChannel){
