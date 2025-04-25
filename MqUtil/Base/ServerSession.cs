@@ -21,12 +21,12 @@ namespace MqUtil.Base{
 		private Thread workThread;
 		private Thread updateThread;
 		private string infoFolder;
-		public string ExperimentColumn = "Experiment";
-		public string FractionsColumn = "Fractions";
-		public string ChannelColumn = "Channel";
-		public string ChannelIndexColumn = "Channel index";
-		public string SampleNameColumn = "Sample name";
-        public string RawFilesColumn = "Raw files";
+		public string ExperimentColumn { get; set; }
+		public string FractionsColumn { get; set; }
+		public string ChannelColumn { get; set; }
+		public string ChannelIndexColumn { get; set; }
+		public string SampleNameColumn { get; set; }
+		public string RawFilesColumn { get; set; }
         public bool IsDone{ get; set; }
 		public int FinishCode{ get; set; }
 		public string Message{ get; set; }
@@ -42,7 +42,13 @@ namespace MqUtil.Base{
 			samplesTable = CreateSamplesTable();
 			fileTable = CreateFileTable(wmodel.HasFractions, wmodel.HasPtm, wmodel.HasCommonChannel);
 			HeatMapData = wmodel.CreateHeatMapData();
-		}
+			ExperimentColumn = "Experiment";
+			FractionsColumn = "Fractions";
+            ChannelColumn = "Channel";
+            ChannelIndexColumn = "Channel index";
+			SampleNameColumn = "Sample name";
+			RawFilesColumn = "Raw files";
+        }
 		public DataTable2 GetProcessTable(){
 			return processTable;
 		}
@@ -227,71 +233,6 @@ namespace MqUtil.Base{
 			}
 			return null;
 		}
-		public string ReadSamplesFromFile(string filename){
-			samplesTable.Rows.Clear();
-            try {
-				bool hasExperiment = TabSep.HasColumn(ExperimentColumn, filename, '\t');
-				if (!hasExperiment){
-					return $"A {ExperimentColumn} column is required in the sample file.";
-                }
-			} catch (IOException){
-				return "Cannot open file " + filename + ". Is it open in another program, e.g. Excel?";
-			}
-			string[] experiment = TabSep.GetColumn(ExperimentColumn, filename, '\t');
-			bool hasFractions = TabSep.HasColumn(FractionsColumn, filename, '\t');
-			if (!hasFractions) {
-				return $"A {FractionsColumn} column is required in the sample file.";
-			}
-			string[] fractionsCol = TabSep.GetColumn(FractionsColumn, filename, '\t');
-			bool hasChannel = TabSep.HasColumn(ChannelColumn, filename, '\t');
-			if (!hasChannel) {
-				return $"A {ChannelColumn} column is required in the sample file.";
-			}
-			string[] channel = TabSep.GetColumn(ChannelColumn, filename, '\t');
-            bool hasChannelIndex = TabSep.HasColumn(ChannelIndexColumn, filename, '\t');
-			if (!hasChannelIndex){
-				return $"A {ChannelIndexColumn} column is required in the sample file.";
-            }
-			string[] channelIndex = TabSep.GetColumn(ChannelIndexColumn, filename, '\t');
-			bool hasSample = TabSep.HasColumn(SampleNameColumn, filename, '\t');
-			if (!hasSample) {
-				return $"A {SampleNameColumn} column is required in the sample file.";
-            }
-			string[] sample = TabSep.GetColumn(SampleNameColumn, filename, '\t');
-			bool hasRawFiles = TabSep.HasColumn(RawFilesColumn, filename, '\t');
-			if (!hasRawFiles) {
-				return $"A {RawFilesColumn} column is required in the sample file.";
-            }
-			string[] rawFiles = TabSep.GetColumn(RawFilesColumn, filename, '\t');
-
-
-            for (int i = 0; i < experiment.Length; i++){
-				experiment[i] = experiment[i].Trim();
-				fractionsCol[i] = fractionsCol[i].Trim();
-				channel[i] = channel[i].Trim();
-				channelIndex[i] = channelIndex[i].Trim();
-				sample[i] = sample[i].Trim();
-				rawFiles[i] = rawFiles[i].Trim();
-            }
-            Dictionary<string, Tuple<List<string>, List<string>>> experimentToFractionAndRowMap = CreateExperimentToFractionAndFileMap();
-			for (int i = 0; i < experiment.Length; i++){
-				if (!experimentToFractionAndRowMap.ContainsKey(experiment[i])){
-					continue;
-				}
-				Tuple<List<string>, List<string>> value = experimentToFractionAndRowMap[experiment[i]];
-				string fractionsJoined = string.Join(";",value.Item1);
-				string filesJoined = string.Join(";", value.Item2);
-                DataRow2 dr = samplesTable.NewRow();
-				dr[ExperimentColumn] = experiment[i];
-                dr[SampleNameColumn] = sample[i];
-                dr[ChannelIndexColumn] = channelIndex[i];
-				dr[ChannelColumn]= channel[i];
-				dr[FractionsColumn] = fractionsJoined;
-				dr[RawFilesColumn] = filesJoined;
-				samplesTable.AddRow(dr);
-            }
-			return null;
-		}
 		public static int[] ParseChannels(string s){
 			if (string.IsNullOrWhiteSpace(s)){
 				return new int[0];
@@ -416,7 +357,7 @@ namespace MqUtil.Base{
 			}
 			return nameToRow;
 		}
-		private Dictionary<string, Tuple<List<string>, List<string>>> CreateExperimentToFractionAndFileMap(){
+		public Dictionary<string, Tuple<List<string>, List<string>>> CreateExperimentToFractionAndFileMap(){
 			Dictionary<string, Tuple<List<string>, List<string>>> experimentToFractionAndRowMap 
 				= new Dictionary<string, Tuple<List<string>, List<string>>>();
             for (int i = 0; i < fileTable.RowCount; i++){
