@@ -79,7 +79,8 @@ namespace MqUtil.Ms.Raw{
 		public int Ms1Count => posLayer.Ms1Count + negLayer.Ms1Count;
 		public virtual int PasefMsmsCount => 0;
 		public virtual bool IsAstral => false;
-		public virtual PasefFrameMsMsInfo GetPasefMsmsInfo(int index){
+		public abstract string GetInstrumentName();
+        public virtual PasefFrameMsMsInfo GetPasefMsmsInfo(int index){
 			return null;
 		}
 		public virtual int PasefPrecursorCount => 0;

@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using MqApi.Num;
 using MqApi.Util;
 using MqUtil.Ms.Graph;
@@ -100,7 +101,7 @@ namespace MqUtil.Base{
 			}
 			return vals;
 		}
-		public void NoFractions(bool hasFractions){
+        public void NoFractions(bool hasFractions){
 			int fileCol = fileTable.GetColumnIndex("File");
 			int expCol = fileTable.GetColumnIndex("Experiment");
 			int fracCol = fileTable.GetColumnIndex("Fraction");
@@ -629,16 +630,22 @@ namespace MqUtil.Base{
 		}
 		private static DataTable2 CreateSamplesTable(){
 			DataTable2 pt = new DataTable2("Samples", "");
-			pt.AddColumn("Experiment", 180, ColumnType.Text,
+			pt.AddColumn("Experiment", 90, ColumnType.Text,
 				"Experiment names as specified in the 'Raw files' table.");
-			pt.AddColumn("Fractions", 180, ColumnType.Text, "Fractions corresponding to the experiment");
+			pt.AddColumn("factor value[group]", 180, ColumnType.Text, "");
+            pt.AddColumn("Fractions", 180, ColumnType.Text, "Fractions corresponding to the experiment");
 			pt.AddColumn("Channel", 180, ColumnType.Text, "Channel name from labeling.");
-			pt.AddColumn("Channel index", 90, ColumnType.Text, "Channel index from labeling.");
             pt.AddColumn("Sample name", 180, ColumnType.Text, "User-specifiable name of the sample.");
-			pt.AddColumn("Raw files", 180, ColumnType.Text, "Raw files corresponding to the fractions and experiment");
+            pt.AddColumn("Organism part", 90, ColumnType.Text, 
+	            "The part of organism’s anatomy or substance arising from an organism from which the biomaterial was derived, (e.g., liver)");
+            pt.AddColumn("Cell type", 90, ColumnType.Text,
+	            "A cell type is a distinct morphological or functional form of cell. Examples are epithelial, glial etc.");
+            pt.AddColumn("Disease", 90, ColumnType.Text, "The disease under study in the Sample.");
+            pt.AddColumn("Biological Replicate", 180, ColumnType.Text, "Parallel measurements of biologically distinct samples");
+            pt.AddColumn("Technical Replicate", 180, ColumnType.Text, "Repeated measurements of the same sample");
             return pt;
 		}
-		private static DataTable2 CreateFileTable(bool hasFractions, bool hasPtm, bool hasCommonChannel){
+        private static DataTable2 CreateFileTable(bool hasFractions, bool hasPtm, bool hasCommonChannel){
 			DataTable2 ft = new DataTable2("File table",
 				"Table containing all raw data sources that are being processed together.");
 			ft.AddColumn("File", 355, ColumnType.Text, "Path to the raw data source, either a file or a folder.");
