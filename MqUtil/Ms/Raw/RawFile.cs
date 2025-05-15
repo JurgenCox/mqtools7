@@ -79,7 +79,8 @@ namespace MqUtil.Ms.Raw{
 		public int Ms1Count => posLayer.Ms1Count + negLayer.Ms1Count;
 		public virtual int PasefMsmsCount => 0;
 		public virtual bool IsAstral => false;
-		public virtual PasefFrameMsMsInfo GetPasefMsmsInfo(int index){
+		public abstract string GetInstrumentName();
+        public virtual PasefFrameMsMsInfo GetPasefMsmsInfo(int index){
 			return null;
 		}
 		public virtual int PasefPrecursorCount => 0;
@@ -99,6 +100,7 @@ namespace MqUtil.Ms.Raw{
 		public double Ms2MassMin => Math.Min(posLayer.Ms2MassMin, negLayer.Ms2MassMin);
 		public double Ms2MassMax => Math.Max(posLayer.Ms2MassMax, negLayer.Ms2MassMax);
 		public double MaxIntensity => Math.Max(posLayer.MaxIntensity, negLayer.MaxIntensity);
+		public bool HasSeparateMs1Deisotoping => IsAstral || HasIms;
 		public abstract void GetSpectrum(int scanNumberMin, int scanNumberMax, int imsIndexMin,
 			int imsIndexMax, bool readCentroids, out double[] masses, out float[] intensities, double resolution,
 			double gridSpacing, double mzMin, double mzMax, bool isMs1);
