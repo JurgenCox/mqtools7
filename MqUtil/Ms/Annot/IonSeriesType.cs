@@ -16,12 +16,18 @@
 		yNH3,
 		bMod,
 		yMod,
+		bModMod,
+		yModMod,
 		bModH2O,
 		yModH2O,
 		bModNH3,
 		yModNH3,
 		b2,
-		y2, 
+		y2,
+		b2Mod,
+		y2Mod,
+		b2ModMod,
+		y2ModMod,
 		p
 		//ushort
 		//5bits
