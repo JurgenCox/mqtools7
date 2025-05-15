@@ -458,38 +458,38 @@
 			}
 		}
 
-		public static string Samples {
+		public static string Metadata {
 			get {
 				switch (TwoLettName) {
-					case arabic: return "عينات";
-					case bulgarian: return "Мостри";
-					case chinese: return "样品";
-					case czech: return "Vzorky";
-					case danish: return "Prøver";
-					case dutch: return "Monsters";
-					case estonian: return "Näidised";
-					case finnish: return "Näytteet";
-					case french: return "Échantillons";
-					case german: return "Proben";
-					case greek: return "Δείγματα";
-					case hebrew: return "דגימות";
-					case hindi: return "नमूने";
-					case italian: return "Campioni";
-					case japanese: return "サンプル";
-					case korean: return "견본";
-					case latvian: return "Paraugi";
-					case lithuanian: return "Pavyzdžiai";
-					case norwegian: return "Prøver";
-					case persian: return "نمونه ها";
-					case polish: return "Próbki";
-					case portuguese: return "Amostras";
-					case romanian: return "Mostre";
-					case russian: return "Образцы";
-					case spanish: return "Muestras";
-					case swedish: return "Prover";
-					case tamil: return "மாதிரிகள்";
-					case turkish: return "Örnekler";
-					default: return "Samples";
+					case arabic: return "البيانات الوصفية";
+					case bulgarian: return "Метаданни";
+					case chinese: return "元数据";
+					case czech: return "Metadata";
+					case danish: return "Metadata";
+					case dutch: return "Metagegevens";
+					case estonian: return "Metaandmed";
+					case finnish: return "Metatiedot";
+					case french: return "Métadonnées";
+					case german: return "Metadaten";
+					case greek: return "Μεταδεδομένα";
+					case hebrew: return "מטא-דאטה";
+					case hindi: return "मेटाडाटा";
+					case italian: return "Metadati";
+					case japanese: return "メタデータ";
+					case korean: return "메타데이터";
+					case latvian: return "Metadati";
+					case lithuanian: return "Metaduomenys";
+					case norwegian: return "Metadata";
+					case persian: return "فراداده";
+					case polish: return "Metadane";
+					case portuguese: return "Metadados";
+					case romanian: return "Metadate";
+					case russian: return "Метаданные";
+					case spanish: return "Metadatos";
+					case swedish: return "Metadata";
+					case tamil: return "மெட்டாடேட்டா";
+					case turkish: return "Meta veri";
+					default: return "Metadata";
 				}
 			}
 		}
