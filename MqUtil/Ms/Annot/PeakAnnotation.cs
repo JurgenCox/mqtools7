@@ -6,7 +6,8 @@ namespace MqUtil.Ms.Annot{
 		public abstract double Mass { get; set; }
 		public abstract ushort NeutralLossLevel { get; }
 		public virtual int Index => -1;
-		public virtual IonType IonType => null;
+        public virtual int PIonIndex => -1;
+        public virtual IonType IonType => null;
 		public abstract override string ToString();
 		public abstract string ToString2(object arg);
 		public abstract override bool Equals(object obj);

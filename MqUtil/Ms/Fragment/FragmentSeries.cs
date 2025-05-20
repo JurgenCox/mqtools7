@@ -56,108 +56,105 @@ namespace MqUtil.Ms.Fragment{
 		public static PeakAnnotation[] zDotSeriesAnnot;
 		public static PeakAnnotation[] zPrimeSeriesAnnot;
 		public static PeakAnnotation a2Annot;
-		public static PeakAnnotation[] pSeriesAnnot;
 		public static void CreateAnnot(){
 			lock (locker){
 				if (ySeriesAnnot != null){
-					return;
-				}
-				xSeriesAnnot = new PeakAnnotation[annotLen];
-				x2SeriesAnnot = new PeakAnnotation[annotLen];
-				xSeriesWater = new PeakAnnotation[annotLen];
-				xSeriesAmmonia = new PeakAnnotation[annotLen];
-				xSeriesLoss = new PeakAnnotation[annotLen];
-				xSeriesLoss2 = new PeakAnnotation[annotLen];
-				ySeriesAnnot = new PeakAnnotation[annotLen];
-				y2SeriesAnnot = new PeakAnnotation[annotLen];
-				ySeriesWater = new PeakAnnotation[annotLen];
-				ySeriesAmmonia = new PeakAnnotation[annotLen];
-				ySeriesLoss = new PeakAnnotation[annotLen];
-				ySeriesLoss2 = new PeakAnnotation[annotLen];
+                    return;
+                }
+                xSeriesAnnot = new PeakAnnotation[annotLen];
+                x2SeriesAnnot = new PeakAnnotation[annotLen];
+                xSeriesWater = new PeakAnnotation[annotLen];
+                xSeriesAmmonia = new PeakAnnotation[annotLen];
+                xSeriesLoss = new PeakAnnotation[annotLen];
+                xSeriesLoss2 = new PeakAnnotation[annotLen];
+                ySeriesAnnot = new PeakAnnotation[annotLen];
+                y2SeriesAnnot = new PeakAnnotation[annotLen];
+                ySeriesWater = new PeakAnnotation[annotLen];
+                ySeriesAmmonia = new PeakAnnotation[annotLen];
+                ySeriesLoss = new PeakAnnotation[annotLen];
+                ySeriesLoss2 = new PeakAnnotation[annotLen];
 				ySeriesLossWater = new PeakAnnotation[annotLen];
 				ySeriesLossAmmonia = new PeakAnnotation[annotLen];
-				zSeriesAnnot = new PeakAnnotation[annotLen];
-				z2SeriesAnnot = new PeakAnnotation[annotLen];
-				zSeriesWater = new PeakAnnotation[annotLen];
-				zSeriesAmmonia = new PeakAnnotation[annotLen];
-				zSeriesLoss = new PeakAnnotation[annotLen];
-				zSeriesLoss2 = new PeakAnnotation[annotLen];
-				aSeriesAnnot = new PeakAnnotation[annotLen];
-				a2SeriesAnnot = new PeakAnnotation[annotLen];
-				aSeriesWater = new PeakAnnotation[annotLen];
-				aSeriesAmmonia = new PeakAnnotation[annotLen];
-				aSeriesLoss = new PeakAnnotation[annotLen];
-				aSeriesLoss2 = new PeakAnnotation[annotLen];
-				bSeriesAnnot = new PeakAnnotation[annotLen];
-				b2SeriesAnnot = new PeakAnnotation[annotLen];
-				bSeriesWater = new PeakAnnotation[annotLen];
-				bSeriesAmmonia = new PeakAnnotation[annotLen];
-				bSeriesLoss = new PeakAnnotation[annotLen];
-				bSeriesLoss2 = new PeakAnnotation[annotLen];
+                zSeriesAnnot = new PeakAnnotation[annotLen];
+                z2SeriesAnnot = new PeakAnnotation[annotLen];
+                zSeriesWater = new PeakAnnotation[annotLen];
+                zSeriesAmmonia = new PeakAnnotation[annotLen];
+                zSeriesLoss = new PeakAnnotation[annotLen];
+                zSeriesLoss2 = new PeakAnnotation[annotLen];
+                aSeriesAnnot = new PeakAnnotation[annotLen];
+                a2SeriesAnnot = new PeakAnnotation[annotLen];
+                aSeriesWater = new PeakAnnotation[annotLen];
+                aSeriesAmmonia = new PeakAnnotation[annotLen];
+                aSeriesLoss = new PeakAnnotation[annotLen];
+                aSeriesLoss2 = new PeakAnnotation[annotLen];
+                bSeriesAnnot = new PeakAnnotation[annotLen];
+                b2SeriesAnnot = new PeakAnnotation[annotLen];
+                bSeriesWater = new PeakAnnotation[annotLen];
+                bSeriesAmmonia = new PeakAnnotation[annotLen];
+                bSeriesLoss = new PeakAnnotation[annotLen];
+                bSeriesLoss2 = new PeakAnnotation[annotLen];
 				bSeriesLossWater = new PeakAnnotation[annotLen];
 				bSeriesLossAmmonia = new PeakAnnotation[annotLen];
-				cSeriesAnnot = new PeakAnnotation[annotLen];
-				c2SeriesAnnot = new PeakAnnotation[annotLen];
-				cSeriesWater = new PeakAnnotation[annotLen];
-				cSeriesAmmonia = new PeakAnnotation[annotLen];
-				cSeriesLoss = new PeakAnnotation[annotLen];
-				cSeriesLoss2 = new PeakAnnotation[annotLen];
-				cmSeriesAnnot = new PeakAnnotation[annotLen];
-				cpSeriesAnnot = new PeakAnnotation[annotLen];
-				zDotSeriesAnnot = new PeakAnnotation[annotLen];
-				zPrimeSeriesAnnot = new PeakAnnotation[annotLen];
-				pSeriesAnnot = new PeakAnnotation[annotLen];
+                cSeriesAnnot = new PeakAnnotation[annotLen];
+                c2SeriesAnnot = new PeakAnnotation[annotLen];
+                cSeriesWater = new PeakAnnotation[annotLen];
+                cSeriesAmmonia = new PeakAnnotation[annotLen];
+                cSeriesLoss = new PeakAnnotation[annotLen];
+                cSeriesLoss2 = new PeakAnnotation[annotLen];
+                cmSeriesAnnot = new PeakAnnotation[annotLen];
+                cpSeriesAnnot = new PeakAnnotation[annotLen];
+                zDotSeriesAnnot = new PeakAnnotation[annotLen];
+                zPrimeSeriesAnnot = new PeakAnnotation[annotLen];
 				for (int i = 0; i < annotLen; i++){
-					xSeriesAnnot[i] = new MsmsPeakAnnotation(new XIon(), i + 1, 1, 0, 0);
-					x2SeriesAnnot[i] = new MsmsPeakAnnotation(new XIon(), i + 1, 2, 0, 0);
-					xSeriesWater[i] = new LossPeakAnnotation(xSeriesAnnot[i], MolUtil.waterLossLib);
-					xSeriesAmmonia[i] = new LossPeakAnnotation(xSeriesAnnot[i], MolUtil.ammoniaLossLib);
-					xSeriesLoss[i] = new MsmsPeakAnnotation(new XIon(), i + 1, 1, 0, 1);
-					xSeriesLoss2[i] = new MsmsPeakAnnotation(new XIon(), i + 1, 1, 0, 2);
-					ySeriesAnnot[i] = new MsmsPeakAnnotation(new YIon(), i + 1, 1, 0, 0);
-					y2SeriesAnnot[i] = new MsmsPeakAnnotation(new YIon(), i + 1, 2, 0, 0);
-					ySeriesWater[i] = new LossPeakAnnotation(ySeriesAnnot[i], MolUtil.waterLossLib);
-					ySeriesAmmonia[i] = new LossPeakAnnotation(ySeriesAnnot[i], MolUtil.ammoniaLossLib);
-					ySeriesLoss[i] = new MsmsPeakAnnotation(new YIon(), i + 1, 1, 0, 1);
-					ySeriesLoss2[i] = new MsmsPeakAnnotation(new YIon(), i + 1, 1, 0, 2);
+                    xSeriesAnnot[i] = new MsmsPeakAnnotation(new XIon(), i + 1, 1, 0, 0);
+                    x2SeriesAnnot[i] = new MsmsPeakAnnotation(new XIon(), i + 1, 2, 0, 0);
+                    xSeriesWater[i] = new LossPeakAnnotation(xSeriesAnnot[i], MolUtil.waterLossLib);
+                    xSeriesAmmonia[i] = new LossPeakAnnotation(xSeriesAnnot[i], MolUtil.ammoniaLossLib);
+                    xSeriesLoss[i] = new MsmsPeakAnnotation(new XIon(), i + 1, 1, 0, 1);
+                    xSeriesLoss2[i] = new MsmsPeakAnnotation(new XIon(), i + 1, 1, 0, 2);
+                    ySeriesAnnot[i] = new MsmsPeakAnnotation(new YIon(), i + 1, 1, 0, 0);
+                    y2SeriesAnnot[i] = new MsmsPeakAnnotation(new YIon(), i + 1, 2, 0, 0);
+                    ySeriesWater[i] = new LossPeakAnnotation(ySeriesAnnot[i], MolUtil.waterLossLib);
+                    ySeriesAmmonia[i] = new LossPeakAnnotation(ySeriesAnnot[i], MolUtil.ammoniaLossLib);
+                    ySeriesLoss[i] = new MsmsPeakAnnotation(new YIon(), i + 1, 1, 0, 1);
+                    ySeriesLoss2[i] = new MsmsPeakAnnotation(new YIon(), i + 1, 1, 0, 2);
 					ySeriesLossWater[i] = new LossPeakAnnotation(ySeriesLoss[i], MolUtil.waterLossLib);
 					ySeriesLossAmmonia[i] = new LossPeakAnnotation(ySeriesLoss[i], MolUtil.ammoniaLossLib);
-					zSeriesAnnot[i] = new MsmsPeakAnnotation(new ZIon(), i + 1, 1, 0, 0);
-					z2SeriesAnnot[i] = new MsmsPeakAnnotation(new ZIon(), i + 1, 2, 0, 0);
-					zSeriesWater[i] = new LossPeakAnnotation(zSeriesAnnot[i], MolUtil.waterLossLib);
-					zSeriesAmmonia[i] = new LossPeakAnnotation(zSeriesAnnot[i], MolUtil.ammoniaLossLib);
-					zSeriesLoss[i] = new MsmsPeakAnnotation(new ZIon(), i + 1, 1, 0, 1);
-					zSeriesLoss2[i] = new MsmsPeakAnnotation(new ZIon(), i + 1, 1, 0, 2);
-					aSeriesAnnot[i] = new MsmsPeakAnnotation(new AIon(), i + 1, 1, 0, 0);
-					a2SeriesAnnot[i] = new MsmsPeakAnnotation(new AIon(), i + 1, 2, 0, 0);
-					aSeriesWater[i] = new LossPeakAnnotation(aSeriesAnnot[i], MolUtil.waterLossLib);
-					aSeriesAmmonia[i] = new LossPeakAnnotation(aSeriesAnnot[i], MolUtil.ammoniaLossLib);
-					aSeriesLoss[i] = new MsmsPeakAnnotation(new AIon(), i + 1, 1, 0, 1);
-					aSeriesLoss2[i] = new MsmsPeakAnnotation(new AIon(), i + 1, 1, 0, 2);
-					bSeriesAnnot[i] = new MsmsPeakAnnotation(new BIon(), i + 1, 1, 0, 0);
-					b2SeriesAnnot[i] = new MsmsPeakAnnotation(new BIon(), i + 1, 2, 0, 0);
-					bSeriesWater[i] = new LossPeakAnnotation(bSeriesAnnot[i], MolUtil.waterLossLib);
-					bSeriesAmmonia[i] = new LossPeakAnnotation(bSeriesAnnot[i], MolUtil.ammoniaLossLib);
-					bSeriesLoss[i] = new MsmsPeakAnnotation(new BIon(), i + 1, 1, 0, 1);
-					bSeriesLoss2[i] = new MsmsPeakAnnotation(new BIon(), i + 1, 1, 0, 2);
+                    zSeriesAnnot[i] = new MsmsPeakAnnotation(new ZIon(), i + 1, 1, 0, 0);
+                    z2SeriesAnnot[i] = new MsmsPeakAnnotation(new ZIon(), i + 1, 2, 0, 0);
+                    zSeriesWater[i] = new LossPeakAnnotation(zSeriesAnnot[i], MolUtil.waterLossLib);
+                    zSeriesAmmonia[i] = new LossPeakAnnotation(zSeriesAnnot[i], MolUtil.ammoniaLossLib);
+                    zSeriesLoss[i] = new MsmsPeakAnnotation(new ZIon(), i + 1, 1, 0, 1);
+                    zSeriesLoss2[i] = new MsmsPeakAnnotation(new ZIon(), i + 1, 1, 0, 2);
+                    aSeriesAnnot[i] = new MsmsPeakAnnotation(new AIon(), i + 1, 1, 0, 0);
+                    a2SeriesAnnot[i] = new MsmsPeakAnnotation(new AIon(), i + 1, 2, 0, 0);
+                    aSeriesWater[i] = new LossPeakAnnotation(aSeriesAnnot[i], MolUtil.waterLossLib);
+                    aSeriesAmmonia[i] = new LossPeakAnnotation(aSeriesAnnot[i], MolUtil.ammoniaLossLib);
+                    aSeriesLoss[i] = new MsmsPeakAnnotation(new AIon(), i + 1, 1, 0, 1);
+                    aSeriesLoss2[i] = new MsmsPeakAnnotation(new AIon(), i + 1, 1, 0, 2);
+                    bSeriesAnnot[i] = new MsmsPeakAnnotation(new BIon(), i + 1, 1, 0, 0);
+                    b2SeriesAnnot[i] = new MsmsPeakAnnotation(new BIon(), i + 1, 2, 0, 0);
+                    bSeriesWater[i] = new LossPeakAnnotation(bSeriesAnnot[i], MolUtil.waterLossLib);
+                    bSeriesAmmonia[i] = new LossPeakAnnotation(bSeriesAnnot[i], MolUtil.ammoniaLossLib);
+                    bSeriesLoss[i] = new MsmsPeakAnnotation(new BIon(), i + 1, 1, 0, 1);
+                    bSeriesLoss2[i] = new MsmsPeakAnnotation(new BIon(), i + 1, 1, 0, 2);
 					bSeriesLossWater[i] = new LossPeakAnnotation(bSeriesLoss[i], MolUtil.waterLossLib);
 					bSeriesLossAmmonia[i] = new LossPeakAnnotation(bSeriesLoss[i], MolUtil.ammoniaLossLib);
-					cSeriesAnnot[i] = new MsmsPeakAnnotation(new CIon(), i + 1, 1, 0, 0);
-					c2SeriesAnnot[i] = new MsmsPeakAnnotation(new CIon(), i + 1, 2, 0, 0);
-					cSeriesWater[i] = new LossPeakAnnotation(cSeriesAnnot[i], MolUtil.waterLossLib);
-					cSeriesAmmonia[i] = new LossPeakAnnotation(cSeriesAnnot[i], MolUtil.ammoniaLossLib);
-					cSeriesLoss[i] = new MsmsPeakAnnotation(new CIon(), i + 1, 1, 0, 1);
-					cSeriesLoss2[i] = new MsmsPeakAnnotation(new CIon(), i + 1, 1, 0, 2);
-					cmSeriesAnnot[i] = new MsmsPeakAnnotation(new CmIon(), i + 1, 1, 0, 0);
-					cpSeriesAnnot[i] = new MsmsPeakAnnotation(new CpIon(), i + 1, 1, 0, 0);
-					zDotSeriesAnnot[i] = new MsmsPeakAnnotation(new ZDotIon(), i + 1, 1, 0, 0);
-					zPrimeSeriesAnnot[i] = new MsmsPeakAnnotation(new ZPrimeIon(), i + 1, 1, 0, 0);
-					pSeriesAnnot[i] = new MsmsPeakAnnotation(new PIon(), i + 1, 1, 0, 0);
-				}
-				a2Annot = new MsmsPeakAnnotation(new AIon(), 2, 1, 0, 0);
-			}
-		}
-		public static double[] GetNtermMasses(string sequence, PeptideModificationInfo fixedMods,
+                    cSeriesAnnot[i] = new MsmsPeakAnnotation(new CIon(), i + 1, 1, 0, 0);
+                    c2SeriesAnnot[i] = new MsmsPeakAnnotation(new CIon(), i + 1, 2, 0, 0);
+                    cSeriesWater[i] = new LossPeakAnnotation(cSeriesAnnot[i], MolUtil.waterLossLib);
+                    cSeriesAmmonia[i] = new LossPeakAnnotation(cSeriesAnnot[i], MolUtil.ammoniaLossLib);
+                    cSeriesLoss[i] = new MsmsPeakAnnotation(new CIon(), i + 1, 1, 0, 1);
+                    cSeriesLoss2[i] = new MsmsPeakAnnotation(new CIon(), i + 1, 1, 0, 2);
+                    cmSeriesAnnot[i] = new MsmsPeakAnnotation(new CmIon(), i + 1, 1, 0, 0);
+                    cpSeriesAnnot[i] = new MsmsPeakAnnotation(new CpIon(), i + 1, 1, 0, 0);
+                    zDotSeriesAnnot[i] = new MsmsPeakAnnotation(new ZDotIon(), i + 1, 1, 0, 0);
+                    zPrimeSeriesAnnot[i] = new MsmsPeakAnnotation(new ZPrimeIon(), i + 1, 1, 0, 0);
+                }
+                a2Annot = new MsmsPeakAnnotation(new AIon(), 2, 1, 0, 0);
+            }
+        }
+        public static double[] GetNtermMasses(string sequence, PeptideModificationInfo fixedMods,
 			PeptideModificationState varMods){
 			return GetNtermMasses(sequence, fixedMods, varMods, null);
 		}
@@ -516,98 +513,7 @@ namespace MqUtil.Ms.Fragment{
 				}
 			}
 		}
-		public static void GetPSeries(ref int pos, double[] masses, PeakAnnotation[] annotations,
-			short[] dependents, bool calcNeighbors, short[] right, short[] left, string sequence,
-			PeptideModificationInfo fixedMods, PeptideModificationState varMods){
-			int n = sequence.Length;
-			double pepmass = AminoAcids.CalcMonoisotopicMass(sequence) + varMods.GetDeltaMass();
-			ushort[] vms = varMods.Modifications;
-			int onlyonetime = 0;
-			for (int i = sequence.Length - 1; i >= 1; i--){
-				ushort vm = vms[i];
-				if (vm != ushort.MaxValue){
-					Modification mod = Tables.ModificationList[vm];
-					ModificationSite s = mod.GetSite(sequence[i]);
-					if (mod.ModificationType == ModificationType.SequenceBasedModifier && onlyonetime == 0){
-						int SBMlen = mod.Sequence.Length;
-						onlyonetime = 1;
-						for (int k = 0; k < s.neutralloss_collection.Length; k++){
-							double mz = pepmass - s.neutralloss_collection[k].DeltaMass + Molecule.massProton;
-							masses[pos] = mz;
-							int pnr = SBMlen - k - 1;
-							annotations[pos] = new MsmsPeakAnnotation(new PIon(), pnr, 1, mz, 0);
-							dependents[pos] = -1;
-							if (calcNeighbors){
-								left[pos] = -1;
-								right[pos] = -1;
-							}
-							pos++;
-						}
-					}
-				}
-			}
-		}
-		public static void GetPSeries(ref int pos, double[] masses,
-			short[] dependents, bool calcNeighbors, short[] right, short[] left, string sequence,
-			PeptideModificationInfo fixedMods, PeptideModificationState varMods){
-			int n = sequence.Length;
-			double pepmass = AminoAcids.CalcMonoisotopicMass(sequence) + varMods.GetDeltaMass();
-			ushort[] vms = varMods.Modifications;
-			int onlyonetime = 0;
-			for (int i = sequence.Length - 1; i >= 1; i--){
-				ushort vm = vms[i];
-				if (vm != ushort.MaxValue){
-					Modification mod = Tables.ModificationList[vm];
-					ModificationSite s = mod.GetSite(sequence[i]);
-					if (mod.ModificationType == ModificationType.SequenceBasedModifier && onlyonetime == 0){
-						int SBMlen = mod.Sequence.Length;
-						onlyonetime = 1;
-						for (int k = 0; k < s.neutralloss_collection.Length; k++){
-							double mz = pepmass - s.neutralloss_collection[k].DeltaMass + Molecule.massProton;
-							masses[pos] = mz;
-							dependents[pos] = -1;
-							if (calcNeighbors){
-								left[pos] = -1;
-								right[pos] = -1;
-							}
-							pos++;
-						}
-					}
-				}
-			}
-		}
-		public static double[] GetPSeries(string sequence, PeptideModificationInfo fixedMods,
-			PeptideModificationState varMods, out PeakAnnotation[] des){
-			// does not work properly
-			double pepmass = AminoAcids.CalcMonoisotopicMass(sequence) + fixedMods.CtermModMass +
-			                 varMods.GetDeltaMass();
-			int n = sequence.Length;
-			ushort[] vms = varMods.Modifications;
-			List<double> p = new List<double>();
-			des = new MsmsPeakAnnotation[0];
-			for (int i = 0; i < n; i++){
-				ushort vm = vms[i];
-				if (vm != ushort.MaxValue){
-					if (vm >= Tables.ModificationList.Length){
-						continue;
-					}
-					Modification mod = Tables.ModificationList[vm];
-					ModificationSite s = mod.GetSite(sequence[i]);
-					if (mod.ModificationType == ModificationType.SequenceBasedModifier){
-						int SBMlen = mod.Sequence.Length;
-						des = new MsmsPeakAnnotation[SBMlen];
-						for (int k = 0; k < s.neutralloss_collection.Length; k++){
-							double mz = pepmass - s.neutralloss_collection[k].DeltaMass;
-							des[i] = new MsmsPeakAnnotation(new PIon(), k + 1, 1, mz, 0);
-							p.Add(mz);
-						}
-					}
-					break;
-				}
-			}
-			return p.ToArray();
-		}
-		private static Dictionary<ushort, Dictionary<char, PeakAnnotation[]>> dpaCache;
+        private static Dictionary<ushort, Dictionary<char, PeakAnnotation[]>> dpaCache;
 		private static PeakAnnotation[] GetDiagnosticAnnotations(ushort modInd, char aa,
 			IList<DiagnosticPeak> diagnostic){
 			if (dpaCache == null){
@@ -925,157 +831,168 @@ namespace MqUtil.Ms.Fragment{
 			return GetZPrimeSeries(GetCtermMasses(sequence, fixedMods, varMods, specialMods), out des);
 		}
 		public static void AddNeutralLossCtermSeries(ref int pos, int[] inds, double[] masses,
-			PeakAnnotation[] annotations, short[] dependents, bool calcNeighbors, short[] left, short[] right,
-			string sequence, PeptideModificationState varMods, double[] ctermSeriesMasses, bool secondLoss,
-			bool includeWater, int ctermWaterLossInd, bool includeAmmonia, int ctermNh3LossInd, bool dependentLosses,
+            PeakAnnotation[] annotations, short[] dependents, bool calcNeighbors, short[] left, short[] right,
+            string sequence, PeptideModificationState varMods, double[] ctermSeriesMasses, bool secondLoss,
+            bool includeWater, int ctermWaterLossInd, bool includeAmmonia, int ctermNh3LossInd, bool dependentLosses,
 			PeakAnnotation[] ctermSeriesLoss, PeakAnnotation[] ctermSeriesLossWater, PeakAnnotation[] ctermSeriesLossAmmonia,
 			PeakAnnotation[] ctermSeriesLoss2, bool sequenceBasedMod){
-			ModificationSite neutralLossSite1 = null;
-			int neutralLossIndex1 = -1;
-			ModificationSite neutralLossSite2 = null;
-			int neutralLossIndex2 = -1;
-			ModificationSite SBMsite = null;
-			int SBMindex = -1;
-			ushort[] vms = varMods.Modifications;
+            ModificationSite neutralLossSite1 = null;
+            int neutralLossIndex1 = -1;
+            ModificationSite neutralLossSite2 = null;
+            int neutralLossIndex2 = -1;
+            ModificationSite SBMsite = null;
+            int SBMindex = -1;
+            ushort[] vms = varMods.Modifications;
 			for (int i = sequence.Length - 1; i >= 1; i--){
-				ushort vm = vms[i];
+                ushort vm = vms[i];
 				if (vm != ushort.MaxValue){
-					Modification mod = Tables.ModificationList[vm];
-					ModificationSite index = mod.GetSite(sequence[i]);
+                    Modification mod = Tables.ModificationList[vm];
+                    ModificationSite index = mod.GetSite(sequence[i]);
 					if (index != null && index.HasNeutralLoss && sequenceBasedMod == false){
 						if (neutralLossIndex1 == -1){
-							neutralLossSite1 = index;
-							neutralLossIndex1 = sequence.Length - 1 - i;
+                            neutralLossSite1 = index;
+                            neutralLossIndex1 = sequence.Length - 1 - i;
 						} else{
-							neutralLossSite2 = index;
-							neutralLossIndex2 = sequence.Length - 1 - i;
-							break;
-						}
+                            neutralLossSite2 = index;
+                            neutralLossIndex2 = sequence.Length - 1 - i;
+                            break;
+                        }
 					} else if (sequenceBasedMod == true && index != null && index.HasNeutralLoss &&
 					           mod.IsSequenceBasedModifier == true){
 						if (SBMindex == -1){
-							SBMsite = index;
-							SBMindex = sequence.Length - 1 - i;
-							break;
-						}
-					}
-				}
-			}
+                            SBMsite = index;
+                            SBMindex = sequence.Length - 1 - i;
+                            break;
+                        }
+                    }
+                }
+            }
 			if (neutralLossIndex1 != -1 && neutralLossSite1 != null){
-				double loss1 = neutralLossSite1.neutralloss_collection[0].DeltaMass;
-				int start = ArrayUtils.CeilIndex(ctermSeriesMasses, loss1);
+                double loss1 = neutralLossSite1.neutralloss_collection[0].DeltaMass;
+                int start = ArrayUtils.CeilIndex(ctermSeriesMasses, loss1);
 				if (start >= 0){
 					if (inds != null){
-						start = inds[start];
-					}
-					start = Math.Max(neutralLossIndex1, start);
-					int indStart = pos;
+                        start = inds[start];
+                    }
+                    start = Math.Max(neutralLossIndex1, start);
+                    int indStart = pos;
 					for (int i = 0; i < ctermSeriesMasses.Length; i++){
-						int ind = inds?[i] ?? i;
+                        int ind = inds?[i] ?? i;
 						if (ind >= start){
-							double m = ctermSeriesMasses[i] - loss1;
-							masses[pos] = m;
-							annotations[pos] = ind >= annotLen ? null : ctermSeriesLoss[ind];
-							dependents[pos] = -1;
+                            double m = ctermSeriesMasses[i] - loss1;
+                            masses[pos] = m;
+                            annotations[pos] = ind >= annotLen ? null : ctermSeriesLoss[ind];
+                            dependents[pos] = -1;
 							if (calcNeighbors){
 								left[pos] = ind > start ? (short) (pos - 1) : (short) -1;
 								right[pos] = i < ctermSeriesMasses.Length - 1 ? (short) (pos + 1) : (short) -1;
-							}
-							pos++;
-						}
-					}
+                            }
+                            pos++;
+                        }
+                    }
 					if (includeWater){
 						for (int i = 0; i < ctermSeriesMasses.Length; i++){
-							int ind = inds?[i] ?? i;
+                            int ind = inds?[i] ?? i;
 							if (ind >= start && ctermWaterLossInd >= 0 && i >= ctermWaterLossInd){
-								double m = ctermSeriesMasses[i] - loss1;
-								masses[pos] = m - Molecule.massWater;
+                                double m = ctermSeriesMasses[i] - loss1;
+                                masses[pos] = m - Molecule.massWater;
 								annotations[pos] = ind >= annotLen ? null : ctermSeriesLossWater[ind];
-								//TODO
+                                //TODO
 								dependents[pos] = (short) (dependentLosses ? indStart + i - start : -1);
 								if (calcNeighbors){
 									left[pos] = ind > start ? (short) (pos - 1) : (short) -1;
 									right[pos] = i < ctermSeriesMasses.Length - 1 ? (short) (pos + 1) : (short) -1;
-								}
-								pos++;
-							}
-						}
-					}
+                                }
+                                pos++;
+                            }
+                        }
+                    }
 					if (includeAmmonia){
 						for (int i = 0; i < ctermSeriesMasses.Length; i++){
-							int ind = inds?[i] ?? i;
+                            int ind = inds?[i] ?? i;
 							if (ind >= start && ctermNh3LossInd >= 0 && i >= ctermNh3LossInd){
-								double m = ctermSeriesMasses[i] - loss1;
-								masses[pos] = m - Molecule.massAmmonia;
+                                double m = ctermSeriesMasses[i] - loss1;
+                                masses[pos] = m - Molecule.massAmmonia;
 								annotations[pos] = ind >= annotLen ? null : ctermSeriesLossAmmonia[ind];
-								//TODO
+                                //TODO
 								dependents[pos] = (short) (dependentLosses ? indStart + i - start : -1);
 								if (calcNeighbors){
 									left[pos] = ind > start ? (short) (pos - 1) : (short) -1;
 									right[pos] = i < ctermSeriesMasses.Length - 1 ? (short) (pos + 1) : (short) -1;
-								}
-								pos++;
-							}
-						}
-					}
-				}
-			}
+                                }
+                                pos++;
+                            }
+                        }
+                    }
+                }
+            }
 			if (secondLoss && neutralLossIndex2 != -1 && neutralLossSite2 != null){
-				double loss1 = neutralLossSite1.neutralloss_collection[0].DeltaMass;
-				double loss2 = neutralLossSite2.neutralloss_collection[0].DeltaMass;
-				int start = ArrayUtils.CeilIndex(ctermSeriesMasses, loss1 + loss2);
+                double loss1 = neutralLossSite1.neutralloss_collection[0].DeltaMass;
+                double loss2 = neutralLossSite2.neutralloss_collection[0].DeltaMass;
+                int start = ArrayUtils.CeilIndex(ctermSeriesMasses, loss1 + loss2);
 				if (start >= 0){
 					if (inds != null){
-						start = inds[start];
-					}
-					start = Math.Max(neutralLossIndex2, start);
+                        start = inds[start];
+                    }
+                    start = Math.Max(neutralLossIndex2, start);
 					for (int i = 0; i < ctermSeriesMasses.Length; i++){
-						int ind = inds?[i] ?? i;
+                        int ind = inds?[i] ?? i;
 						if (ind >= start){
-							double m = ctermSeriesMasses[i] - loss1 - loss2;
+                            double m = ctermSeriesMasses[i] - loss1 - loss2;
 							if (m > 0){
-								masses[pos] = m;
-								annotations[pos] = ind >= annotLen ? null : ctermSeriesLoss2[ind];
-								dependents[pos] = -1;
+                                masses[pos] = m;
+                                annotations[pos] = ind >= annotLen ? null : ctermSeriesLoss2[ind];
+                                dependents[pos] = -1;
 								if (calcNeighbors){
 									left[pos] = ind > start ? (short) (pos - 1) : (short) -1;
 									right[pos] = i < ctermSeriesMasses.Length - 1 ? (short) (pos + 1) : (short) -1;
-								}
-								pos++;
-							}
-						}
-					}
-				}
-			}
+                                }
+                                pos++;
+                            }
+                        }
+                    }
+                }
+            }
 			if (SBMindex != -1 && SBMsite != null){
 				for (int k = 0; k < SBMsite.neutralloss_collection.Length; k++){
-					double SBMloss = SBMsite.neutralloss_collection[k].DeltaMass;
-					int start = ArrayUtils.CeilIndex(ctermSeriesMasses, SBMloss);
+                    double SBMloss = SBMsite.neutralloss_collection[k].DeltaMass;
+                    int start = ArrayUtils.CeilIndex(ctermSeriesMasses, SBMloss);
 					if (start >= 0){
 						if (inds != null){
-							start = inds[start];
-						}
-						start = Math.Max(SBMindex, start);
-						int indStart = pos;
+                            start = inds[start];
+                        }
+                        start = Math.Max(SBMindex, start);
+                        int indStart = pos;
 						for (int i = 0; i < ctermSeriesMasses.Length; i++){
-							int ind = inds?[i] ?? i;
+                            int ind = inds?[i] ?? i;
 							if (ind >= start){
-								double m = ctermSeriesMasses[i] - SBMloss;
-								masses[pos] = m;
+                                double m = ctermSeriesMasses[i] - SBMloss;
+
+                                string name = SBMsite.neutralloss_collection[k].ShortName; // to add a number for the specific p-ions
+                                if (int.TryParse(name, out int pnr))
+                                {
+                                    annotations[pos] = new MsmsPeakAnnotation(new YIon(), ind + 1, 1, m, 0, pnr);
+                                }
+                                else // use number in list as annotation number
+                                {
+                                    int pnr2 = SBMsite.neutralloss_collection.Length - k;
+                                    annotations[pos] = new MsmsPeakAnnotation(new YIon(), ind + 1, 1, m, 0, pnr2);
+                                }
+                                masses[pos] = m;
 								annotations[pos] = ind >= annotLen ? null : ctermSeriesLoss[ind];
-								dependents[pos] = -1;
+                                dependents[pos] = -1;
 								if (calcNeighbors){
 									left[pos] = ind > start ? (short) (pos - 1) : (short) -1;
 									right[pos] = i < ctermSeriesMasses.Length - 1 ? (short) (pos + 1) : (short) -1;
-								}
-								pos++;
-							}
-						}
-					}
-				}
-			}
-		}
-		public static void AddNeutralLossCtermSeriesNoAnnot(ref int pos, int[] inds, double[] masses,
+                                }
+                                pos++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        public static void AddNeutralLossCtermSeriesNoAnnot(ref int pos, int[] inds, double[] masses,
 			short[] dependents, bool calcNeighbors, short[] left, short[] right, string sequence,
 			PeptideModificationState varMods, double[] ctermSeriesMasses, bool secondLoss, bool includeWater,
 			int ctermWaterLossInd, bool includeAmmonia, int ctermNh3LossInd, bool dependentLosses,
@@ -1356,8 +1273,17 @@ namespace MqUtil.Ms.Fragment{
 							if (ind >= start){
 								double m = ntermSeriesMasses[i] - SBMloss;
 								masses[pos] = m;
-								annotations[pos] = ind >= annotLen ? null : ntermSeriesLoss[ind];
-								dependents[pos] = -1;
+                                string name = SBMsite.neutralloss_collection[k].ShortName;
+                                if (int.TryParse(name, out int pnr))
+                                {
+                                    annotations[pos] = new MsmsPeakAnnotation(new BIon(), ind + 1, 1, m, 0, pnr);
+                                }
+                                else
+                                {
+                                    int pnr2 = SBMsite.neutralloss_collection.Length - k;
+                                    annotations[pos] = new MsmsPeakAnnotation(new BIon(), ind + 1, 1, m, 0, pnr2);
+                                }
+                                dependents[pos] = -1;
 								if (calcNeighbors){
 									left[pos] = ind > start ? (short) (pos - 1) : (short) -1;
 									right[pos] = i < ntermSeriesMasses.Length - 1 ? (short) (pos + 1) : (short) -1;
