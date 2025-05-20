@@ -271,13 +271,13 @@ namespace MqUtil.Mol{
 					if (mod.Sites == null){
 						throw new Exception("No specificity is defined for modification " + mod.Name + ".");
 					}
-					if (mod.ModificationType == ModificationType.SequenceBasedModifier){
-						if (string.IsNullOrEmpty(mod.Sequence) && !string.IsNullOrEmpty(mod.Composition)){
-							 mod.Sequence = mod.Composition;
-							 mod.Composition = SequenceBasedModifier.GetCompositionFromSequence(mod.Sequence);
-						}
-					}
-					if (!result.ContainsKey(mod.Name)){
+                    if (mod.ModificationType == ModificationType.SequenceBasedModifier){
+                        if (!string.IsNullOrEmpty(mod.Sequence) && string.IsNullOrEmpty(mod.Composition)){
+                            //mod.Sequence = mod.Composition; // was causing issues
+                            mod.Composition = SequenceBasedModifier.GetCompositionFromSequence(mod.Sequence);
+                        }
+                    }
+                    if (!result.ContainsKey(mod.Name)){
 						result.Add(mod.Name, mod);
 					}
 					if (mod.ModificationType == ModificationType.Label && !labelMods.ContainsKey(mod.Name)){

@@ -8,7 +8,6 @@ namespace MqUtil.Ms.Annot.Ions{
 		public static IonType X = new XIon();
 		public static IonType Y = new YIon();
 		public static IonType Z = new ZIon();
-		public static IonType P = new PIon();
 		public static IonType Z2H = new Z2HIon();
 		public static IonType ZH = new ZHIon();
 		public static IonType parent = new ParentIon();
@@ -88,8 +87,6 @@ namespace MqUtil.Ms.Annot.Ions{
 					return new ParentIon();
 				case 13:
 					return new PXIon();
-				case 14:
-					return new PIon();
 				default:
 					throw new Exception("Could not find specified IonType " + r);
 			}
@@ -124,8 +121,6 @@ namespace MqUtil.Ms.Annot.Ions{
 				writer.Write(12);
 			} else if (this is PXIon) {
 				writer.Write(13);
-			} else if (this is PIon) {
-				writer.Write(14);
 			} else{
 				throw new Exception("Could not find specified IonType " + GetType());
 			}

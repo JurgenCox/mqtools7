@@ -11,15 +11,26 @@ namespace MqUtil.Ms.Annot{
 		private readonly short index;
 		private readonly IonType ionType;
 		private double mz;
+        private readonly short Pionindex = -1;
 
-		public MsmsPeakAnnotation(IonType ionType, int index, int charge, double mz, ushort neutralLossLevel){
+        public MsmsPeakAnnotation(IonType ionType, int index, int charge, double mz, ushort neutralLossLevel){
 			this.ionType = ionType;
 			this.index = (short) index;
 			this.charge = (short) charge;
 			this.mz = mz;
 			this.neutralLossLevel = neutralLossLevel;
 		}
-		public MsmsPeakAnnotation(IonType ionType, int index, int charge, double mz, ushort neutralLossLevel, byte crossType, CrossLinkSpecificFragmentAnnotation specificAnn) {
+        public MsmsPeakAnnotation(IonType ionType, int index, int charge, double mz, ushort neutralLossLevel, int Pionindex)
+        {
+            this.ionType = ionType;
+            this.index = (short)index;
+            this.charge = (short)charge;
+            this.mz = mz;
+            this.neutralLossLevel = neutralLossLevel;
+            this.Pionindex = (short)Pionindex;
+        }
+
+        public MsmsPeakAnnotation(IonType ionType, int index, int charge, double mz, ushort neutralLossLevel, byte crossType, CrossLinkSpecificFragmentAnnotation specificAnn) {
 			this.ionType = ionType;
 			this.index = (short)index;
 			this.charge = (short)charge;
@@ -35,13 +46,16 @@ namespace MqUtil.Ms.Annot{
 			charge = reader.ReadInt16();
 			mz = reader.ReadDouble();
 			neutralLossLevel = reader.ReadUInt16();
-		}
+            Pionindex = reader.ReadInt16();
+        }
 
 		public override IonType IonType => ionType;
 		public override ushort NeutralLossLevel => neutralLossLevel;
 		public override int Index => index;
 
-		public override int Charge{
+        public override int PIonIndex => Pionindex;
+
+        public override int Charge{
 			get => charge;
 			set => charge = (short) value;
 		}
@@ -62,7 +76,8 @@ namespace MqUtil.Ms.Annot{
 			writer.Write(charge);
 			writer.Write(Mz);
 			writer.Write(neutralLossLevel);
-		}
+            writer.Write(Pionindex);
+        }
 
 		public override string ToString(){
 			StringBuilder builder = new StringBuilder();
@@ -81,7 +96,11 @@ namespace MqUtil.Ms.Annot{
                 // this format is inconsistent with fragmenttype.cs (+charge)
 			    //builder.Append("(+" + Charge + ")");
             }
-			return builder.ToString();
+            if (Pionindex != -1)
+            {
+                builder.Append("-p" + Pionindex);
+            }
+            return builder.ToString();
 		}
 
 		public override string ToString2(object arg){
@@ -100,7 +119,11 @@ namespace MqUtil.Ms.Annot{
 			if (Charge > 1){
 				result += StringUtils.ToSuperscript(Charge, true, false);
 			}
-			return result;
+            if (Pionindex != -1)
+            {
+                result += "-p" + Pionindex;
+            }
+            return result;
 		}
 		
 		public override bool Equals(object anObject){
@@ -137,7 +160,8 @@ namespace MqUtil.Ms.Annot{
 				h = 31*h + charge;
 				h = 31*h + ionType.GetHashCode();
 				h = 31*h + (neutralLossLevel + 1);
-				hash = h;
+                h = 31 * h + Pionindex;
+                hash = h;
 			}
 			return hash;
 		}
