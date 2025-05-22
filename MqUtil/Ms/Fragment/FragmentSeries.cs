@@ -979,7 +979,6 @@ namespace MqUtil.Ms.Fragment{
                                     annotations[pos] = new MsmsPeakAnnotation(new YIon(), ind + 1, 1, m, 0, pnr2);
                                 }
                                 masses[pos] = m;
-								annotations[pos] = ind >= annotLen ? null : ctermSeriesLoss[ind];
                                 dependents[pos] = -1;
 								if (calcNeighbors){
 									left[pos] = ind > start ? (short) (pos - 1) : (short) -1;
