@@ -364,8 +364,8 @@ namespace MqUtil.Base{
             for (int i = 0; i < fileTable.RowCount; i++){
 				DataRow2 dr = fileTable.GetRow(i);
 				string experiment = (string)dr["Experiment"];
-				string fraction = dr["Fraction"].ToString();
-				if (fraction == null){
+				string fraction = (string)dr["Fraction"];
+                if (fraction == null){
 					fraction = short.MaxValue.ToString();
 	            }
 				string rawFile = (string)dr["File"];
@@ -647,7 +647,7 @@ namespace MqUtil.Base{
             pt.AddColumn("Technical replicate", 180, ColumnType.Text, "Repeated measurements of the same sample");
             pt.AddColumn("Sex", 90, ColumnType.Text, "");
             pt.AddColumn("Age", 90, ColumnType.Text, "");
-            pt.AddColumn("Ancestry category", 90, ColumnType.Text, "");
+            pt.AddColumn("Ancestry category", 180, ColumnType.Text, "");
             pt.AddColumn("Cell line", 90, ColumnType.Text, "");
             return pt;
 		}
