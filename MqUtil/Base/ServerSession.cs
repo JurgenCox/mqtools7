@@ -648,6 +648,7 @@ namespace MqUtil.Base{
             pt.AddColumn("Sex", 90, ColumnType.Text, "");
             pt.AddColumn("Age", 90, ColumnType.Text, "");
             pt.AddColumn("Ancestry category", 90, ColumnType.Text, "");
+            pt.AddColumn("Cell line", 90, ColumnType.Text, "");
             return pt;
 		}
         private static DataTable2 CreateFileTable(bool hasFractions, bool hasPtm, bool hasCommonChannel){
