@@ -110,8 +110,16 @@ namespace MqUtil.Table{
 		public int GetColumnIndex(string colName){
 			return nameMapping.ContainsKey(colName) ? nameMapping[colName] : -1;
 		}
-
-		public object GetEntry(long row, string colname){
+		public int GetColumnIndexToLower(string colName) {
+			foreach (KeyValuePair<string, int> kvp in nameMapping){
+				if (string.Equals(kvp.Key, colName, 
+					    StringComparison.CurrentCultureIgnoreCase)){
+					return kvp.Value;
+				}
+			}
+			return -1;
+		}
+        public object GetEntry(long row, string colname){
 			int colInd = GetColumnIndex(colname);
 			return colInd < 0 ? null : GetEntry(row, colInd);
 		}
