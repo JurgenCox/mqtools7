@@ -363,8 +363,8 @@ namespace MqUtil.Base{
 				= new Dictionary<string, Tuple<List<string>, List<string>>>();
             for (int i = 0; i < fileTable.RowCount; i++){
 				DataRow2 dr = fileTable.GetRow(i);
-				string experiment = (string)dr["Experiment"];
-				string fraction = (string)dr["Fraction"];
+                string experiment = (string)dr["Experiment"];
+				string fraction = Convert.ToString(dr["Fraction"]) ?? string.Empty;
                 if (fraction == null){
 					fraction = short.MaxValue.ToString();
 	            }
