@@ -111,12 +111,14 @@ namespace MqUtil.Table{
 			return nameMapping.ContainsKey(colName) ? nameMapping[colName] : -1;
 		}
 		public int GetColumnIndexToLower(string colName) {
-			foreach (KeyValuePair<string, int> kvp in nameMapping){
-				if (string.Equals(kvp.Key, colName, 
-					    StringComparison.CurrentCultureIgnoreCase)){
-					return kvp.Value;
-				}
-			}
+			string colNameProcessed = colName.Replace(" ", "").
+				ToLowerInvariant();
+            foreach (KeyValuePair<string, int> kvp in nameMapping){
+	            string key = kvp.Key.Replace(" ", "").ToLowerInvariant();
+	            if (key == colNameProcessed) {
+		            return kvp.Value;
+	            }
+            }
 			return -1;
 		}
         public object GetEntry(long row, string colname){
