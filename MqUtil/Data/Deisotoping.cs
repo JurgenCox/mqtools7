@@ -41,10 +41,10 @@ namespace MqUtil.Data{
 		}
 
 		public List<int[]> FindIsotopeClusters(out byte[] clusterCh, IDeisotopable3D peakList, int[] tmpFilePos,
-			double isoCorrThres, MsDataType msDataType, bool checkMassDeficit, int minPeakLen, bool isDia, Responder responder){
+			double isoCorrThres, MsDataType msDataType, bool checkMassDeficit, int minPeakLen, bool isDia, Responder responder, bool emptyResults) {
 			string clusterTmpFile = dataPath + "_tmpclusters";
 			int nclusters = CalcClusterIndices(peakList, minCharge, maxCharge, correlationThreshold, tmpReader,
-				tmpFilePos, matchTol, matchTolInPpm, clusterTmpFile, checkMassDeficit, minPeakLen, isDia, responder);
+				tmpFilePos, matchTol, matchTolInPpm, clusterTmpFile, checkMassDeficit, minPeakLen, isDia, responder, emptyResults);
 			responder?.Comment("Initial clusters found.");
 			peakList.MinTimes = null;
 			peakList.MaxTimes = null;
@@ -262,7 +262,7 @@ namespace MqUtil.Data{
 		/// </summary>
 		private static int CalcClusterIndices(IDeisotopable3D peakList, byte minCharge, byte maxCharge,
 			double correlationThreshold, BinaryReader tmpReader, IList<int> tmppos, double matchTol, bool matchTolInPpm,
-			string clusterTmpFile, bool checkMassDeficit, int minPeakLen, bool isDia, Responder responder){
+			string clusterTmpFile, bool checkMassDeficit, int minPeakLen, bool isDia, Responder responder, bool emptyResults){
 			double[] centerMz = peakList.CenterMz;
 			int[] o = centerMz.Order(); // the indices that will put centerMz in order, 
 			// i.e. centerMz[o[i]] is less than or equal to centerMz[o[i+1]]
@@ -275,53 +275,55 @@ namespace MqUtil.Data{
 			const int ncheck = 1000000;
 			NeighbourList neighbourList = new NeighbourList(); // which elements are "neighbors" to which other elements
 			int npeaks = centerMz.Length;
-			for (int jOrdered = 0; jOrdered < npeaks; jOrdered++){
-				if (jOrdered % 10000 == 0) {
-					responder?.Comment("1st cl. " + jOrdered / 1000 + "k/" + npeaks / 1000 + "k (" +
-					                   NumUtils.GetPercentageString(jOrdered / (double)npeaks) + ")");
-				}
-				SlimPeak1 peakj = null;
-				double massJ = centerMzOrdered[jOrdered];
-				double err = matchTolInPpm ? matchTol * massJ * 1e-6 : matchTol;
-				double me2 = err * err;
-				int timeMinJ = minRtIndsOrdered[jOrdered];
-				int timeMaxJ = maxRtIndsOrdered[jOrdered];
-				int start = ArrayUtils.CeilIndex(centerMzOrdered, massJ - 1.03);
-				int j = o[jOrdered];
-				for (int iOrdered = start; iOrdered < jOrdered; iOrdered++){
-					int timeMinI = minRtIndsOrdered[iOrdered];
-					int timeMaxI = maxRtIndsOrdered[iOrdered];
-					if (isDia){
-						bool shortI = timeMaxI - timeMinI < minPeakLen - 1;
-						if (shortI){
+			if (!emptyResults) {
+				for (int jOrdered = 0; jOrdered < npeaks; jOrdered++) {
+					if (jOrdered % 10000 == 0) {
+						responder?.Comment("1st cl. " + jOrdered / 1000 + "k/" + npeaks / 1000 + "k (" +
+						                   NumUtils.GetPercentageString(jOrdered / (double)npeaks) + ")");
+					}
+					SlimPeak1 peakj = null;
+					double massJ = centerMzOrdered[jOrdered];
+					double err = matchTolInPpm ? matchTol * massJ * 1e-6 : matchTol;
+					double me2 = err * err;
+					int timeMinJ = minRtIndsOrdered[jOrdered];
+					int timeMaxJ = maxRtIndsOrdered[jOrdered];
+					int start = ArrayUtils.CeilIndex(centerMzOrdered, massJ - 1.03);
+					int j = o[jOrdered];
+					for (int iOrdered = start; iOrdered < jOrdered; iOrdered++) {
+						int timeMinI = minRtIndsOrdered[iOrdered];
+						int timeMaxI = maxRtIndsOrdered[iOrdered];
+						if (isDia) {
+							bool shortI = timeMaxI - timeMinI < minPeakLen - 1;
+							if (shortI) {
+								continue;
+							}
+						}
+						double massDiff = Math.Abs(centerMzOrdered[iOrdered] - massJ);
+						if (timeMinI > timeMaxJ || timeMinJ > timeMaxI) {
 							continue;
 						}
+						if (Invalid(massDiff, timeMinI, timeMaxI, timeMinJ, timeMaxJ, maxCharge)) {
+							continue;
+						}
+						if (!FitsMassDifference(massDiff, me2, minCharge, maxCharge, massJ, checkMassDeficit)) {
+							continue;
+						}
+						if (peakj == null) {
+							peakj = GetPeak(jOrdered, j, peakCache, tmpReader, tmppos);
+						}
+						int i = o[iOrdered];
+						SlimPeak1 peaki = GetPeak(iOrdered, i, peakCache, tmpReader, tmppos);
+						double xy = CalcCorrelation(peaki, peakj);
+						if (xy < correlationThreshold) {
+							continue;
+						}
+						neighbourList.Add(i, j);
 					}
-					double massDiff = Math.Abs(centerMzOrdered[iOrdered] - massJ);
-					if (timeMinI > timeMaxJ || timeMinJ > timeMaxI){
-						continue;
+					if (jOrdered > 0 && jOrdered % ncheck == 0) {
+						CalcClusters(neighbourList, clusterWriter, ref clusterCount, massJ - 2.2, centerMz);
 					}
-					if (Invalid(massDiff, timeMinI, timeMaxI, timeMinJ, timeMaxJ, maxCharge)){
-						continue;
-					}
-					if (!FitsMassDifference(massDiff, me2, minCharge, maxCharge, massJ, checkMassDeficit)){
-						continue;
-					}
-					if (peakj == null){ 
-						peakj = GetPeak(jOrdered, j, peakCache, tmpReader, tmppos);
-					}
-					int i = o[iOrdered];
-					SlimPeak1 peaki = GetPeak(iOrdered, i, peakCache, tmpReader, tmppos);
-					double xy = CalcCorrelation(peaki, peakj);
-					if (xy < correlationThreshold){
-						continue;
-					}
-					neighbourList.Add(i, j);
-				}
-				if (jOrdered > 0 && jOrdered % ncheck == 0){
-					CalcClusters(neighbourList, clusterWriter, ref clusterCount, massJ - 2.2, centerMz);
-				}
 
+				}
 			}
 			// Then go back and find any remaining clusters.
 			CalcClusters(neighbourList, clusterWriter, ref clusterCount, double.MaxValue, centerMz);
@@ -901,12 +903,12 @@ namespace MqUtil.Data{
 		public static void FindIsotopeClusters(byte minCharge, byte maxCharge, double timeCorrThresh,
 			double isoCorrThresh, IDeisotopable3D peakList, string dataPath, double matchTol, bool matchTolInPpm,
 			string filename, bool hasMzBounds, double isotopeValleyFactor, bool precalcIntensities,
-			MsDataType msDataType, bool checkMassDeficit, int minPeakLen, bool isDia, Responder responder){
+			MsDataType msDataType, bool checkMassDeficit, int minPeakLen, bool isDia, Responder responder, bool emptyResults) {
 			ReadTmpData(filename, hasMzBounds, out int[] tmpFilePos, out double[] tmpTime);
 			Deisotoping deiso = new Deisotoping(minCharge, maxCharge, timeCorrThresh, isotopeValleyFactor, dataPath,
 				matchTol, matchTolInPpm);
 			List<int[]> clusterInd = deiso.FindIsotopeClusters(out byte[] clusterCharges, peakList, tmpFilePos,
-				isoCorrThresh, msDataType, checkMassDeficit, minPeakLen, isDia, responder);
+				isoCorrThresh, msDataType, checkMassDeficit, minPeakLen, isDia, responder, emptyResults);
 			deiso.CloseTmpFile();
 			deiso.Dispose();
 			RegisterIsotopeClusters(minCharge, maxCharge, peakList, clusterInd, clusterCharges, tmpTime,
