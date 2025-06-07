@@ -22,12 +22,7 @@ namespace MqUtil.Base{
 		private Thread workThread;
 		private Thread updateThread;
 		private string infoFolder;
-		public string ExperimentColumn { get; set; }
-		public string FractionsColumn { get; set; }
-		public string ChannelColumn { get; set; }
-		public string ChannelIndexColumn { get; set; }
-		public string SampleNameColumn { get; set; }
-		public string RawFilesColumn { get; set; }
+		
         public bool IsDone{ get; set; }
 		public int FinishCode{ get; set; }
 		public string Message{ get; set; }
@@ -43,12 +38,6 @@ namespace MqUtil.Base{
 			samplesTable = CreateSamplesTable();
 			fileTable = CreateFileTable(wmodel.HasFractions, wmodel.HasPtm, wmodel.HasCommonChannel);
 			HeatMapData = wmodel.CreateHeatMapData();
-			ExperimentColumn = "Experiment";
-			FractionsColumn = "Fractions";
-            ChannelColumn = "Channel";
-            ChannelIndexColumn = "Channel index";
-			SampleNameColumn = "Sample name";
-			RawFilesColumn = "Raw files";
         }
 		public DataTable2 GetProcessTable(){
 			return processTable;
@@ -630,25 +619,25 @@ namespace MqUtil.Base{
 		}
 		private static DataTable2 CreateSamplesTable(){
 			DataTable2 pt = new DataTable2("Metadata", "");
-			pt.AddColumn("Experiment", 90, ColumnType.Text,
+			pt.AddColumn(MetaDataColumns.ExperimentColumn, 90, ColumnType.Text,
 				"Experiment names as specified in the 'Raw files' table.");
-			pt.AddColumn("Files", 180, ColumnType.Text, "Path to the raw data source, either a file or a folder.");
-            pt.AddColumn("Group", 90, ColumnType.Text, "");
-            pt.AddColumn("Fractions", 180, ColumnType.Text, "Fractions corresponding to the experiment");
-            pt.AddColumn("Sample name", 180, ColumnType.Text, "User-specifiable name of the sample.");
-            pt.AddColumn("Channel", 180, ColumnType.Text, "Channel name from labeling.");
-			pt.AddColumn("Organism", 180, ColumnType.Text, "The organism of the Sample of origin.");
-            pt.AddColumn("Organism part", 90, ColumnType.Text, 
+			pt.AddColumn(MetaDataColumns.FilesColumn, 180, ColumnType.Text, "Path to the raw data source, either a file or a folder.");
+            pt.AddColumn(MetaDataColumns.GroupColumn, 90, ColumnType.Text, "");
+            pt.AddColumn(MetaDataColumns.FractionsColumn, 180, ColumnType.Text, "Fractions corresponding to the experiment");
+            pt.AddColumn(MetaDataColumns.SampleNameColumn, 180, ColumnType.Text, "User-specifiable name of the sample.");
+            pt.AddColumn(MetaDataColumns.ChannelColumn, 180, ColumnType.Text, "Channel name from labeling.");
+			pt.AddColumn(MetaDataColumns.OrganismColumn, 180, ColumnType.Text, "The organism of the Sample of origin.");
+            pt.AddColumn(MetaDataColumns.OrganismPartColumn, 90, ColumnType.Text, 
 	            "The part of organism’s anatomy or substance arising from an organism from which the biomaterial was derived, (e.g., liver)");
-            pt.AddColumn("Cell type", 90, ColumnType.Text,
+            pt.AddColumn(MetaDataColumns.CellTypeColumn, 90, ColumnType.Text,
 	            "A cell type is a distinct morphological or functional form of cell. Examples are epithelial, glial etc.");
-            pt.AddColumn("Disease", 90, ColumnType.Text, "The disease under study in the Sample.");
-            pt.AddColumn("Biological replicate", 180, ColumnType.Text, "Parallel measurements of biologically distinct samples");
-            pt.AddColumn("Technical replicate", 180, ColumnType.Text, "Repeated measurements of the same sample");
-            pt.AddColumn("Sex", 90, ColumnType.Text, "");
-            pt.AddColumn("Age", 90, ColumnType.Text, "");
-            pt.AddColumn("Ancestry category", 180, ColumnType.Text, "");
-            pt.AddColumn("Cell line", 90, ColumnType.Text, "");
+            pt.AddColumn(MetaDataColumns.DiseaseColumn, 90, ColumnType.Text, "The disease under study in the Sample.");
+            pt.AddColumn(MetaDataColumns.BiologicalReplicateColumn, 180, ColumnType.Text, "Parallel measurements of biologically distinct samples");
+            pt.AddColumn(MetaDataColumns.TechnicalReplicateColumn, 180, ColumnType.Text, "Repeated measurements of the same sample");
+            pt.AddColumn(MetaDataColumns.SexColumn, 90, ColumnType.Text, "");
+            pt.AddColumn(MetaDataColumns.AgeColumn, 90, ColumnType.Text, "");
+            pt.AddColumn(MetaDataColumns.AncestryCategoryColumn, 180, ColumnType.Text, "");
+            pt.AddColumn(MetaDataColumns.CellLineColumn, 90, ColumnType.Text, "");
             return pt;
 		}
         private static DataTable2 CreateFileTable(bool hasFractions, bool hasPtm, bool hasCommonChannel){
