@@ -180,7 +180,7 @@ namespace MqUtil.Ms.Annot{
 		}
 
 		public override object Clone(){
-			return new MsmsPeakAnnotation(ionType, index, charge, mz, neutralLossLevel);
+			return new MsmsPeakAnnotation(ionType, index, charge, mz, neutralLossLevel, Pionindex);
 		}
 
 		public override bool IsNTerminal => IonType.IsNTerminal;
