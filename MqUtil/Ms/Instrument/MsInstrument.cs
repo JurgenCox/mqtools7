@@ -60,7 +60,7 @@ namespace MqUtil.Ms.Instrument{
 		public double DiaMinPrecursorScoreDefault => 0.0;
 		public bool DiaUseProfileCorrelationDefault => false;
 		public bool DiaHardRtFilterDefault => true;
-		public bool DiaHardCssFilterDefault => true;
+		public bool DiaHardCcsFilterDefault => true;
 		public bool DiaConvertLibraryCharge2FragmentsDefault => false;
 		public abstract bool DiaChargeNormalizationLibraryDefault{ get; }
 		public abstract bool DiaChargeNormalizationSampleDefault{ get; }
