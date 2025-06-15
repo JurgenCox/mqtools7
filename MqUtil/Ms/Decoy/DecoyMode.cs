@@ -4,6 +4,7 @@
 		Revert,
 		Randomize,
 		Reward,
-		Mutate
+		Mutate,
+		MutateRandom
 	}
 }
