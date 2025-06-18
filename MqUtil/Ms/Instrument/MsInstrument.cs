@@ -71,7 +71,7 @@ namespace MqUtil.Ms.Instrument{
 		public double DiaXgBoostGammaDefault => 0.9;
 		public int DiaXgBoostMaxDeltastepDefault => 3;
 		public int DiaXgBoostMinChildWeightDefault => 9;
-		public int DiaXgBoostMaximumTreeDepthDefault => 4;
+		public int DiaXgBoostMaximumTreeDepthDefault => 3;
 		public int DiaXgBoostEstimatorsDefault => 580;
 		public bool DiaGlobalMlDefault => true;
 		public double DiaTransferQvalueDefault => 0.9;
