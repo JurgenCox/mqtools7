@@ -14,7 +14,8 @@ namespace MqUtil.Base{
 		private readonly DataTable2 processTable;
 		public readonly DataTable2 samplesTable;
 		public readonly DataTable2 fileTable;
-		private readonly MaxQuantWorkspace workspace;
+        public readonly DataTable2 pipeLineTable;
+        private readonly MaxQuantWorkspace workspace;
 		public HeatMapData HeatMapData{ get; internal set; }
         public CancellationTokenSource cancelThreadSource;
         private CancellationTokenSource workThreadSource;
@@ -37,7 +38,8 @@ namespace MqUtil.Base{
 			processTable = CreateProcessTable();
 			samplesTable = CreateSamplesTable();
 			fileTable = CreateFileTable(wmodel.HasFractions, wmodel.HasPtm, wmodel.HasCommonChannel);
-			HeatMapData = wmodel.CreateHeatMapData();
+            pipeLineTable = CreatePipelineTable();
+            HeatMapData = wmodel.CreateHeatMapData();
         }
 		public DataTable2 GetProcessTable(){
 			return processTable;
@@ -48,7 +50,10 @@ namespace MqUtil.Base{
 		public DataTable2 GetFileTable(){
 			return fileTable;
 		}
-		public string GetTitle(){
+		public DataTable2 GetPipelineTable(){
+			return pipeLineTable;
+        }
+        public string GetTitle(){
 			return title;
 		}
 		/// <summary>
@@ -90,6 +95,15 @@ namespace MqUtil.Base{
 			}
 			return vals;
 		}
+        public string[] GetPipeLineColumn(int col)
+        {
+            string[] vals = new string[pipeLineTable.RowCount];
+            for (int i = 0; i < vals.Length; i++)
+            {
+                vals[i] = pipeLineTable.GetEntry(i, col).ToString() ?? "";
+            }
+            return vals;
+        }
         public void NoFractions(bool hasFractions){
 			int fileCol = fileTable.GetColumnIndex("File");
 			int expCol = fileTable.GetColumnIndex("Experiment");
@@ -617,27 +631,36 @@ namespace MqUtil.Base{
 			pt.AddColumn("Start time", 200, ColumnType.Text, "Time at which job started.");
 			return pt;
 		}
-		private static DataTable2 CreateSamplesTable(){
+        private static DataTable2 CreatePipelineTable()
+        {
+            DataTable2 pt = new DataTable2("Pipeline", "");
+            pt.AddColumn(ColumnNames.MaxQuantSessionColumn, 180, ColumnType.Text,
+                "The name of the MaxQuant session");
+			pt.AddColumn(ColumnNames.PipeLineStepColumn, 180, ColumnType.Text,"Position of the step in the pipeline.");
+			pt.AddColumn(ColumnNames.DescriptionColumn, 180, ColumnType.Text, "Description of the step in the pipeline.");
+            return pt;
+        }
+        private static DataTable2 CreateSamplesTable(){
 			DataTable2 pt = new DataTable2("Metadata", "");
-			pt.AddColumn(MetaDataColumns.ExperimentColumn, 90, ColumnType.Text,
+			pt.AddColumn(ColumnNames.ExperimentColumn, 90, ColumnType.Text,
 				"Experiment names as specified in the 'Raw files' table.");
-			pt.AddColumn(MetaDataColumns.FilesColumn, 180, ColumnType.Text, "Path to the raw data source, either a file or a folder.");
-            pt.AddColumn(MetaDataColumns.GroupColumn, 90, ColumnType.Text, "");
-            pt.AddColumn(MetaDataColumns.FractionsColumn, 180, ColumnType.Text, "Fractions corresponding to the experiment");
-            pt.AddColumn(MetaDataColumns.SampleNameColumn, 180, ColumnType.Text, "User-specifiable name of the sample.");
-            pt.AddColumn(MetaDataColumns.ChannelColumn, 180, ColumnType.Text, "Channel name from labeling.");
-			pt.AddColumn(MetaDataColumns.OrganismColumn, 180, ColumnType.Text, "The organism of the Sample of origin.");
-            pt.AddColumn(MetaDataColumns.OrganismPartColumn, 90, ColumnType.Text, 
+			pt.AddColumn(ColumnNames.FilesColumn, 180, ColumnType.Text, "Path to the raw data source, either a file or a folder.");
+            pt.AddColumn(ColumnNames.GroupColumn, 90, ColumnType.Text, "");
+            pt.AddColumn(ColumnNames.FractionsColumn, 180, ColumnType.Text, "Fractions corresponding to the experiment");
+            pt.AddColumn(ColumnNames.SampleNameColumn, 180, ColumnType.Text, "User-specifiable name of the sample.");
+            pt.AddColumn(ColumnNames.ChannelColumn, 180, ColumnType.Text, "Channel name from labeling.");
+			pt.AddColumn(ColumnNames.OrganismColumn, 180, ColumnType.Text, "The organism of the Sample of origin.");
+            pt.AddColumn(ColumnNames.OrganismPartColumn, 90, ColumnType.Text, 
 	            "The part of organism’s anatomy or substance arising from an organism from which the biomaterial was derived, (e.g., liver)");
-            pt.AddColumn(MetaDataColumns.CellTypeColumn, 90, ColumnType.Text,
+            pt.AddColumn(ColumnNames.CellTypeColumn, 90, ColumnType.Text,
 	            "A cell type is a distinct morphological or functional form of cell. Examples are epithelial, glial etc.");
-            pt.AddColumn(MetaDataColumns.DiseaseColumn, 90, ColumnType.Text, "The disease under study in the Sample.");
-            pt.AddColumn(MetaDataColumns.BiologicalReplicateColumn, 180, ColumnType.Text, "Parallel measurements of biologically distinct samples");
-            pt.AddColumn(MetaDataColumns.TechnicalReplicateColumn, 180, ColumnType.Text, "Repeated measurements of the same sample");
-            pt.AddColumn(MetaDataColumns.SexColumn, 90, ColumnType.Text, "");
-            pt.AddColumn(MetaDataColumns.AgeColumn, 90, ColumnType.Text, "");
-            pt.AddColumn(MetaDataColumns.AncestryCategoryColumn, 180, ColumnType.Text, "");
-            pt.AddColumn(MetaDataColumns.CellLineColumn, 90, ColumnType.Text, "");
+            pt.AddColumn(ColumnNames.DiseaseColumn, 90, ColumnType.Text, "The disease under study in the Sample.");
+            pt.AddColumn(ColumnNames.BiologicalReplicateColumn, 180, ColumnType.Text, "Parallel measurements of biologically distinct samples");
+            pt.AddColumn(ColumnNames.TechnicalReplicateColumn, 180, ColumnType.Text, "Repeated measurements of the same sample");
+            pt.AddColumn(ColumnNames.SexColumn, 90, ColumnType.Text, "");
+            pt.AddColumn(ColumnNames.AgeColumn, 90, ColumnType.Text, "");
+            pt.AddColumn(ColumnNames.AncestryCategoryColumn, 180, ColumnType.Text, "");
+            pt.AddColumn(ColumnNames.CellLineColumn, 90, ColumnType.Text, "");
             return pt;
 		}
         private static DataTable2 CreateFileTable(bool hasFractions, bool hasPtm, bool hasCommonChannel){
