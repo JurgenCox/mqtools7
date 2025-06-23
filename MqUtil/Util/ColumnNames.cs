@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace MqUtil.Util
 {
-    public  static class MetaDataColumns
+    public  static class ColumnNames
     {
+        //Metadata column names
         public static string ExperimentColumn = "Experiment";
         public static string FilesColumn = "Files";
         public static string GroupColumn = "Group";
@@ -24,7 +25,10 @@ namespace MqUtil.Util
         public static string AgeColumn = "Age";
         public static string AncestryCategoryColumn = "Ancestry category";
         public static string CellLineColumn = "Cell line";
-
+        //Pipeline column names
+        public static string MaxQuantSessionColumn = "MaxQuant Session";
+        public static string PipeLineStepColumn = "Pipeline Step";
+        public static string DescriptionColumn = "Description";
 
 
 
