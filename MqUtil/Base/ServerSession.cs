@@ -638,6 +638,7 @@ namespace MqUtil.Base{
                 "The name of the MaxQuant session");
 			pt.AddColumn(ColumnNames.PipeLineStepColumn, 180, ColumnType.Text,"Position of the step in the pipeline.");
 			pt.AddColumn(ColumnNames.DescriptionColumn, 180, ColumnType.Text, "Description of the step in the pipeline.");
+            pt.AddColumn(ColumnNames.MqparPath, 400, ColumnType.Text, "Path to the respective mqpar file");
             return pt;
         }
         private static DataTable2 CreateSamplesTable(){
