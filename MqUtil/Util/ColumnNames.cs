@@ -27,8 +27,9 @@ namespace MqUtil.Util
         public static string CellLineColumn = "Cell line";
         //Pipeline column names
         public static string MaxQuantSessionColumn = "MaxQuant Session";
-        public static string PipeLineStepColumn = "Pipeline Step";
+        public static string PipeLineStepColumn = "#Step";
         public static string DescriptionColumn = "Description";
+        public static string MqparPath = "Mqpar Path";
 
 
 
