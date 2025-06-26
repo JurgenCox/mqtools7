@@ -796,7 +796,8 @@ namespace MqApi.Util{
 			"dn is dominantly y", "precursor found", "precursor has isotope pattern", "taxonomy ids",
 			"precursor.charge", "proteotypic", "taxonomy names", "dia evidence type", "precursorcharge", "nterm", 
 			"cterm", "fragmenttype", "fragmentcharge", "fragmentlosstype", "excludefromassay", "splicing type", 
-			"splicing form", "precursor charge", "proteolytic enzyme", "activation", "cell line"
+			"splicing form", "precursor charge", "proteolytic enzyme", "activation", "cell line","lib.index", 
+			"dia mass range index", "sub-range"
 		});
 		public static readonly HashSet<string> textualColDefaultNames = new HashSet<string>(new[]{
 			"protein ids", "protein", "majority protein ids", "protein names", "gene names", "uniprot", "ensembl",
@@ -894,7 +895,7 @@ namespace MqApi.Util{
 			"precursor rt (mins)", "delta scan index", "c count", "h count", "n count", "o count", "s count", "p count",
 			"length of protein 1","length of protein 2","ms1.normalised","normalisation.factor","ptm.informative",
 			"ptm.specific","ptm.localising","ptm.q.value","ptm.site.confidence","lib.ptm.site.confidence",
-			"precursor.mz","lib.index", "dia mass range index", "sub-range"
+			"precursor.mz"
 		});
 		public static readonly HashSet<string> multiNumericColDefaultNames = new HashSet<string>(new[]{
 			"mass deviations [da]", "mass deviations [ppm]", "number of phospho (sty)", "fragment.quant.raw",
