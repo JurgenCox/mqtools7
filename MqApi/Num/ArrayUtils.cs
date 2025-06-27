@@ -2521,12 +2521,12 @@ namespace MqApi.Num{
 			if (n == 1){
 				return 0;
 			}
-            if (value > Max(array)) {
-                return Array.BinarySearch(array, Max(array));
-            }
-            if (value < Min(array)) {
-                return Array.BinarySearch(array, Min(array));
-            }
+			if (value > array[n - 1]) {
+				return n - 1;
+			}
+			if (value < array[0]) {
+				return 0;
+			}
             int a = Array.BinarySearch(array, value);
 			if (a >= 0){
 				return a;
