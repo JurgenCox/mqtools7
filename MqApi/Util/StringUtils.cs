@@ -797,7 +797,8 @@ namespace MqApi.Util{
 			"precursor.charge", "proteotypic", "taxonomy names", "dia evidence type", "precursorcharge", "nterm", 
 			"cterm", "fragmenttype", "fragmentcharge", "fragmentlosstype", "excludefromassay", "splicing type", 
 			"splicing form", "precursor charge", "proteolytic enzyme", "activation", "cell line","lib.index", 
-			"dia mass range index", "sub-range"
+			"dia mass range index", "sub-range", "isdecoy", "fitsrt", "fitsims", "fitssupplentry", "hasprecursor",
+			"range index"
 		});
 		public static readonly HashSet<string> textualColDefaultNames = new HashSet<string>(new[]{
 			"protein ids", "protein", "majority protein ids", "protein names", "gene names", "uniprot", "ensembl",
@@ -819,7 +820,7 @@ namespace MqApi.Util{
 			"genes", "modified.sequence", "stripped.sequence", "precursor.id", "first.protein.description",
 			"transition_name", "peptidesequence", "proteingroup", "fullunimodpeptidename", "modifiedpeptide",
 			"peptidegrouplabel", "uniprotid", "gene name", "peptide sequence", "protein index of crosslink 1", 
-			"protein index of crosslink 2","fragment.info"
+			"protein index of crosslink 2","fragment.info", "file name"
 		});
 		public static readonly HashSet<string> numericColDefaultNames = new HashSet<string>(new[]{
 			"length", "length1", "length2", "position", "total position", "peptides (seq)", "razor peptides (seq)",
@@ -895,8 +896,10 @@ namespace MqApi.Util{
 			"precursor rt (mins)", "delta scan index", "c count", "h count", "n count", "o count", "s count", "p count",
 			"length of protein 1","length of protein 2","ms1.normalised","normalisation.factor","ptm.informative",
 			"ptm.specific","ptm.localising","ptm.q.value","ptm.site.confidence","lib.ptm.site.confidence",
-			"precursor.mz"
+			"precursor.mz", "mq rtind", "dn rtind", "d rtind", "mq ccsind", "dn ccsind", "d ccsind", 
+			"dn ccs", "fragmentcount", "dn fragmentcount"
 		});
+
 		public static readonly HashSet<string> multiNumericColDefaultNames = new HashSet<string>(new[]{
 			"mass deviations [da]", "mass deviations [ppm]", "number of phospho (sty)", "fragment.quant.raw",
 			"fragment.quant.corrected", "fragment.correlations"
