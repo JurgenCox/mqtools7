@@ -820,7 +820,7 @@ namespace MqApi.Util{
 			"genes", "modified.sequence", "stripped.sequence", "precursor.id", "first.protein.description",
 			"transition_name", "peptidesequence", "proteingroup", "fullunimodpeptidename", "modifiedpeptide",
 			"peptidegrouplabel", "uniprotid", "gene name", "peptide sequence", "protein index of crosslink 1", 
-			"protein index of crosslink 2","fragment.info", "file name"
+			"protein index of crosslink 2","fragment.info", "file name", "fragments found", "fragments not found"
 		});
 		public static readonly HashSet<string> numericColDefaultNames = new HashSet<string>(new[]{
 			"length", "length1", "length2", "position", "total position", "peptides (seq)", "razor peptides (seq)",
