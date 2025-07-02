@@ -2449,11 +2449,11 @@ namespace MqApi.Num{
 				if (n == 1){
 					return 0;
 				}
-				if (value > Max(array)){
-					return Array.BinarySearch(array, Max(array));
+				if (value > array[n - 1]){
+					return n - 1;
 				}
-				if (value < Min(array)){
-					return Array.BinarySearch(array, Min(array));
+				if (value < array[0]){
+					return 0;
 				}
 				int a = Array.BinarySearch(array, 0, array.Length, value);
 				if (a >= 0){
@@ -2486,13 +2486,13 @@ namespace MqApi.Num{
 				if (n == 1){
 					return 0;
 				}
-                if (value > Max(array)) {
-                    return array.BinarySearch(Max(array));
-                }
-                if (value < Min(array)) {
-                    return array.BinarySearch(Min(array));
-                }
-                int a = array.BinarySearch(value);
+				if (value > array[n - 1]){
+					return n - 1;
+				}
+				if (value < array[0]){
+					return 0;
+				}
+				int a = array.BinarySearch(value);
 				if (a >= 0){
 					return a;
 				}
@@ -2552,13 +2552,13 @@ namespace MqApi.Num{
 			if (n == 1){
 				return 0;
 			}
-            if (value > Max(array)) {
-                return Array.BinarySearch(array, Max(array));
-            }
-            if (value < Min(array)) {
-                return Array.BinarySearch(array, Min(array));
-            }
-            int a = Array.BinarySearch(array, value);
+			if (value > array[n - 1]){
+				return n - 1;
+			}
+			if (value < array[0]){
+				return 0;
+			}
+			int a = Array.BinarySearch(array, value);
 			if (a >= 0){
 				return a;
 			}
