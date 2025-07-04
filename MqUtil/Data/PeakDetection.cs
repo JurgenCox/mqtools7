@@ -13,23 +13,18 @@ namespace MqUtil.Data{
 		public static WritablePeak[] Detect(double matchTol, bool matchInPpm, BasicGroupParams param, RawLayer rawFile,
 			string peaksPath, bool skipBeginning, bool writeTmpFiles, bool hasMassBounds, bool isDia, bool isMsms,
 			bool processPeaks, Responder responder, bool calcNeighbors, int maxCharge, double isoMatchTol, 
-			bool isoMatchTolInPpm, bool calculateResolution) {
+			bool isoMatchTolInPpm, bool calculateResolution, double halfWidth, double valleyFactor,
+			bool advancedPeakSplitting, bool slicePeaks, MsInstrument msInstrument, int missingScans,
+			IntensityDetermination intensDet, int minPeakLen)
+		{
 			bool write = !string.IsNullOrEmpty(peaksPath);
 			List<WritablePeak> peaks = new List<WritablePeak>();
-			double halfWidth = param.CentroidHalfWidth;
-			double valleyFactor = param.ValleyFactor;
-			bool advancedPeakSplitting = param.AdvancedPeakSplitting;
-			bool slicePeaks = param.CutPeaks;
-			MsInstrument msInstrument = param.MsInstrument1;
 			bool useCentroids = param.UseMs1Centroids;
 			if (calculateResolution && !isMsms){
 				useCentroids = false;
 			}
-			int minPeakLen = isDia ? param.DiaMinPeakLen : param.MinPeakLen;
 			double intensThreshold = isMsms ? param.IntensityThresholdMs2 : isDia? param.IntensityThresholdMs1Dia : 
 				param.IntensityThresholdMs1Dda;
-			IntensityDetermination intensDet = param.IntensityDetermination1;
-			int missingScans = param.GapScans;
 			const byte minCharge = 1;
 			if (write){
 				if (File.Exists(peaksPath)){
