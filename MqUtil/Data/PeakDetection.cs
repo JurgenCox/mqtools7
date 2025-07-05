@@ -11,11 +11,11 @@ namespace MqUtil.Data{
 	public static class PeakDetection{
         public const int halfWidthCentroidMs = 2;
 		public static WritablePeak[] Detect(double matchTol, bool matchInPpm, BasicGroupParams param, RawLayer rawFile,
-			string peaksPath, bool skipBeginning, bool writeTmpFiles, bool hasMassBounds, bool isDia, bool isMsms,
+			string peaksPath, bool skipBeginning, bool writeTmpFiles, bool hasMassBounds, bool isMsms,
 			bool processPeaks, Responder responder, bool calcNeighbors, int maxCharge, double isoMatchTol, 
 			bool isoMatchTolInPpm, bool calculateResolution, double halfWidth, double valleyFactor,
 			bool advancedPeakSplitting, bool slicePeaks, MsInstrument msInstrument, int missingScans,
-			IntensityDetermination intensDet, int minPeakLen)
+			IntensityDetermination intensDet, int minPeakLen, double intensThreshold)
 		{
 			bool write = !string.IsNullOrEmpty(peaksPath);
 			List<WritablePeak> peaks = new List<WritablePeak>();
@@ -23,8 +23,6 @@ namespace MqUtil.Data{
 			if (calculateResolution && !isMsms){
 				useCentroids = false;
 			}
-			double intensThreshold = isMsms ? param.IntensityThresholdMs2 : isDia? param.IntensityThresholdMs1Dia : 
-				param.IntensityThresholdMs1Dda;
 			const byte minCharge = 1;
 			if (write){
 				if (File.Exists(peaksPath)){
