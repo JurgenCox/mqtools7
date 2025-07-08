@@ -60,5 +60,12 @@ namespace MqUtil.Ms.Data {
 				FileUtils.Write(MutationNames, writer);
 			}
 		}
-	}
+       public double GetScore(Dictionary<Tuple<string,string>, double> pepSeq2Score){
+			double result = 0;
+			foreach (Tuple<string, string> t in PeptideSequences){
+				result += pepSeq2Score[t];
+			}
+			return result;
+		}
+    }
 }
