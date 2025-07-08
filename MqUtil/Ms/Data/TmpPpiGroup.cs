@@ -60,6 +60,21 @@ namespace MqUtil.Ms.Data {
 				FileUtils.Write(MutationNames, writer);
 			}
 		}
+        public int CountRazors
+        {
+            get
+            {
+                int c = 0;
+                foreach (bool t in razorPeptide)
+                {
+                    if (t)
+                    {
+                        c++;
+                    }
+                }
+                return c;
+            }
+        }
         public void SetRazorPeptide(Tuple<string, string> seq)
         {
             for (int i = 0; i < PeptideSequences.Length; i++)
