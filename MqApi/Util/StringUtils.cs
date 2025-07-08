@@ -898,7 +898,8 @@ namespace MqApi.Util{
 			"ptm.specific","ptm.localising","ptm.q.value","ptm.site.confidence","lib.ptm.site.confidence",
 			"precursor.mz", "mq rtind", "dn rtind", "d rtind", "mq ccsind", "dn ccsind", "d ccsind", 
 			"dn ccs", "fragmentcount", "dn fragmentcount", "dn k0inv", "mq k0inv", "dn rt", "mq rt",
-			"fragments found intensity", "fragments not found intensity"
+			"fragments found intensity", "fragments not found intensity",
+			"fragments found median correlation", "fragments not found median correlation", "precursor m/z"
 		});
 		public static readonly HashSet<string> multiNumericColDefaultNames = new HashSet<string>(new[]{
 			"mass deviations [da]", "mass deviations [ppm]", "number of phospho (sty)", "fragment.quant.raw",
