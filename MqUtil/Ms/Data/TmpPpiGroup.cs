@@ -60,5 +60,39 @@ namespace MqUtil.Ms.Data {
 				FileUtils.Write(MutationNames, writer);
 			}
 		}
-	}
+        public int CountRazors
+        {
+            get
+            {
+                int c = 0;
+                foreach (bool t in razorPeptide)
+                {
+                    if (t)
+                    {
+                        c++;
+                    }
+                }
+                return c;
+            }
+        }
+        public void SetRazorPeptide(Tuple<string, string> seq)
+        {
+            for (int i = 0; i < PeptideSequences.Length; i++)
+            {
+                if (PeptideSequences[i] == seq)
+                {
+                    razorPeptide[i] = true;
+                    return;
+                }
+            }
+            throw new Exception("Peptide not found.");
+        }
+        public double GetScore(Dictionary<Tuple<string,string>, double> pepSeq2Score){
+			double result = 0;
+			foreach (Tuple<string, string> t in PeptideSequences){
+				result += pepSeq2Score[t];
+			}
+			return result;
+		}
+    }
 }
