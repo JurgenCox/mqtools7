@@ -97,8 +97,8 @@ namespace MqUtil.Ms.Instrument{
 		public sealed override bool DiaBackgroundSubtractionDefault => false;
 		public sealed override double DiaBackgroundSubtractionQuantileDefault => 0.5;
 		public sealed override double DiaBackgroundSubtractionFactorDefault => 4;
-		public sealed override double DiaInitialPrecMassTolPpmDefault => 20;
-		public sealed override double DiaInitialFragMassTolPpmDefault => 25;
+		public sealed override double DiaInitialPrecMassTolPpmDefault => 15;
+		public sealed override double DiaInitialFragMassTolPpmDefault => 15;
 		public sealed override LfqRatioType DiaLfqRatioTypeDefault => LfqRatioType.Median;
 		public sealed override double GetCentroidMatchTolDefault(MsDataType dataType){
 			return 10;
