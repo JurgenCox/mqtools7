@@ -429,7 +429,7 @@ namespace MqUtil.Ms.Graph{
 
 		public Tuple<int[], int[], double[], int[][]> GetFrameInfo(int fileIndex, bool positive){
 			RawFileLayer rfl = GetRawFileLayer(fileIndex, positive);
-			RawLayerMs1TimsWindowSummedFrames.Prepare(rfl.Ms1ScanNumbers, rfl.Ms1Rt, out int[] frameIndMin,
+			RawLayerMs1TimsWindowSummedFrames.Prepare(rfl.Ms1Rt, out int[] frameIndMin,
 				out int[] frameIndMax, out double[] rts);
 			int[][] ms2FrameInds = GetMs2FrameInds(rfl, frameIndMin);
 			return new Tuple<int[], int[], double[], int[][]>(frameIndMin, frameIndMax, rts, ms2FrameInds);

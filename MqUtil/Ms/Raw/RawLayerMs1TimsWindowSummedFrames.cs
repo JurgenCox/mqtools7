@@ -21,10 +21,10 @@ namespace MqUtil.Ms.Raw{
 			this.gridSpacing = gridSpacing;
 			this.minMz = minMz;
 			this.maxMz = maxMz;
-			Prepare(rawFile.Ms1ScanNumbers, rawFile.Ms1Rt, out frameIndMin, out frameIndMax, out rts);
+			Prepare(rawFile.Ms1Rt, out frameIndMin, out frameIndMax, out rts);
 		}
-		public static void Prepare(int[] scanNumbers, double[] ms1Rt, out int[] frameIndMin,
-			out int[] frameIndMax, out double[] newRTs){
+		public static void Prepare(double[] ms1Rt, out int[] frameIndMin, out int[] frameIndMax, 
+			out double[] newRTs){
 			List<int> current = new List<int>();
 			List<int[]> newInds = new List<int[]>();
 			current.Add(0);
