@@ -664,6 +664,8 @@ namespace MqUtil.Data{
 			indexWriter.Write((float) ms1Rt[maxFrameInd]);
 			indexWriter.Write(SliceInds[0]);
 			indexWriter.Write(SliceInds[SliceInds.Count - 1]);
+			indexWriter.Write(minFrameInd);
+			indexWriter.Write(maxFrameInd);
 			(bool hasLeftNeighbor, bool hasRightNeighbor) = GetHasNeighbors();
 			indexWriter.Write(hasLeftNeighbor);
 			indexWriter.Write(hasRightNeighbor);
