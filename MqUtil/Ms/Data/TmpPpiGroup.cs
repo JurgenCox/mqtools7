@@ -7,7 +7,10 @@ namespace MqUtil.Ms.Data {
 		public Tuple<string, string>[] PeptideSequences { get; }
 		public byte[] Mutated { get; }
 		public string[] MutationNames { get; set; }
-		public TmpPpiGroup(Tuple<string, string>[] proteinIds, Tuple<string, string>[] peptideSequences, byte[] isMutated) {
+		public Dictionary<string, HashSet<Tuple<string, string>>> IntraLinks { get; set; }
+
+        public TmpPpiGroup(Tuple<string, string>[] proteinIds, Tuple<string, string>[] peptideSequences, byte[] isMutated,
+			Dictionary<string, HashSet<Tuple<string, string>>> intraLinks) {
 			ProteinIds = proteinIds;
 			PeptideSequences = peptideSequences;
 			if (isMutated != null) {
@@ -18,6 +21,8 @@ namespace MqUtil.Ms.Data {
 				}
 			}
 			razorPeptide = new bool[peptideSequences.Length];
+			IntraLinks = intraLinks;
+
 		}
 		public TmpPpiGroup(BinaryReader reader) {
 			int len = reader.ReadInt32();
@@ -40,6 +45,23 @@ namespace MqUtil.Ms.Data {
 				Mutated = FileUtils.ReadByteArray(reader);
 				MutationNames = FileUtils.ReadStringArray(reader);
 			}
+			Dictionary<string, HashSet<Tuple<string, string>>> intraLinks = 
+				new Dictionary<string, HashSet<Tuple<string, string>>>();
+			int proteinCount = reader.ReadInt32();
+			for (int i = 0; i < proteinCount; i++){
+				string protein = reader.ReadString();
+				if (!intraLinks.ContainsKey(protein)){
+					intraLinks[protein] = new HashSet<Tuple<string, string>>();
+                }
+				int intraLinkCount = reader.ReadInt32();
+				for (int j = 0; j < intraLinkCount; j++){
+					string[] splitSeq = reader.ReadString().Split('_');
+					Tuple<string,string> peptidePair = new Tuple<string, string>(splitSeq[0], splitSeq[1]);
+					if (intraLinks.ContainsKey(protein)){
+						intraLinks[protein].Add(peptidePair);
+					}
+				}
+            }
 		}
 		public void Write(BinaryWriter writer) {
 			writer.Write(ProteinIds.Length);
@@ -58,6 +80,15 @@ namespace MqUtil.Ms.Data {
 			if (!isNull) {
 				FileUtils.Write(Mutated, writer);
 				FileUtils.Write(MutationNames, writer);
+			}
+			writer.Write(IntraLinks.Count);
+			foreach (string protein in IntraLinks.Keys){
+				writer.Write(protein);
+                writer.Write(IntraLinks[protein].Count);
+				foreach (Tuple<string, string> pair in IntraLinks[protein]){
+					string combinedSequence = pair.Item1 + "_" + pair.Item2;
+					writer.Write(combinedSequence);
+                }
 			}
 		}
         public int CountRazors
