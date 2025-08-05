@@ -23,19 +23,15 @@ namespace MqUtil.Ms.Data
             writer = FileUtils.GetBinaryWriter(filePath);
             writer.Write(0);
         }
-        public void Add(Tuple<string, string> key, Tuple<string, string>[] value)
+        public void Add(Tuple<string, string> key, string[] value1, string[] value2)
         {
             if (!keys.Contains(key))
             {
                 keys.Add(key);
                 string key_merged = key.Item1 + "_" + key.Item2;
                 writer.Write(key_merged);
-                string[] value_merged = new string[value.Length];
-                for(int i = 0; i < value.Length; i++)
-                {
-                    value_merged[i] = value[i].Item1 + "_" + value[i].Item2;
-                }
-                FileUtils.Write(value_merged, writer);
+                FileUtils.Write(value1, writer);
+				FileUtils.Write(value2, writer);
             }
         }
         public void Finish()
@@ -49,11 +45,11 @@ namespace MqUtil.Ms.Data
         {
             return keys.Contains(key);
         }
-        public Dictionary<Tuple<string, string>, Dictionary<Tuple<string, string>, bool>> 
+        public Dictionary<Tuple<string, string>, Dictionary<string, bool>>
             Contains(Dictionary<Tuple<string, string>, HashSet<Tuple<string, string>>> map)
         {
-            Dictionary<Tuple<string, string>, Dictionary<Tuple<string, string>, bool>> result = 
-                new Dictionary<Tuple<string, string>, Dictionary<Tuple<string, string>, bool>>();
+			Dictionary<Tuple<string, string>, Dictionary<string, bool>> result = 
+                new Dictionary<Tuple<string, string>, Dictionary<string, bool>>();
             BinaryReader reader = FileUtils.GetBinaryReader(filePath);
             int n = reader.ReadInt32();
             for (int i = 0; i < n; i++)
@@ -61,24 +57,23 @@ namespace MqUtil.Ms.Data
                 string protIdMerged = reader.ReadString();
                 string[] parts = protIdMerged.Split('_');
                 Tuple<string, string> protId = new Tuple<string, string>(parts[0], parts[1]);
-                string[] peptidesMerged = FileUtils.ReadStringArray(reader);
-                Tuple<string, string>[] peptides = new Tuple<string, string>[peptidesMerged.Length];
-                for (int j =0; j < peptidesMerged.Length; j++)
-                {
-                    string[] peptideParts = peptidesMerged[j].Split('_');
-                    peptides[j] = new Tuple<string, string>(peptideParts[0], peptideParts[1]);
-                }
+                string[] peptides1 = FileUtils.ReadStringArray(reader);
+				string[] peptides2 = FileUtils.ReadStringArray(reader);
                 if (map.ContainsKey(protId))
-                {
-                    result.Add(protId, new Dictionary<Tuple<string, string>, bool>());
-                    Dictionary<Tuple<string, string>, bool> x = result[protId];
-                    HashSet<Tuple<string, string>> peptideSearch = map[protId];
-                    foreach (Tuple<string, string> s in peptideSearch)
-                    {
-                        bool contains = Array.BinarySearch(peptides, s) >= 0;
-                        x.Add(s, contains);
-                    }
-                }
+				{
+					result.Add(protId, new Dictionary<string, bool>());
+					Dictionary<string, bool> x = result[protId];
+					HashSet<Tuple<string, string>> peptideSearch = map[protId];
+					foreach (Tuple<string, string> s in peptideSearch)
+					{
+						foreach (string pep in new[] { s.Item1, s.Item2 }){
+							bool contains = Array.BinarySearch(peptides1, s) >= 0||
+											Array.BinarySearch(peptides2, s) >= 0;
+                            x.Add(pep, contains);
+                        }
+					}
+				}
+				
             }
             reader.Close();
             return result;
