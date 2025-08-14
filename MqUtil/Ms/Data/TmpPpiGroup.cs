@@ -1,8 +1,10 @@
 ﻿using MqApi.Util;
 
 namespace MqUtil.Ms.Data {
-	public class TmpPpiGroup {
-		private readonly bool[] razorPeptide;
+	public class TmpPpiGroup
+    {
+        private const byte Version = 1;
+        private readonly bool[] razorPeptide;
 		public Tuple<string, string>[] ProteinIds { get; }
 		public Tuple<string, string>[] PeptideSequences { get; }
 		public byte[] Mutated { get; }
@@ -25,7 +27,12 @@ namespace MqUtil.Ms.Data {
 
 		}
 		public TmpPpiGroup(BinaryReader reader) {
-			int len = reader.ReadInt32();
+            byte version = reader.ReadByte();
+            if (version != Version){
+                throw new Exception("Wrong version of TmpPpiGroup. " +
+                                    "Expected " + Version + " but got " + version + ".");
+            }
+            int len = reader.ReadInt32();
 			ProteinIds = new Tuple<string, string>[len];
 			for (int i = 0; i < len; i++) {
 				string s1 = reader.ReadString();
@@ -45,25 +52,33 @@ namespace MqUtil.Ms.Data {
 				Mutated = FileUtils.ReadByteArray(reader);
 				MutationNames = FileUtils.ReadStringArray(reader);
 			}
-			Dictionary<string, HashSet<Tuple<string, string>>> intraLinks = 
-				new Dictionary<string, HashSet<Tuple<string, string>>>();
-			int proteinCount = reader.ReadInt32();
-			for (int i = 0; i < proteinCount; i++){
-				string protein = reader.ReadString();
-				if (!intraLinks.ContainsKey(protein)){
-					intraLinks[protein] = new HashSet<Tuple<string, string>>();
+			bool intraNull = reader.ReadBoolean();
+            if (intraNull){
+                IntraLinks = new Dictionary<string, HashSet<Tuple<string, string>>>();
+            } else{
+                Dictionary<string, HashSet<Tuple<string, string>>> intraLinks =
+                    new Dictionary<string, HashSet<Tuple<string, string>>>();
+                int proteinCount = reader.ReadInt32();
+                for (int i = 0; i < proteinCount; i++)
+                {
+                    string protein = reader.ReadString();
+                    int intraLinkCount = reader.ReadInt32();
+                    var set = new HashSet<Tuple<string, string>>();
+                    for (int j = 0; j < intraLinkCount; j++)
+                    {
+                        string p1 = reader.ReadString();
+                        string p2 = reader.ReadString();
+                        set.Add(new Tuple<string, string>(p1, p2));
+                    }
+                    intraLinks[protein] = set;
                 }
-				int intraLinkCount = reader.ReadInt32();
-				for (int j = 0; j < intraLinkCount; j++){
-					string[] splitSeq = reader.ReadString().Split('_');
-					Tuple<string,string> peptidePair = new Tuple<string, string>(splitSeq[0], splitSeq[1]);
-					if (intraLinks.ContainsKey(protein)){
-						intraLinks[protein].Add(peptidePair);
-					}
-				}
+                IntraLinks = intraLinks;
             }
-		}
-		public void Write(BinaryWriter writer) {
+				
+        }
+		public void Write(BinaryWriter writer)
+        {
+            writer.Write(Version);
 			writer.Write(ProteinIds.Length);
 			foreach (Tuple<string, string> x in ProteinIds) {
 				writer.Write(x.Item1);
@@ -81,16 +96,25 @@ namespace MqUtil.Ms.Data {
 				FileUtils.Write(Mutated, writer);
 				FileUtils.Write(MutationNames, writer);
 			}
-			writer.Write(IntraLinks.Count);
-			foreach (string protein in IntraLinks.Keys){
-				writer.Write(protein);
-                writer.Write(IntraLinks[protein].Count);
-				foreach (Tuple<string, string> pair in IntraLinks[protein]){
-					string combinedSequence = pair.Item1 + "_" + pair.Item2;
-					writer.Write(combinedSequence);
+			bool intraNull = IntraLinks == null || IntraLinks.Count == 0;
+            writer.Write(intraNull);
+            if (intraNull){
+                return;
+            }
+            writer.Write(IntraLinks.Count);
+            foreach (var kvp in IntraLinks)
+            {
+                writer.Write(kvp.Key); // protein
+                writer.Write(kvp.Value.Count);
+                foreach (var pair in kvp.Value)
+                {
+                    writer.Write(pair.Item1);
+                    writer.Write(pair.Item2);
                 }
-			}
-		}
+            }
+
+
+        }
         public int CountRazors
         {
             get
@@ -110,7 +134,7 @@ namespace MqUtil.Ms.Data {
         {
             for (int i = 0; i < PeptideSequences.Length; i++)
             {
-                if (PeptideSequences[i] == seq)
+                if (PeptideSequences[i].Equals(seq))
                 {
                     razorPeptide[i] = true;
                     return;
@@ -120,10 +144,11 @@ namespace MqUtil.Ms.Data {
         }
         public double GetScore(Dictionary<Tuple<string,string>, double> pepSeq2Score){
 			double result = 0;
-			foreach (Tuple<string, string> t in PeptideSequences){
-				result += pepSeq2Score[t];
-			}
-			return result;
-		}
+            foreach (Tuple<string, string> t in PeptideSequences)
+            {
+                if (pepSeq2Score.TryGetValue(t, out double s)) result += s;
+            }
+            return result;
+        }
     }
 }
