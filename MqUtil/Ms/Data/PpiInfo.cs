@@ -67,9 +67,9 @@ namespace MqUtil.Ms.Data
 					foreach (Tuple<string, string> s in peptideSearch)
 					{
 						foreach (string pep in new[] { s.Item1, s.Item2 }){
-							bool contains = Array.BinarySearch(peptides1, s) >= 0||
-											Array.BinarySearch(peptides2, s) >= 0;
-                            x.Add(pep, contains);
+                            bool contains = Array.BinarySearch(peptides1, pep) >= 0||
+                                            Array.BinarySearch(peptides2, pep) >= 0;
+                            x.TryAdd(pep, contains);
                         }
 					}
 				}
