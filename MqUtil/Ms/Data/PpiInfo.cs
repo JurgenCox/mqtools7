@@ -45,11 +45,11 @@ namespace MqUtil.Ms.Data
         {
             return keys.Contains(key);
         }
-        public Dictionary<Tuple<string, string>, Dictionary<string, bool>>
+        public Dictionary<Tuple<string, string>, Dictionary<Tuple<string, string>, bool>>
             Contains(Dictionary<Tuple<string, string>, HashSet<Tuple<string, string>>> map)
         {
-			Dictionary<Tuple<string, string>, Dictionary<string, bool>> result = 
-                new Dictionary<Tuple<string, string>, Dictionary<string, bool>>();
+			Dictionary<Tuple<string, string>, Dictionary<Tuple<string, string>, bool>> result = 
+                new Dictionary<Tuple<string, string>, Dictionary<Tuple<string, string>, bool>>();
             BinaryReader reader = FileUtils.GetBinaryReader(filePath);
             int n = reader.ReadInt32();
             for (int i = 0; i < n; i++)
@@ -59,21 +59,21 @@ namespace MqUtil.Ms.Data
                 Tuple<string, string> protId = new Tuple<string, string>(parts[0], parts[1]);
                 string[] peptides1 = FileUtils.ReadStringArray(reader);
 				string[] peptides2 = FileUtils.ReadStringArray(reader);
-                if (map.ContainsKey(protId))
-				{
-					result.Add(protId, new Dictionary<string, bool>());
-					Dictionary<string, bool> x = result[protId];
-					HashSet<Tuple<string, string>> peptideSearch = map[protId];
-					foreach (Tuple<string, string> s in peptideSearch)
-					{
-						foreach (string pep in new[] { s.Item1, s.Item2 }){
-                            bool contains = Array.BinarySearch(peptides1, pep) >= 0||
-                                            Array.BinarySearch(peptides2, pep) >= 0;
-                            x.TryAdd(pep, contains);
-                        }
-					}
-				}
-				
+                if (!map.ContainsKey(protId)){
+                    continue;
+                }
+                result.Add(protId, new Dictionary<Tuple<string, string>, bool>());
+                Dictionary<Tuple<string, string>, bool> x = result[protId];
+                HashSet<Tuple<string, string>> peptideSearch = map[protId];
+                foreach (Tuple<string, string> s in peptideSearch)
+                {
+                    foreach (string pep in new[] { s.Item1, s.Item2 }){
+                        bool contains = Array.BinarySearch(peptides1, pep) >= 0&&
+                                        Array.BinarySearch(peptides2, pep) >= 0;
+                        x.TryAdd(s, contains);
+                    }
+                }
+
             }
             reader.Close();
             return result;
