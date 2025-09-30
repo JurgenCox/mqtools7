@@ -23,7 +23,7 @@ namespace MqUtil.Util{
 
 		private static void GetIndices(int i, out int j, out int k){
 			j = (int) (0.5 + Math.Sqrt(0.25 + 2*i) + 1e-6);
-			k = i - j*(j - 1)/2 - 1;
+			k = i - j*(j - 1)/2;
 		}
 
 		public void Abort(){
