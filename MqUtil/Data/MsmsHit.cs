@@ -60,7 +60,11 @@ namespace MqUtil.Data{
 		public double[] MassesChargeSplit { get; set; } = new double[0];
 		public double[] IntensitiesChargeSplitComplele { get; set; } = new double[0];
 		public double[] MassesChargeSplitComplele { get; set; } = new double[0];
-		public MsmsHit(AndromedaPeptide[] peptides, int scanNumber, int scanEventIndex, int fileIndex, QueryType type,
+		public bool[] IsFromSecondSequence { get; set; } = new bool[0];
+		public CrossLinkSpecificFragmentAnnotation[] ClRelatedPeakAnnotation { get; set; } = new CrossLinkSpecificFragmentAnnotation[0];
+		public bool IsCross { get; set; }
+        public LinkPatternData LinkPatternData { get; set; }
+        public MsmsHit(AndromedaPeptide[] peptides, int scanNumber, int scanEventIndex, int fileIndex, QueryType type,
 			int multipletIndex, double retentionTime, double mz, double monoisotopicMz, object fixedMods,
 			byte multiplicity, string[][] labels, int fragTypeIndex, int massAnalyzerIndex,
 			double intensityFractionWindow, double intensityFractionTotal, double basePeakFraction,
@@ -395,7 +399,19 @@ namespace MqUtil.Data{
 			MassesChargeSplit = FileUtils.ReadDoubleArray(reader);
 			IntensitiesChargeSplitComplele = FileUtils.ReadDoubleArray(reader);
 			MassesChargeSplitComplele = FileUtils.ReadDoubleArray(reader);
-		}
+			IsFromSecondSequence = FileUtils.ReadBooleanArray(reader);
+            len = reader.ReadInt32();
+            ClRelatedPeakAnnotation = new CrossLinkSpecificFragmentAnnotation[len];
+            for (int i = 0; i < len; i++)
+            {
+                ClRelatedPeakAnnotation[i] = (CrossLinkSpecificFragmentAnnotation)reader.ReadInt32();
+            }
+			IsCross = reader.ReadBoolean();
+			if (IsCross)
+			{
+                LinkPatternData = LinkPatternData.FromBinary(reader);
+            }
+        }
 
 		private static PeakAnnotation ReadAnnotation(int type, BinaryReader reader){
 			if (type == 0){
@@ -652,7 +668,16 @@ namespace MqUtil.Data{
 			FileUtils.Write(MassesChargeSplit, writer);
 			FileUtils.Write(IntensitiesChargeSplitComplele, writer);
 			FileUtils.Write(MassesChargeSplitComplele, writer);
-		}
+            FileUtils.Write(IsFromSecondSequence, writer);
+            writer.Write(ClRelatedPeakAnnotation.Length);
+            foreach (CrossLinkSpecificFragmentAnnotation clAnnot in ClRelatedPeakAnnotation){
+                writer.Write((int)clAnnot);
+            }
+			writer.Write(IsCross);
+            if (IsCross){
+                LinkPatternData.Write(writer);
+            }
+        }
 
 		public PeptideModificationState GetFixedAndLabelModifications(string[] fixedModifications, string sequence){
 			return GetFixedAndLabelModifications(fixedModifications, sequence, labelModificationArray[0]);
