@@ -338,26 +338,17 @@ namespace MqUtil.Ms.Search {
 			return HasFullDecoyHit(proteinSet);
 		}
 
-		private bool HasFullDecoyHit(ProteinSet proteinSet) {
-			bool isTargetA = false;
-			bool isTargetB = false;
-			foreach (int t1 in Peptide1.ProteinIndices) {
-				if (!proteinSet.GetIsDecoy(t1)) {
-					isTargetA = true;
-				}
-			}
-			if (Peptide2 != null) {
-				foreach (int t2 in Peptide2.ProteinIndices) {
-					if (!proteinSet.GetIsDecoy(t2)) {
-						isTargetB = true;
-					}
-				}
-				if (!isTargetA && !isTargetB) {
-					return true;
-				}
-			}
-			return false;
-		}
+        private bool HasFullDecoyHit(ProteinSet proteinSet)
+        {
+            bool isTargetA = Peptide1.ProteinIndices.Any(t1 => !proteinSet.GetIsDecoy(t1));
+
+            if (Peptide2 == null)
+                return true;
+
+            bool isTargetB = Peptide2.ProteinIndices.Any(t2 => !proteinSet.GetIsDecoy(t2));
+
+            return !isTargetA && !isTargetB;
+        }
 
         public string[] GetProteinIds(ProteinSet proteinSet) {
 			string[] result = new string[Peptide1.ProteinIndices.Length];
