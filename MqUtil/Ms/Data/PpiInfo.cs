@@ -67,11 +67,10 @@ namespace MqUtil.Ms.Data
                 HashSet<Tuple<string, string>> peptideSearch = map[protId];
                 foreach (Tuple<string, string> s in peptideSearch)
                 {
-                    foreach (string pep in new[] { s.Item1, s.Item2 }){
-                        bool contains = Array.BinarySearch(peptides1, pep) >= 0&&
-                                        Array.BinarySearch(peptides2, pep) >= 0;
-                        x.TryAdd(s, contains);
-                    }
+                    bool contains1 = Array.BinarySearch(peptides1, s.Item1) >= 0;
+                    bool contains2 = Array.BinarySearch(peptides2, s.Item2) >= 0;
+                    x.TryAdd(s, contains1&&contains2);
+                    
                 }
 
             }
