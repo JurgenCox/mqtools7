@@ -1,6 +1,7 @@
 ﻿using MqApi.Param;
 namespace MqApi.Generic{
-	public interface IUpload : IActivity{
+	public interface IUpload : IActivityWithHeading
+   {
 		/// <summary>
 		/// Define here the parameters that determine the specifics of the upload.
 		/// </summary>
@@ -11,5 +12,5 @@ namespace MqApi.Generic{
 		int NumSupplTables{ get; }
 		string[] HelpDocuments{ get; }
 		int NumDocuments{ get; }
-	}
+    }
 }

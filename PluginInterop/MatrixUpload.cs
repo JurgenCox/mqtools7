@@ -14,12 +14,13 @@ namespace PluginInterop{
 		public float DisplayRank => 1;
 		public bool IsActive => true;
 		public int GetMaxThreads(Parameters parameters) => 1;
-		public bool HasButton => true;
+		public bool HasButton => false;
 		public abstract Bitmap2 DisplayImage{ get; }
 		public string Url => projectUrl;
 		public string[] HelpSupplTables => new string[0];
 		public int NumSupplTables => 0;
-		public string[] HelpDocuments => new string[0];
+		public string Heading => "Advanced";
+        public string[] HelpDocuments => new string[0];
 		public int NumDocuments => 0;
 		/// <summary>
 		/// Create the parameters for the GUI with default of 'Code file' and 'Executable'. Includes buttons
