@@ -8,7 +8,7 @@ using MqApi.Param;
 using MqUtil.Num;
 namespace PerseusPluginLib.Load{
 	public class CreateRandomMatrix : IMatrixUpload{
-		public bool HasButton => true;
+		public bool HasButton => false;
 		public Bitmap2 DisplayImage => Bitmap2.GetImage("dice.png");
 		public string Name => "Create random matrix";
 		public bool IsActive => true;
@@ -17,7 +17,8 @@ namespace PerseusPluginLib.Load{
 		public int NumSupplTables => 0;
 		public string[] HelpDocuments => new string[0];
 		public int NumDocuments => 0;
-		public string Url => "https://cox-labs.github.io/coxdocs/createrandommatrix.html";
+		public string Heading => "Basic";
+        public string Url => "https://cox-labs.github.io/coxdocs/createrandommatrix.html";
 		public string Description
 			=>
 				"Create a matrix of given dimensions containing random " +

@@ -7,7 +7,7 @@ namespace PluginInterop.Python{
 		public override Bitmap2 DisplayImage => Bitmap2.GetImage("python.png");
 		protected override string CodeFilter => "Python script, *.py | *.py";
 		protected virtual string[] ReqiredPythonPackages => new[]{"perseuspy"};
-		protected override FileParam ExecutableParam(){
+        protected override FileParam ExecutableParam(){
 			return Utils.CreateCheckedFileParam(InterpreterLabel, InterpreterFilter, TryFindExecutable,
 				new[]{"perseuspy"});
 		}

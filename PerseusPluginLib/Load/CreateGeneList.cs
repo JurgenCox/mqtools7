@@ -9,7 +9,7 @@ using MqApi.Util;
 using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.Load{
 	public class CreateGeneList : IMatrixUpload{
-		public bool HasButton => true;
+		public bool HasButton => false;
 		public Bitmap2 DisplayImage => PerseusPluginUtils.GetImage("list.png");
 		public string Description => "Start with a list of all protein-coding genes from an organism.";
 		public string Name => "Create gene list";
@@ -19,7 +19,8 @@ namespace PerseusPluginLib.Load{
 		public int NumSupplTables => 0;
 		public string[] HelpDocuments => new string[0];
 		public int NumDocuments => 0;
-		public string Url => "https://cox-labs.github.io/coxdocs/creategenelist.html";
+		public string Heading => "Basic";
+        public string Url => "https://cox-labs.github.io/coxdocs/creategenelist.html";
 		public int GetMaxThreads(Parameters parameters){
 			return 1;
 		}

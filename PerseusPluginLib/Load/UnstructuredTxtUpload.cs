@@ -10,7 +10,7 @@ using MqApi.Util;
 using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.Load{
 	public class UnstructuredTxtUpload : IMatrixUpload{
-		public bool HasButton => true;
+		public bool HasButton => false;
 		public Bitmap2 DisplayImage => PerseusPluginUtils.GetImage("raw.png");
 		public string Name => "Raw upload";
 		public bool IsActive => true;
@@ -19,7 +19,8 @@ namespace PerseusPluginLib.Load{
 		public int NumSupplTables => 0;
 		public string[] HelpDocuments => new string[0];
 		public int NumDocuments => 0;
-		public int GetMaxThreads(Parameters parameters){
+		public string Heading => "Basic";
+        public int GetMaxThreads(Parameters parameters){
 			return 1;
 		}
 		public string Url => "https://cox-labs.github.io/coxdocs/unstructuredtxtupload.html";
