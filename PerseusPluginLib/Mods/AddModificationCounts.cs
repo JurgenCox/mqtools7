@@ -9,7 +9,8 @@ using MqApi.Param;
 using MqUtil.Parse;
 namespace PerseusPluginLib.Mods{
 	public class AddModificationCounts : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.Plugins;
+        public bool HasButton => false;
 		public string Url
 			=>
                 "https://cox-labs.github.io/coxdocs/addmodificationcounts.html";

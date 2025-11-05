@@ -7,7 +7,8 @@ using MqApi.Network;
 using MqApi.Param;
 namespace PluginInterop{
 	public abstract class NetworkProcessing : InteropBase, INetworkProcessing{
-		public abstract string Name{ get; }
+		public string Category => null;
+        public abstract string Name{ get; }
 		public abstract string Description{ get; }
 		public virtual float DisplayRank => 1;
 		public virtual bool IsActive => true;

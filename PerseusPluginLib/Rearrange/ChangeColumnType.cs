@@ -10,7 +10,8 @@ using MqApi.Util;
 using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.Rearrange{
 	public class ChangeColumnType : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description => "Convert the type of selected columns to another desired type.";
 		public string HelpOutput => "";

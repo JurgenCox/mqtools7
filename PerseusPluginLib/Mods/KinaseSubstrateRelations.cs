@@ -11,7 +11,8 @@ using MqUtil.Parse;
 namespace PerseusPluginLib.Mods{
 	public class KinaseSubstrateRelations : IMatrixProcessing{
 		public bool HasButton => false;
-		public Bitmap2 DisplayImage => null;
+		public string Category => IMatrixProcessingCategories.Plugins;
+        public Bitmap2 DisplayImage => null;
 		public string Description
 			=>
 				"Kinase-substrate relations are read from PSP files and attached as annotation based on " +

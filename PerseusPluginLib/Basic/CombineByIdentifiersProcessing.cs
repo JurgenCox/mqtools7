@@ -18,7 +18,8 @@ namespace PerseusPluginLib.Basic{
 		Minimum
 	}
 	public class CombineByIdentifiersProcessing : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description
 			=>

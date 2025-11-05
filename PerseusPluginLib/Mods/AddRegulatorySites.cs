@@ -8,7 +8,8 @@ using MqApi.Param;
 using MqUtil.Parse;
 namespace PerseusPluginLib.Mods{
 	public class AddRegulatorySites : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.Plugins;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description
 			=> "PSP information on regulatory sites is added based on UniProt identifiers and sequence windows.";

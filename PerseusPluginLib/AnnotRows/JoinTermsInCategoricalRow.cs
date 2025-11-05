@@ -7,7 +7,8 @@ using MqApi.Matrix;
 using MqApi.Param;
 namespace PerseusPluginLib.AnnotRows{
 	public class JoinTermsInCategoricalRow : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataAnnotation;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description => "The selected terms in the categorical row will be joined to one term.";
 		public string HelpOutput => "The filtered matrix.";

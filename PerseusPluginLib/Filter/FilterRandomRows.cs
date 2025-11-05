@@ -10,7 +10,8 @@ using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.Filter{
 	public class FilterRandomRows : IMatrixProcessing{
 		public bool HasButton => false;
-		public Bitmap2 DisplayImage => null;
+		public string Category => IMatrixProcessingCategories.DataAnnotation;
+        public Bitmap2 DisplayImage => null;
 		public string Description => "A given number of rows is kept based on random decisions.";
 		public string HelpOutput => "The filtered matrix.";
 		public string[] HelpSupplTables => new string[0];

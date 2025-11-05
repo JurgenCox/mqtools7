@@ -7,8 +7,9 @@ using MqApi.Num;
 using MqApi.Param;
 using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.Rearrange{
-	public class ReorderRemoveColumns : IMatrixProcessing{
-		public bool HasButton => false;
+	public class ReorderRemoveColumns : IMatrixProcessing {
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string HelpOutput => "Same matrix but with columns in the new order.";
 		public string[] HelpSupplTables => new string[0];

@@ -6,7 +6,8 @@ using MqApi.Matrix;
 using MqApi.Param;
 namespace PerseusPluginLib.Norm{
 	public class UnitVector : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataNormalization;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string HelpOutput => "Normalized matrix.";
 		public string[] HelpSupplTables => new string[0];

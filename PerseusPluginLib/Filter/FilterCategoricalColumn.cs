@@ -8,7 +8,8 @@ using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.Filter{
 	public class FilterCategoricalColumn : IMatrixProcessing{
 		public bool HasButton => true;
-		public Bitmap2 DisplayImage => PerseusPluginUtils.GetImage("filter2.png");
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public Bitmap2 DisplayImage => PerseusPluginUtils.GetImage("filter2.png");
 		public string Description
 			=> "Those rows are kept or removed that have the specified value in the selected categorical column.";
 		public string HelpOutput => "The filtered matrix.";

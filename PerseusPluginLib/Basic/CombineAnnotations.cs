@@ -8,7 +8,8 @@ using MqApi.Num;
 using MqApi.Param;
 namespace PerseusPluginLib.Basic{
 	public class CombineAnnotations : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description =>
 			"Search multiple categorical or string columns for the occurence of a set of terms.";

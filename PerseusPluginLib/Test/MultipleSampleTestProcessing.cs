@@ -15,7 +15,8 @@ using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.Test{
 	public class MultipleSampleTestProcessing : IMatrixProcessing{
 		public bool HasButton => true;
-		public Bitmap2 DisplayImage => PerseusPluginUtils.GetImage("pn.png");
+		public string Category => IMatrixProcessingCategories.StatisticalAnalysis;
+        public Bitmap2 DisplayImage => PerseusPluginUtils.GetImage("pn.png");
 		public string Name => "Multiple-sample tests";
 		public string Heading => "Tests";
 		public bool IsActive => true;

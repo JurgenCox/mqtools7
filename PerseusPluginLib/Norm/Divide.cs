@@ -10,7 +10,8 @@ using MqApi.Util;
 using MqUtil.Num;
 namespace PerseusPluginLib.Norm{
 	public class Divide : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataNormalization;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description => "Divide all values by the specified quantity calculated on each row/column.";
 		public string HelpOutput => "Normalized matrix.";

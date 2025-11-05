@@ -8,7 +8,8 @@ using MqApi.Param;
 using PerseusPluginLib.AnnotCols.AnnotationProvider;
 namespace PerseusPluginLib.AnnotCols{
 	public class BackToBaseIdentifiers : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataAnnotation;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description
 			=>

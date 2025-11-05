@@ -11,7 +11,8 @@ using MqApi.Util;
 using MqUtil.Parse;
 namespace PerseusPluginLib.Mods{
 	public class AddKnownSites : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.Plugins;
+        public bool HasButton => false;
 		public string Url
 			=> "https://cox-labs.github.io/coxdocs/addknownsites.html";
 		public Bitmap2 DisplayImage => null;

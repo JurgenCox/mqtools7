@@ -8,7 +8,8 @@ using MqApi.Param;
 namespace PerseusPluginLib.Norm{
 	public class WidthAdjustment : IMatrixProcessing{
 		public bool HasButton => false;
-		public Bitmap2 DisplayImage => null;
+		public string Category => IMatrixProcessingCategories.DataNormalization;
+        public Bitmap2 DisplayImage => null;
 		public string Description
 			=>
 				"The first, second and third quartile (q1, q2, q3) are calculated from the " +

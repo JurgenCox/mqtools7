@@ -5,7 +5,8 @@ using MqApi.Matrix;
 using MqApi.Param;
 namespace PerseusPluginLib.Impute{
 	public class ReplaceImputedByNan : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description => "Replaces all values that have been imputed with NaN.";
 		public string HelpOutput => "Same matrix but with imputed values deleted.";

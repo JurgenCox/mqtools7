@@ -8,7 +8,8 @@ using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.Filter{
 	public class FilterTextualColumn : IMatrixProcessing{
 		public bool HasButton => false;
-		public Bitmap2 DisplayImage => null;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public Bitmap2 DisplayImage => null;
 		public string Description
 			=> "Only those rows are kept that have a value in the textual column that matches the search string.";
 		public string HelpOutput => "The filtered matrix.";

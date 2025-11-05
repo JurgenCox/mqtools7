@@ -7,7 +7,8 @@ using MqApi.Param;
 namespace PerseusPluginLib.Rearrange{
 	public class ProcessTextColumns : IMatrixProcessing{
 		public bool HasButton => false;
-		public Bitmap2 DisplayImage => null;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public Bitmap2 DisplayImage => null;
 		public string Description => "Values in string columns can be manipulated according to a regular expression.";
 		public string HelpOutput => "";
 		public string[] HelpSupplTables => new string[0];

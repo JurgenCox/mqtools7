@@ -8,7 +8,8 @@ using MqApi.Param;
 using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.Rearrange{
 	public class RemoveEmptyColumns : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string HelpOutput => "Same matrix but with empty columns removed.";
 		public string[] HelpSupplTables => new string[0];

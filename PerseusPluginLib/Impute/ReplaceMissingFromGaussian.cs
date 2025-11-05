@@ -9,7 +9,8 @@ using MqUtil.Num;
 using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.Impute{
 	public class ReplaceMissingFromGaussian : IMatrixProcessing{
-		public bool HasButton => true;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public bool HasButton => true;
 		public Bitmap2 DisplayImage => PerseusPluginUtils.GetImage("histo.png");
 		public string HelpOutput => "";
 		public int NumSupplTables => 0;

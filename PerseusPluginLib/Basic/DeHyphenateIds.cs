@@ -7,7 +7,8 @@ using MqApi.Param;
 using MqApi.Util;
 namespace PerseusPluginLib.Basic{
 	public class DeHyphenateIds : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Name => "De-hyphenate ids";
 		public string Heading => "Rearrange";

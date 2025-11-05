@@ -5,5 +5,6 @@
 		int NumSupplTables{ get; }
 		string[] HelpDocuments{ get; }
 		int NumDocuments{ get; }
-	}
+		string Category { get; }
+    }
 }

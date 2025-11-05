@@ -8,7 +8,8 @@ using MqApi.Param;
 using MqApi.Util;
 namespace PerseusPluginLib.Norm{
 	public class ScaleToInterval : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataNormalization;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Name => "Scale to interval";
 		public string Heading => "Normalization";

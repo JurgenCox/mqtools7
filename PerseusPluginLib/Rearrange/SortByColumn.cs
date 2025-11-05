@@ -9,7 +9,8 @@ using MqApi.Num.Vector;
 using MqApi.Param;
 namespace PerseusPluginLib.Rearrange{
 	public class SortByColumn : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description => "Simple sorting by a column.";
 		public string HelpOutput => "The same matrix but sorted by the specified column.";
