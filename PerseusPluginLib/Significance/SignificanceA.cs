@@ -11,7 +11,8 @@ using MqUtil.Num.Test;
 using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.Significance{
 	public class SignificanceA : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.StatisticalAnalysis;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string[] HelpDocuments => new string[0];
 		public int NumDocuments => 0;

@@ -7,7 +7,8 @@ using MqApi.Param;
 using MqUtil.Num;
 namespace PerseusPluginLib.Rearrange{
 	public class SubsampleRows : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description => "Reduce the matrix to a random sub-sample of row indices.";
 		public string HelpOutput => "The same matrix but with a random sub-sample of rows.";

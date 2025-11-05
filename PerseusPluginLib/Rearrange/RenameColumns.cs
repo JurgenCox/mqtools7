@@ -9,7 +9,8 @@ using MqApi.Matrix;
 using MqApi.Param;
 namespace PerseusPluginLib.Rearrange{
 	public class RenameColumns : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description
 			=> "New names can be specified for each expression column. The new names are typed in explicitly.";

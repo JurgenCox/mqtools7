@@ -9,7 +9,8 @@ using MqApi.Param;
 using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.AnnotRows{
 	public class AverageGroups : IMatrixProcessing{
-		public bool HasButton => true;
+		public string Category => IMatrixProcessingCategories.DataAnnotation;
+        public bool HasButton => true;
 		public Bitmap2 DisplayImage => PerseusPluginUtils.GetImage("average.png");
 		public string HelpOutput => "Averaged main matrix containing as many columns as there were groups defined.";
 		public string[] HelpSupplTables => new string[0];

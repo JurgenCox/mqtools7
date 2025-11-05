@@ -9,7 +9,8 @@ using MqApi.Param;
 using MqUtil.Num.Perform;
 namespace PerseusPluginLib.Basic{
 	public class PerformanceCurves : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.StatisticalAnalysis;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Name => "Performance curves";
 		public string Heading => "Basic";

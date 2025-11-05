@@ -11,7 +11,8 @@ using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.Norm{
 	public class ZScore : IMatrixProcessing{
 		public bool HasButton => true;
-		public Bitmap2 DisplayImage => PerseusPluginUtils.GetImage("zscoreButton.Image.png");
+		public string Category => IMatrixProcessingCategories.DataNormalization;
+        public Bitmap2 DisplayImage => PerseusPluginUtils.GetImage("zscoreButton.Image.png");
 		public string Name => "Z-score";
 		public string Heading => "Normalization";
 		public bool IsActive => true;

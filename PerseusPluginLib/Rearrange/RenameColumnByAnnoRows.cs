@@ -7,7 +7,8 @@ using MqApi.Param;
 using MqApi.Drawing;
 namespace PerseusPluginLib.Rearrange{
 	public class RenameColumnAnnoRow : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description => "Rename the main column names based on categorical row.";
 		public string HelpOutput => "The names of the main column will be renamed by the categorical rows.";

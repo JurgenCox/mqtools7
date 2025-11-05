@@ -8,7 +8,8 @@ using MqApi.Param;
 namespace PerseusPluginLib.Quality{
 	public class CreateQualityMatrix : IMatrixProcessing{
 		public bool HasButton => false;
-		public Bitmap2 DisplayImage => null;
+		public string Category => IMatrixProcessingCategories.StatisticalAnalysis;
+        public Bitmap2 DisplayImage => null;
 		public string Description
 			=>
 				"Create a matrix of quality values from a set of numerical columns. There has to " +

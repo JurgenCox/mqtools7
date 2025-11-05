@@ -12,7 +12,8 @@ using MqApi.Util;
 using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.AnnotRows{
 	public class ManageCategoricalAnnotRow : IMatrixProcessing{
-		public bool HasButton => true;
+		public string Category => IMatrixProcessingCategories.DataAnnotation;
+        public bool HasButton => true;
 		public Bitmap2 DisplayImage => PerseusPluginUtils.GetImage("groupButton.Image.png");
 		public string Description =>
 			"Manage the categorical annotation rows. One important applications is to define a grouping that is " +

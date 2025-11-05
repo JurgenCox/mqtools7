@@ -7,7 +7,8 @@ using MqApi.Param;
 using MqApi.Util;
 namespace PerseusPluginLib.Norm{
 	public class UnZScore : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataNormalization;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Name => "Un-Z-score";
 		public string Heading => "Normalization";

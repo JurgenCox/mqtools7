@@ -7,7 +7,8 @@ using MqApi.Matrix;
 using MqApi.Param;
 namespace PerseusPluginLib.Rearrange{
 	public class CombineCategoricalColumns : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description => "Combine the terms in two categorical columns to form a new categorical column.";
 		public string HelpOutput => "A new categorical column is generated with combined terms.";

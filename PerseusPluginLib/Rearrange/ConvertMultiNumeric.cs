@@ -14,7 +14,8 @@ namespace PerseusPluginLib.Rearrange{
 			x => x.Mean(), x => ArrayUtils.Median(x)
 		};
 		public bool HasButton => false;
-		public Bitmap2 DisplayImage => null;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public Bitmap2 DisplayImage => null;
 		public string Description
 			=>
 				"Creates for the specified multi-numeric columns a numeric column containing the result of the specified operation " +

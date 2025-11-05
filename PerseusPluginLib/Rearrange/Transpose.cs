@@ -7,7 +7,8 @@ using MqApi.Param;
 using MqApi.Util;
 namespace PerseusPluginLib.Rearrange{
 	public class Transpose : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description
 			=> "The matrix of expression values is being transposed, i.e. rows become columns and columns become rows.";

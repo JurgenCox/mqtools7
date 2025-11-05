@@ -7,7 +7,8 @@ using MqApi.Num;
 using MqApi.Param;
 namespace PerseusPluginLib.Rearrange{
 	public class ReorderColumnsByNumAnnotationRow : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string HelpOutput => "Same matrix but with columns in the new order implied by a numerical row.";
 		public string[] HelpSupplTables => new string[0];

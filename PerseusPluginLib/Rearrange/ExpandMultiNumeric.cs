@@ -10,7 +10,8 @@ namespace PerseusPluginLib.Rearrange{
 	public class ExpandMultiNumeric : IMatrixProcessing{
 		//TODO: optionally distribute values into multiple columns.
 		public bool HasButton => false;
-		public Bitmap2 DisplayImage => null;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public Bitmap2 DisplayImage => null;
 		public string Description
 			=>
 				"Distribute multiple values per cell in a multi-numeric column over multiple rows. For each row in the" +

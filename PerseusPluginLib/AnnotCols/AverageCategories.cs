@@ -16,7 +16,8 @@ namespace PerseusPluginLib.AnnotCols{
 		StandardDeviation
 	}
 	public class AverageCategories : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataAnnotation;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description
 			=>

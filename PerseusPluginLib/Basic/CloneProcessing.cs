@@ -5,7 +5,8 @@ using MqApi.Matrix;
 using MqApi.Param;
 namespace PerseusPluginLib.Basic{
 	public class CloneProcessing : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => Bitmap2.GetImage("sheepButton.Image.png");
 		public string Description => "A copy of the input matrix is generated.";
 		public string HelpOutput => "Same as input matrix.";

@@ -7,7 +7,8 @@ using MqApi.Num;
 using MqApi.Param;
 namespace PerseusPluginLib.Norm{
 	public class SubtractRowCluster : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataNormalization;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description => "Subtract the average pattern of the selected rows from all rows.";
 		public string HelpOutput => "Normalized matrix.";

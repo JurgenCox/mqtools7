@@ -19,7 +19,8 @@ namespace PerseusPluginLib.Filter{
 	}
 	public class FilterValidValuesRows : IMatrixProcessing{
 		public bool HasButton => true;
-		public Bitmap2 DisplayImage => PerseusPluginUtils.GetImage("missingsButton.Image.png");
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public Bitmap2 DisplayImage => PerseusPluginUtils.GetImage("missingsButton.Image.png");
 		public string Name => "Filter rows based on valid values";
 		public string Heading => "Filter rows";
 		public bool IsActive => true;

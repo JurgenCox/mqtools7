@@ -8,7 +8,8 @@ using MqApi.Param;
 using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.Rearrange{
 	public class ReorderRemoveAnnotRows : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string HelpOutput => "Same matrix but with annotation rows removed or in new order.";
 		public string[] HelpSupplTables => new string[0];

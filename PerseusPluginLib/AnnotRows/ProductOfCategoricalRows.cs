@@ -7,7 +7,8 @@ using MqApi.Util;
 using MqApi.Drawing;
 namespace PerseusPluginLib.AnnotRows{
 	public class ProductOfCategoricalRows : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataAnnotation;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description => "Two or more categorical rows are combined into one by using product terms.";
 		public string HelpOutput => "Matrix with the product categorical row added.";

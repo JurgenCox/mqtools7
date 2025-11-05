@@ -13,7 +13,8 @@ using PerseusPluginLib.AnnotCols.AnnotationProvider;
 using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.AnnotCols{
 	public class AddAnnotationToMatrix : IMatrixProcessing{
-		public bool HasButton => true;
+		public string Category => IMatrixProcessingCategories.DataAnnotation;
+        public bool HasButton => true;
 		public Bitmap2 DisplayImage => PerseusPluginUtils.GetImage("network.png");
 		public string Description
 			=>
