@@ -8,7 +8,8 @@ using MqApi.Param;
 using MqUtil.Num;
 namespace PerseusPluginLib.Basic{
 	public class AddNoise : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description => "Modulate the data with Gaussian noise.";
 		public string HelpOutput => "Same as input matrix with random noise added to the expression columns.";
