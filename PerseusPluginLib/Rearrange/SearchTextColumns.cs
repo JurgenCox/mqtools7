@@ -5,7 +5,8 @@ using MqApi.Matrix;
 using MqApi.Param;
 namespace PerseusPluginLib.Rearrange{
 	public class SearchTextColumns : IMatrixProcessing{
-		public bool HasButton => false;
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description =>
 			"A new categorical column is generated representing search results in a text column.";

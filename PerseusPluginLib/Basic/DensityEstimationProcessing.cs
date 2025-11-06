@@ -9,7 +9,8 @@ using MqUtil.Num;
 using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.Basic{
 	public class DensityEstimationProcessing : IMatrixProcessing{
-		public string Name => "Density estimation";
+		public string Category => IMatrixProcessingCategories.DataHandling;
+        public string Name => "Density estimation";
 		public float DisplayRank => -3;
 		public bool IsActive => true;
 		public bool HasButton => true;
