@@ -10,7 +10,7 @@ using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.Filter{
 	public class FilterDuplicateRows : IMatrixProcessing{
 		public bool HasButton => false;
-		public string Category => IMatrixProcessingCategories.DataAnnotation;
+		public string Category => IMatrixProcessingCategories.DataHandling;
         public Bitmap2 DisplayImage => null;
 		public string Description =>
 			"Remove duplicate rows based on the specified columns. Caution! Limited numerical accuracy: Uses textual representation of values.";

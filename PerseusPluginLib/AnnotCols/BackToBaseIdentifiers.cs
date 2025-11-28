@@ -20,7 +20,7 @@ namespace PerseusPluginLib.AnnotCols{
 		public string[] HelpSupplTables => new string[0];
 		public int NumSupplTables => 0;
 		public string Name => "To base identifiers";
-		public string Heading => "Annot. columns";
+		public string Heading => "Add annotation columns";
 		public bool IsActive => true;
 		public float DisplayRank => -19.5f;
 		public string[] HelpDocuments => new string[0];

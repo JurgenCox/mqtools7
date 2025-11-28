@@ -21,7 +21,7 @@ namespace PerseusPluginLib.Rearrange{
 				"Creates for the specified multi-numeric columns a numeric column containing the result of the specified operation " +
 				"applied to the items in each cell of each selected multi-numeric column.";
 		public string Name => "Convert multi-numeric column";
-		public string Heading => "Rearrange";
+		public string Heading => "Matrix structure operations";
 		public bool IsActive => true;
 		public float DisplayRank => 17;
 		public string[] HelpSupplTables => new string[0];

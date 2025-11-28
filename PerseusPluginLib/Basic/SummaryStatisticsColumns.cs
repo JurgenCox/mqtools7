@@ -7,11 +7,11 @@ using MqApi.Num;
 using MqApi.Param;
 namespace PerseusPluginLib.Basic{
 	public class SummaryStatisticsColumns : IMatrixProcessing{
-		public string Category => IMatrixProcessingCategories.DataAnnotation;
+		public string Category => IMatrixProcessingCategories.StatisticalAnalysis;
         public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Name => "Summary statistics (columns)";
-		public string Heading => "Basic";
+		public string Heading => "Descriptive statistics";
 		public bool IsActive => true;
 		public float DisplayRank => -6;
 		public string[] HelpDocuments => new string[0];

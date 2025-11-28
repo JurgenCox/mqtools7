@@ -21,7 +21,7 @@ namespace PerseusPluginLib.Rearrange{
 				"to have the same number of semicolon-separated elements as there are values in the cell(s) " +
 				"of the multi-numeric columns(s).";
 		public string Name => "Expand multi-numeric and text columns";
-		public string Heading => "Rearrange";
+		public string Heading => "Expand multi-numeric and string columns";
 		public bool IsActive => true;
 		public float DisplayRank => 12;
 		public string[] HelpSupplTables => new string[0];

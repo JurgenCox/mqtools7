@@ -22,7 +22,7 @@ namespace PerseusPluginLib.AnnotRows{
 		public string[] HelpSupplTables => new string[0];
 		public int NumSupplTables => 0;
 		public string Name => "Categorical annotation rows";
-		public string Heading => "Annot. rows";
+		public string Heading => "Add annotation rows";
 		public bool IsActive => true;
 		public float DisplayRank => 1;
 		public string[] HelpDocuments => new string[0];

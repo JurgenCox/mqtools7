@@ -14,7 +14,7 @@ namespace PerseusPluginLib.Norm{
 		public string Category => IMatrixProcessingCategories.DataNormalization;
         public Bitmap2 DisplayImage => PerseusPluginUtils.GetImage("zscoreButton.Image.png");
 		public string Name => "Z-score";
-		public string Heading => "Normalization";
+		public string Heading => "Scale and standardize";
 		public bool IsActive => true;
 		public float DisplayRank => -10;
 		public string HelpOutput => "Normalized matrix.";

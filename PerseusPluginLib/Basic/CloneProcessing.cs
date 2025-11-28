@@ -13,7 +13,7 @@ namespace PerseusPluginLib.Basic{
 		public string[] HelpSupplTables => new string[0];
 		public int NumSupplTables => 0;
 		public string Name => "Clone";
-		public string Heading => "Basic";
+		public string Heading => "Matrix structure operations";
 		public bool IsActive => true;
 		public float DisplayRank => 100;
 		public string[] HelpDocuments => new string[0];

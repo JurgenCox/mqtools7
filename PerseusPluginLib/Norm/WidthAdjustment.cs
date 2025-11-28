@@ -20,7 +20,7 @@ namespace PerseusPluginLib.Norm{
 		public string[] HelpSupplTables => new string[0];
 		public int NumSupplTables => 0;
 		public string Name => "Width adjustment";
-		public string Heading => "Normalization";
+		public string Heading => "Scale and standardize";
 		public bool IsActive => true;
 		public float DisplayRank => -7;
 		public string[] HelpDocuments => new string[0];

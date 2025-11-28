@@ -10,7 +10,7 @@ using MqApi.Num;
 using MqApi.Param;
 namespace PerseusPluginLib.AnnotCols{
 	public class CategoryCounting : IMatrixProcessing{
-		public string Category => IMatrixProcessingCategories.DataAnnotation;
+		public string Category => IMatrixProcessingCategories.StatisticalAnalysis;
         public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description => "For each term in a categorical column one counts the number of occurrences.";
@@ -18,7 +18,7 @@ namespace PerseusPluginLib.AnnotCols{
 		public string[] HelpSupplTables => new string[0];
 		public int NumSupplTables => 0;
 		public string Name => "Category counting";
-		public string Heading => "Annot. columns";
+		public string Heading => "Descriptive statistics";
 		public bool IsActive => true;
 		public float DisplayRank => 3;
 		public string[] HelpDocuments => new string[0];

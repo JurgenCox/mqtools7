@@ -15,7 +15,7 @@ namespace PerseusPluginLib.Norm{
 		public string[] HelpSupplTables => new string[0];
 		public int NumSupplTables => 0;
 		public string Name => "Subtract row cluster";
-		public string Heading => "Normalization";
+		public string Heading => "Normalize to reference";
 		public bool IsActive => true;
 		public float DisplayRank => 0;
 		public string[] HelpDocuments => new string[0];

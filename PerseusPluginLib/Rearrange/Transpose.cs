@@ -18,7 +18,7 @@ namespace PerseusPluginLib.Rearrange{
 		public string[] HelpSupplTables => new string[0];
 		public int NumSupplTables => 0;
 		public string Name => "Transpose";
-		public string Heading => "Rearrange";
+		public string Heading => "Matrix structure operations";
 		public bool IsActive => true;
 		public float DisplayRank => 5;
 		public string[] HelpDocuments => new string[0];
