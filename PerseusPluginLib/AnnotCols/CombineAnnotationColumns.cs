@@ -9,7 +9,7 @@ using MqApi.Param;
 namespace PerseusPluginLib.AnnotCols{
 	public class CombineAnnotationColumns : IMatrixProcessing{
 		private static readonly string[] strategies ={"Union", "Intersection", "Majority"};
-		public string Category => IMatrixProcessingCategories.DataAnnotation;
+		public string Category => IMatrixProcessingCategories.StatisticalAnalysis;
         public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Description => "Combine annotations columns using different strategies.";
@@ -17,7 +17,7 @@ namespace PerseusPluginLib.AnnotCols{
 		public string[] HelpSupplTables => new string[0];
 		public int NumSupplTables => 0;
 		public string Name => "Combine annotation columns";
-		public string Heading => "Annot. columns";
+		public string Heading => "Descriptive statistics";
 		public bool IsActive => true;
 		public float DisplayRank => 4;
 		public string[] HelpDocuments => new string[0];

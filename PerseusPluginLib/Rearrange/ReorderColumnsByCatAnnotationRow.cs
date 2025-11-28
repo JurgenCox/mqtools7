@@ -12,7 +12,7 @@ namespace PerseusPluginLib.Rearrange{
 		public string HelpOutput => "Same matrix but with columns in the new order implied by a categorical row.";
 		public string[] HelpSupplTables => new string[0];
 		public int NumSupplTables => 0;
-		public string Heading => "Rearrange";
+		public string Heading => "Matrix structure operations";
 		public string Name => "Reorder columns by categorical annotation row";
 		public bool IsActive => true;
 		public float DisplayRank => 2.95f;

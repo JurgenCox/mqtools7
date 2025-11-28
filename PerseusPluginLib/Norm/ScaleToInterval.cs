@@ -12,7 +12,7 @@ namespace PerseusPluginLib.Norm{
         public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Name => "Scale to interval";
-		public string Heading => "Normalization";
+		public string Heading => "Scale and standardize";
 		public bool IsActive => true;
 		public float DisplayRank => -7;
 		public string HelpOutput => "";

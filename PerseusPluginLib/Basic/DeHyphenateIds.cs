@@ -11,7 +11,7 @@ namespace PerseusPluginLib.Basic{
         public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Name => "De-hyphenate ids";
-		public string Heading => "Rearrange";
+		public string Heading => "Matrix value operations";
 		public bool IsActive => true;
 		public float DisplayRank => 10;
 		public string[] HelpSupplTables => new string[0];

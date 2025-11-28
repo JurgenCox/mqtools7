@@ -8,11 +8,11 @@ using MqApi.Param;
 using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.Basic{
 	public class Quantiles : IMatrixProcessing{
-		public string Category => IMatrixProcessingCategories.DataHandling;
+		public string Category => IMatrixProcessingCategories.StatisticalAnalysis;
         public bool HasButton => false;
 		public Bitmap2 DisplayImage => PerseusPluginUtils.GetImage("quantiles.png");
 		public string Name => "Quantiles";
-		public string Heading => "Basic";
+		public string Heading => "Descriptive statistics";
 		public bool IsActive => true;
 		public float DisplayRank => -4;
 		public string HelpOutput

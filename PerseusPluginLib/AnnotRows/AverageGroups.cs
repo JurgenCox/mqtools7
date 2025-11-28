@@ -9,14 +9,14 @@ using MqApi.Param;
 using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.AnnotRows{
 	public class AverageGroups : IMatrixProcessing{
-		public string Category => IMatrixProcessingCategories.DataAnnotation;
+		public string Category => IMatrixProcessingCategories.StatisticalAnalysis;
         public bool HasButton => true;
 		public Bitmap2 DisplayImage => PerseusPluginUtils.GetImage("average.png");
 		public string HelpOutput => "Averaged main matrix containing as many columns as there were groups defined.";
 		public string[] HelpSupplTables => new string[0];
 		public int NumSupplTables => 0;
 		public string Name => "Average groups";
-		public string Heading => "Annot. rows";
+		public string Heading => "Descriptive statistics";
 		public bool IsActive => true;
 		public float DisplayRank => 3;
 		public string[] HelpDocuments => new string[0];

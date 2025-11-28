@@ -12,7 +12,7 @@ using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.Filter{
 	public class FilterNumericalColumn : IMatrixProcessing{
 		public bool HasButton => false;
-		public string Category => IMatrixProcessingCategories.DataAnnotation;
+		public string Category => IMatrixProcessingCategories.DataHandling;
         public Bitmap2 DisplayImage => null;
 		public string HelpOutput => "The filtered matrix.";
 		public string[] HelpSupplTables => new string[0];

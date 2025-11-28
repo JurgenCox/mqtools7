@@ -29,7 +29,7 @@ namespace PerseusPluginLib.Basic{
 		public string[] HelpSupplTables => new string[0];
 		public int NumSupplTables => 0;
 		public string Name => "Combine rows by identifiers";
-		public string Heading => "Basic";
+		public string Heading => "Matrix value operations";
 		public bool IsActive => true;
 		public float DisplayRank => 20;
 		public string[] HelpDocuments => new string[0];

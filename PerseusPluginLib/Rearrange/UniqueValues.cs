@@ -14,7 +14,7 @@ namespace PerseusPluginLib.Rearrange{
 				"Values within each row in the selected text columns are made unique by removing duplicates. The entries are " +
 				"interpreted as separated by semicolons.";
 		public string Name => "Unique values";
-		public string Heading => "Rearrange";
+		public string Heading => "Matrix structure operations";
 		public bool IsActive => true;
 		public float DisplayRank => 16;
 		public string[] HelpSupplTables => new string[0];

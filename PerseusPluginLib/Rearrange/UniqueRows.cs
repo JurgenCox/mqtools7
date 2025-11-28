@@ -14,7 +14,7 @@ namespace PerseusPluginLib.Rearrange{
 		public Bitmap2 DisplayImage => null;
 		public string Description => "Combines rows with identical values in the specified columns";
 		public string Name => "Unique rows";
-		public string Heading => "Rearrange";
+		public string Heading => "Matrix structure operations";
 		public bool IsActive => true;
 		public float DisplayRank => 16;
 		public string[] HelpSupplTables => new string[0];

@@ -18,7 +18,7 @@ namespace PerseusPluginLib.Test{
 		public string Category => IMatrixProcessingCategories.StatisticalAnalysis;
         public Bitmap2 DisplayImage => PerseusPluginUtils.GetImage("pn.png");
 		public string Name => "Multiple-sample tests";
-		public string Heading => "Tests";
+		public string Heading => "Group comparison tests";
 		public bool IsActive => true;
 		public float DisplayRank => 2;
 		public string[] HelpSupplTables => new string[0];

@@ -9,13 +9,13 @@ using MqUtil.Num;
 using PerseusPluginLib.Utils;
 namespace PerseusPluginLib.Basic{
 	public class DensityEstimationProcessing : IMatrixProcessing{
-		public string Category => IMatrixProcessingCategories.DataHandling;
+		public string Category => IMatrixProcessingCategories.StatisticalAnalysis;
         public string Name => "Density estimation";
 		public float DisplayRank => -3;
 		public bool IsActive => true;
 		public bool HasButton => true;
 		public Bitmap2 DisplayImage => PerseusPluginUtils.GetImage("density.Image.png");
-		public string Heading => "Basic";
+		public string Heading => "Descriptive statistics";
 		public string[] HelpSupplTables => new string[0];
 		public int NumSupplTables => 0;
 		public string[] HelpDocuments => new string[0];

@@ -17,7 +17,7 @@ namespace PerseusPluginLib.Norm{
 		public string Url =>
             "https://cox-labs.github.io/coxdocs/unitvector.html";
 		public string Name => "Unit vectors";
-		public string Heading => "Normalization";
+		public string Heading => "Scale and standardize";
 		public bool IsActive => true;
 		public float DisplayRank => -8;
 		public string Description =>

@@ -15,7 +15,7 @@ namespace PerseusPluginLib.AnnotRows{
 		public string[] HelpSupplTables => new string[0];
 		public int NumSupplTables => 0;
 		public string Name => "Join terms in categorical row";
-		public string Heading => "Annot. rows";
+		public string Heading => "Annotation integration";
 		public bool IsActive => true;
 		public float DisplayRank => 20;
 		public string[] HelpDocuments => new string[0];
