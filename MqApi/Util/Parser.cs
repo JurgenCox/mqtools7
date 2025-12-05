@@ -37,11 +37,19 @@ namespace MqApi.Util{
 		public static bool TryShort(string s, out short x){
 			return short.TryParse(s, NumberStyles.Any, CultureInfo.InvariantCulture, out x);
 		}
-		public static bool Bool(string s){
-			return bool.Parse(s);
+		public static bool Bool(string s) {
+			return s switch {
+				"+" => true,
+				"-" => false,
+				_ => bool.Parse(s)
+			};
 		}
-		public static bool TryBool(string s, out bool x){
-			return bool.TryParse(s, out x);
+		public static bool TryBool(string s, out bool x) {
+			return s switch {
+				"+" => bool.TryParse("true", out x),
+				"-" => bool.TryParse("false", out x),
+				_ => bool.TryParse(s, out x)
+			};
 		}
 		public static byte Byte(string s){
 			return byte.Parse(s, NumberStyles.Any, CultureInfo.InvariantCulture);
