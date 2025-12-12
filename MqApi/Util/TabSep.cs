@@ -4,18 +4,18 @@ namespace MqApi.Util{
 		public static string[] GetColumn(string columnName, string filename, char separator){
 			return GetColumn(columnName, filename, 0, separator);
 		}
-		public static string[] GetColumn(string columnName, string filename, int nskip, char separator){
-			return GetColumns(new[]{columnName}, filename, nskip, separator)[0];
+		public static string[] GetColumn(string columnName, string filename, int nSkip, char separator){
+			return GetColumns([columnName], filename, nSkip, separator)[0];
 		}
 		public static double[][] GetDoubleColumns(string[] columnNames, string filename, char separator){
 			return GetDoubleColumns(columnNames, filename, 0, separator);
 		}
-		public static double[][] GetDoubleColumns(string[] columnNames, string filename, int nskip, char separator){
-			return GetDoubleColumns(columnNames, filename, double.NaN, nskip, separator);
+		public static double[][] GetDoubleColumns(string[] columnNames, string filename, int nSkip, char separator){
+			return GetDoubleColumns(columnNames, filename, double.NaN, nSkip, separator);
 		}
-		public static double[][] GetDoubleColumns(string[] columnNames, string filename, double defaultValue, int nskip,
+		public static double[][] GetDoubleColumns(string[] columnNames, string filename, double defaultValue, int nSkip,
 			char separator){
-			string[][] x = GetColumns(columnNames, filename, nskip, separator);
+			string[][] x = GetColumns(columnNames, filename, nSkip, separator);
 			double[][] d = new double[x.Length][];
 			for (int i = 0; i < d.Length; i++){
 				d[i] = new double[x[i].Length];
@@ -31,21 +31,21 @@ namespace MqApi.Util{
 		public static bool[] GetBoolColumn(string columnName, string filename, char separator){
 			return GetBoolColumn(columnName, filename, false, 0, separator);
 		}
-		public static double[] GetDoubleColumn(string columnName, string filename, int nskip, char separator){
-			return GetDoubleColumn(columnName, filename, double.NaN, nskip, separator);
+		public static double[] GetDoubleColumn(string columnName, string filename, int nSkip, char separator){
+			return GetDoubleColumn(columnName, filename, double.NaN, nSkip, separator);
 		}
-		public static double[] GetDoubleColumn(string columnName, string filename, double defaultValue, int nskip,
+		public static double[] GetDoubleColumn(string columnName, string filename, double defaultValue, int nSkip,
 			char separator){
-			string[] x = GetColumn(columnName, filename, nskip, separator);
+			string[] x = GetColumn(columnName, filename, nSkip, separator);
 			double[] d = new double[x.Length];
 			for (int i = 0; i < d.Length; i++){
 				d[i] = Parser.TryDouble(x[i], out double w) ? w : defaultValue;
 			}
 			return d;
 		}
-		public static bool[] GetBoolColumn(string columnName, string filename, bool defaultValue, int nskip,
+		public static bool[] GetBoolColumn(string columnName, string filename, bool defaultValue, int nSkip,
 			char separator){
-			string[] x = GetColumn(columnName, filename, nskip, separator);
+			string[] x = GetColumn(columnName, filename, nSkip, separator);
 			bool[] d = new bool[x.Length];
 			for (int i = 0; i < d.Length; i++){
 				d[i] = bool.TryParse(x[i], out bool w) ? w : defaultValue;
@@ -55,12 +55,12 @@ namespace MqApi.Util{
 		public static float[][] GetFloatColumns(string[] columnNames, string filename, char separator){
 			return GetFloatColumns(columnNames, filename, float.NaN, 0, separator);
 		}
-		public static float[][] GetFloatColumns(string[] columnNames, string filename, int nskip, char separator){
-			return GetFloatColumns(columnNames, filename, float.NaN, nskip, separator);
+		public static float[][] GetFloatColumns(string[] columnNames, string filename, int nSkip, char separator){
+			return GetFloatColumns(columnNames, filename, float.NaN, nSkip, separator);
 		}
-		public static float[][] GetFloatColumns(string[] columnNames, string filename, float defaultValue, int nskip,
+		public static float[][] GetFloatColumns(string[] columnNames, string filename, float defaultValue, int nSkip,
 			char separator){
-			string[][] x = GetColumns(columnNames, filename, nskip, separator);
+			string[][] x = GetColumns(columnNames, filename, nSkip, separator);
 			float[][] d = new float[x.Length][];
 			for (int i = 0; i < d.Length; i++){
 				d[i] = new float[x[i].Length];
@@ -70,9 +70,9 @@ namespace MqApi.Util{
 			}
 			return d;
 		}
-		public static float[,] GetFloatColumns2D(string[] columnNames, string filename, float defaultValue, int nskip,
+		public static float[,] GetFloatColumns2D(string[] columnNames, string filename, float defaultValue, int nSkip,
 			char separator){
-			string[][] x = GetColumns(columnNames, filename, nskip, separator);
+			string[][] x = GetColumns(columnNames, filename, nSkip, separator);
 			float[,] d = new float[x[0].Length, x.Length];
 			for (int i = 0; i < d.GetLength(0); i++){
 				for (int j = 0; j < d.GetLength(1); j++){
@@ -81,15 +81,15 @@ namespace MqApi.Util{
 			}
 			return d;
 		}
-		public static float[] GetFloatColumn(string columnName, string filename, int nskip, char separator){
-			return GetFloatColumn(columnName, filename, float.NaN, nskip, separator);
+		public static float[] GetFloatColumn(string columnName, string filename, int nSkip, char separator){
+			return GetFloatColumn(columnName, filename, float.NaN, nSkip, separator);
 		}
 		public static float[] GetFloatColumn(string columnName, string filename, char separator){
 			return GetFloatColumn(columnName, filename, float.NaN, 0, separator);
 		}
-		public static float[] GetFloatColumn(string columnName, string filename, float defaultValue, int nskip,
+		public static float[] GetFloatColumn(string columnName, string filename, float defaultValue, int nSkip,
 			char separator){
-			string[] x = GetColumn(columnName, filename, nskip, separator);
+			string[] x = GetColumn(columnName, filename, nSkip, separator);
 			float[] d = new float[x.Length];
 			for (int i = 0; i < d.Length; i++){
 				d[i] = Parser.TryFloat(x[i], out float w) ? w : defaultValue;
@@ -99,9 +99,9 @@ namespace MqApi.Util{
 		public static int[] GetIntColumn(string columnName, string filename, char separator){
 			return GetIntColumn(columnName, filename, -1, 0, separator);
 		}
-		public static int[] GetIntColumn(string columnName, string filename, int defaultValue, int nskip,
+		public static int[] GetIntColumn(string columnName, string filename, int defaultValue, int nSkip,
 			char separator){
-			string[] x = GetColumn(columnName, filename, nskip, separator);
+			string[] x = GetColumn(columnName, filename, nSkip, separator);
 			int[] d = new int[x.Length];
 			for (int i = 0; i < d.Length; i++){
 				d[i] = Parser.TryInt(x[i], out int w) ? w : defaultValue;
@@ -111,44 +111,23 @@ namespace MqApi.Util{
 		public static short[] GetShortColumn(string columnName, string filename, char separator){
 			return GetShortColumn(columnName, filename, -1, 0, separator);
 		}
-		public static short[] GetShortColumn(string columnName, string filename, short defaultValue, int nskip,
+		public static short[] GetShortColumn(string columnName, string filename, short defaultValue, int nSkip,
 			char separator){
-			string[] x = GetColumn(columnName, filename, nskip, separator);
+			string[] x = GetColumn(columnName, filename, nSkip, separator);
 			short[] d = new short[x.Length];
 			for (int i = 0; i < d.Length; i++){
 				d[i] = Parser.TryShort(x[i], out short w) ? w : defaultValue;
 			}
 			return d;
 		}
-		public static string[][] GetColumns(string[] columnNames, string filename, int nskip, char separator){
-			return GetColumns(columnNames, filename, nskip, null, null, separator);
+		public static string[][] GetColumns(string[] columnNames, string filename, int nSkip, char separator){
+			return GetColumns(columnNames, filename, nSkip, null, null, separator);
 		}
-		public static string[][] GetColumns(string[] columnNames, string filename, int nskip,
+		public static string[][] GetColumns(string[] columnNames, string filename, int nSkip,
 			HashSet<string> commentPrefix, HashSet<string> commentPrefixExceptions, char separator){
 			StreamReader reader = FileUtils.GetReader(filename);
-			for (int i = 0; i < nskip; i++){
-				reader.ReadLine();
-			}
-			string line = reader.ReadLine();
-			if (commentPrefix != null){
-				while (IsCommentLine(line, commentPrefix, commentPrefixExceptions)){
-					line = reader.ReadLine();
-				}
-			}
-			string[] titles = line.Split(separator);
-			int[] colIndices = new int[columnNames.Length];
-			for (int i = 0; i < columnNames.Length; i++){
-				colIndices[i] = -1;
-				for (int j = 0; j < titles.Length; j++){
-					if (titles[j].Trim().Equals(columnNames[i])){
-						colIndices[i] = j;
-						break;
-					}
-				}
-				if (colIndices[i] == -1){
-					throw new ArgumentException("Column " + columnNames[i] + " does not exist.");
-				}
-			}
+			string line = Skip(reader, nSkip, commentPrefix, commentPrefixExceptions);
+			int[] colIndices = GetColumnIndices(line, columnNames, separator);
 			List<string[]> x = new List<string[]>();
 			while ((line = reader.ReadLine()) != null){
 				if (line.Trim().Length == 0){
@@ -180,35 +159,65 @@ namespace MqApi.Util{
 			}
 			return result;
 		}
-		public static bool HasColumn(string columnName, string filename, char separator){
+		private static int[] GetColumnIndices(string line, string[] columnNames, char separator) {
+			string[] titles = line.Split(separator);
+			int[] colIndices = new int[columnNames.Length];
+			for (int i = 0; i < columnNames.Length; i++) {
+				colIndices[i] = -1;
+				for (int j = 0; j < titles.Length; j++) {
+					if (titles[j].Trim().Equals(columnNames[i])) {
+						colIndices[i] = j;
+						break;
+					}
+				}
+				if (colIndices[i] == -1) {
+					throw new ArgumentException("Column " + columnNames[i] + " does not exist.");
+				}
+			}
+			return colIndices;
+		}
+	private static string Skip(StreamReader reader, int nSkip, HashSet<string> commentPrefix, 
+			HashSet<string> commentPrefixExceptions) {
+			for (int i = 0; i < nSkip; i++) {
+				reader.ReadLine();
+			}
+			string line = reader.ReadLine();
+			if (commentPrefix != null) {
+				while (IsCommentLine(line, commentPrefix, commentPrefixExceptions)) {
+					line = reader.ReadLine();
+				}
+			}
+			return line;
+		}
+	public static bool HasColumn(string columnName, string filename, char separator){
 			return HasColumn(columnName, filename, 0, separator);
 		}
 		public static bool HasColumnCaseInsensitive(string columnName, string filename, char separator,
 			out string matchColumnName){
 			return HasColumnCaseInsensitive(columnName, filename, 0, separator, out matchColumnName);
 		}
-		public static bool HasColumn(string columnName, string filename, int nskip, char separator){
-			return HasColumn(columnName, filename, nskip, null, null, separator);
+		public static bool HasColumn(string columnName, string filename, int nSkip, char separator){
+			return HasColumn(columnName, filename, nSkip, null, null, separator);
 		}
-		public static bool HasColumnCaseInsensitive(string columnName, string filename, int nskip, char separator,
+		public static bool HasColumnCaseInsensitive(string columnName, string filename, int nSkip, char separator,
 			out string matchColumnName){
-			return HasColumnCaseInsensitive(columnName, filename, nskip, null, null, separator, out matchColumnName);
+			return HasColumnCaseInsensitive(columnName, filename, nSkip, null, null, separator, out matchColumnName);
 		}
-		public static bool HasColumn(string columnName, string filename, int nskip, HashSet<string> commentPrefix,
+		public static bool HasColumn(string columnName, string filename, int nSkip, HashSet<string> commentPrefix,
 			HashSet<string> commentPrefixExceptions, char separator){
-			return HasColumnImpl(columnName, filename, nskip, commentPrefix, commentPrefixExceptions, separator, false,
+			return HasColumnImpl(columnName, filename, nSkip, commentPrefix, commentPrefixExceptions, separator, false,
 				out string _);
 		}
-		public static bool HasColumnCaseInsensitive(string columnName, string filename, int nskip,
+		public static bool HasColumnCaseInsensitive(string columnName, string filename, int nSkip,
 			HashSet<string> commentPrefix, HashSet<string> commentPrefixExceptions, char separator,
 			out string matchColumnName){
-			return HasColumnImpl(columnName, filename, nskip, commentPrefix, commentPrefixExceptions, separator, true,
+			return HasColumnImpl(columnName, filename, nSkip, commentPrefix, commentPrefixExceptions, separator, true,
 				out matchColumnName);
 		}
-		private static bool HasColumnImpl(string columnName, string filename, int nskip, HashSet<string> commentPrefix,
+		private static bool HasColumnImpl(string columnName, string filename, int nSkip, HashSet<string> commentPrefix,
 			HashSet<string> commentPrefixExceptions, char separator, bool caseInsensitive, out string matchColumnName){
 			StreamReader reader = FileUtils.GetReader(filename);
-			for (int i = 0; i < nskip; i++){
+			for (int i = 0; i < nSkip; i++){
 				reader.ReadLine();
 			}
 			string line = reader.ReadLine();
@@ -236,13 +245,13 @@ namespace MqApi.Util{
 			return false;
 		}
 		public static string[][] GetColumnsIfContains(string[] columnNames, string controlColumn, string controlValue,
-			string filename, bool inverse, int nskip, char separator){
+			string filename, bool inverse, int nSkip, char separator){
 			string[] allNames = new string[columnNames.Length + 1];
 			for (int i = 0; i < columnNames.Length; i++){
 				allNames[i] = columnNames[i];
 			}
 			allNames[columnNames.Length] = controlColumn;
-			string[][] x = GetColumns(allNames, filename, nskip, separator);
+			string[][] x = GetColumns(allNames, filename, nSkip, separator);
 			string[] controlColumnValues = x[columnNames.Length];
 			List<int> valids = new List<int>();
 			for (int i = 0; i < controlColumnValues.Length; i++){
@@ -264,13 +273,13 @@ namespace MqApi.Util{
 			return result;
 		}
 		public static string[] GetColumnIfContains(string columnName, string controlColumn, string controlValue,
-			string filename, bool inverse, int nskip, char separator){
-			return GetColumnsIfContains(new[]{columnName}, controlColumn, controlValue, filename, inverse, nskip,
+			string filename, bool inverse, int nSkip, char separator){
+			return GetColumnsIfContains([columnName], controlColumn, controlValue, filename, inverse, nSkip,
 				separator)[0];
 		}
 		public static double[] GetDoubleColumnIfContains(string columnName, string controlColumn, string controlValue,
-			string filename, bool inverse, int nskip, char separator){
-			string[] x = GetColumnIfContains(columnName, controlColumn, controlValue, filename, inverse, nskip,
+			string filename, bool inverse, int nSkip, char separator){
+			string[] x = GetColumnIfContains(columnName, controlColumn, controlValue, filename, inverse, nSkip,
 				separator);
 			double[] d = new double[x.Length];
 			for (int i = 0; i < d.Length; i++){
@@ -278,8 +287,8 @@ namespace MqApi.Util{
 			}
 			return d;
 		}
-		public static string[] GetColumnNames(string filename, int nskip, char separator){
-			return GetColumnNames(filename, nskip, null, null, null, separator);
+		public static string[] GetColumnNames(string filename, int nSkip, char separator){
+			return GetColumnNames(filename, nSkip, null, null, null, separator);
 		}
 		public static string[] GetColumnNames(string filename, char separator){
 			return GetColumnNames(filename, 0, null, null, null, separator);
@@ -288,23 +297,23 @@ namespace MqApi.Util{
 			HashSet<string> commentPrefixExceptions, Dictionary<string, string[]> annotationRows, char separator){
 			return GetColumnNames(filename, 0, commentPrefix, commentPrefixExceptions, annotationRows, separator);
 		}
-		public static string[] GetColumnNames(string filename, int nskip, HashSet<string> commentPrefix,
+		public static string[] GetColumnNames(string filename, int nSkip, HashSet<string> commentPrefix,
 			HashSet<string> commentPrefixExceptions, Dictionary<string, string[]> annotationRows, char separator){
 			StreamReader reader = FileUtils.GetReader(filename, true);
-			string[] titles = GetColumnNames(reader, nskip, commentPrefix, commentPrefixExceptions, annotationRows,
+			string[] titles = GetColumnNames(reader, nSkip, commentPrefix, commentPrefixExceptions, annotationRows,
 				separator);
 			reader.Close();
 			return titles;
 		}
-		public static string[] GetColumnNames(StreamReader reader, int nskip, HashSet<string> commentPrefix,
+		public static string[] GetColumnNames(StreamReader reader, int nSkip, HashSet<string> commentPrefix,
 			HashSet<string> commentPrefixExceptions, Dictionary<string, string[]> annotationRows, char separator){
 			reader.BaseStream.Seek(0, SeekOrigin.Begin);
-			for (int i = 0; i < nskip; i++){
+			for (int i = 0; i < nSkip; i++){
 				reader.ReadLine();
 			}
 			string line = reader.ReadLine();
 			if (line == null){
-				return new string[0];
+				return [];
 			}
 			if (commentPrefix != null){
 				while (IsCommentLine(line, commentPrefix, commentPrefixExceptions)){
@@ -314,7 +323,7 @@ namespace MqApi.Util{
 			string[] titles = line.Split(separator);
 			for (int i = 0; i < titles.Length; i++){
 				string t = titles[i];
-				if (t.Length > 1 && t[0] == '\"' && t[t.Length - 1] == '\"') {
+				if (t.Length > 1 && t[0] == '\"' && t[^1] == '\"') {
 					titles[i] = t.Substring(1, t.Length - 2);
 				} 
 			}
@@ -366,21 +375,21 @@ namespace MqApi.Util{
 		public static int GetRowCount(string filename){
 			return GetRowCount(filename, 0);
 		}
-		public static int GetRowCount(string filename, int nskip){
-			return GetRowCount(filename, nskip, null, null);
+		public static int GetRowCount(string filename, int nSkip){
+			return GetRowCount(filename, nSkip, null, null);
 		}
-		public static int GetRowCount(string filename, int nskip, HashSet<string> commentPrefix,
+		public static int GetRowCount(string filename, int nSkip, HashSet<string> commentPrefix,
 			HashSet<string> commentPrefixExceptions){
 			StreamReader reader = FileUtils.GetReader(filename);
-			int count = GetRowCount(reader, nskip, commentPrefix, commentPrefixExceptions);
+			int count = GetRowCount(reader, nSkip, commentPrefix, commentPrefixExceptions);
 			reader.Close();
 			return count;
 		}
-		public static int GetRowCount(StreamReader reader, int nskip, HashSet<string> commentPrefix,
+		public static int GetRowCount(StreamReader reader, int nSkip, HashSet<string> commentPrefix,
 			HashSet<string> commentPrefixExceptions){
 			reader.BaseStream.Seek(0, SeekOrigin.Begin);
 			reader.ReadLine();
-			for (int i = 0; i < nskip; i++){
+			for (int i = 0; i < nSkip; i++){
 				reader.ReadLine();
 			}
 			int count = 0;
