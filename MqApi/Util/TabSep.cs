@@ -125,29 +125,9 @@ namespace MqApi.Util{
 		}
 		public static string[][] GetColumns(string[] columnNames, string filename, int nSkip,
 			HashSet<string> commentPrefix, HashSet<string> commentPrefixExceptions, char separator){
-			StreamReader reader = FileUtils.GetReader(filename);
-			string line = Skip(reader, nSkip, commentPrefix, commentPrefixExceptions);
-			int[] colIndices = GetColumnIndices(line, columnNames, separator);
 			List<string[]> x = new List<string[]>();
-			while ((line = reader.ReadLine()) != null){
-				if (line.Trim().Length == 0){
-					continue;
-				}
-				string[] w = line.Split(separator);
-				string[] z;
-				try{
-					z = w.SubArray(colIndices);
-				} catch (Exception){
-					continue;
-				}
-				for (int i = 0; i < z.Length; i++){
-					if (z[i].StartsWith("\"") && z[i].EndsWith("\"")){
-						z[i] = z[i].Substring(1, z[i].Length - 2);
-					}
-				}
-				x.Add(z);
-			}
-			reader.Close();
+			ProcessFile((z) => { x.Add(z); }, columnNames,  filename,  nSkip, commentPrefix, 
+				commentPrefixExceptions, separator);
 			string[][] result = new string[columnNames.Length][];
 			for (int i = 0; i < columnNames.Length; i++){
 				result[i] = new string[x.Count];
@@ -159,7 +139,37 @@ namespace MqApi.Util{
 			}
 			return result;
 		}
-		private static int[] GetColumnIndices(string line, string[] columnNames, char separator) {
+		public static void ProcessFile(Action<string[]> processLine, string[] columnNames, string filename, int nSkip,
+			char separator) {
+			ProcessFile(processLine, columnNames, filename, nSkip, null, null, separator);
+		}
+		public static void ProcessFile(Action<string[]> processLine,string[] columnNames, string filename, int nSkip,
+			HashSet<string> commentPrefix, HashSet<string> commentPrefixExceptions, char separator) {
+			StreamReader reader = FileUtils.GetReader(filename);
+			string line = Skip(reader, nSkip, commentPrefix, commentPrefixExceptions);
+			int[] colIndices = GetColumnIndices(line, columnNames, separator);
+			while ((line = reader.ReadLine()) != null) {
+				if (line.Trim().Length == 0) {
+					continue;
+				}
+				string[] w = line.Split(separator);
+				string[] z;
+				try {
+					z = w.SubArray(colIndices);
+				}catch (Exception) {
+					continue;
+				}
+				for (int i = 0; i < z.Length; i++) {
+					if (z[i].StartsWith("\"") && z[i].EndsWith("\"")) {
+						z[i] = z[i].Substring(1, z[i].Length - 2);
+					}
+				}
+				processLine(z);
+			}
+			reader.Close();
+		}
+
+	private static int[] GetColumnIndices(string line, string[] columnNames, char separator) {
 			string[] titles = line.Split(separator);
 			int[] colIndices = new int[columnNames.Length];
 			for (int i = 0; i < columnNames.Length; i++) {
