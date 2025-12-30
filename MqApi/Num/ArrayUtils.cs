@@ -906,6 +906,9 @@ namespace MqApi.Num{
 		///     An array containing the elements of the input array indexed by the <code>indices</code> array.
 		/// </returns>
 		public static T[] SubArray<T>(this IList<T> array, IList<int> indices){
+			if (array == null) {
+				return null;
+			}
 			T[] result = new T[indices.Count];
 			for (int i = 0; i < result.Length; i++){
 				result[i] = array[indices[i]];
