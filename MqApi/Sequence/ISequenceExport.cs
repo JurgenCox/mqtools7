@@ -2,7 +2,7 @@
 using MqApi.Param;
 namespace MqApi.Sequence{
 	public interface ISequenceExport : ISequenceActivity, IExport{
-		void Export(Parameters parameters, ISequenceData ndata, ProcessInfo processInfo);
+		void Export(Parameters parameters, ISequenceData data, ProcessInfo processInfo);
 		/// <summary>
 		/// Define here the parameters that determine the specifics of the export.
 		/// </summary>
