@@ -4,6 +4,8 @@
 		Document,
 		Sequence,
 		Network,
+		SingleCell,
+		Spatial,
 		Mri,
 		Visualization,
 		Unknown
