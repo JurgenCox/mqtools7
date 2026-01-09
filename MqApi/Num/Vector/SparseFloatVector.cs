@@ -28,7 +28,8 @@ namespace MqApi.Num.Vector{
 		}
 		public SparseFloatVector(){
 		}
-		public SparseFloatVector(int[] indices, float[] values, int length){
+		public SparseFloatVector(int[] indices, float[] values, int length)
+		{
 			this.indices = indices;
 			this.values = values;
 			this.length = length;

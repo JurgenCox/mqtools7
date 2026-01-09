@@ -7,7 +7,19 @@ namespace MqApi.Num.Matrix{
 			this.vals = vals;
 			this.nrows = nrows;
 		}
-		private SparseColumnFloatMatrixIndexer(){
+		private SparseColumnFloatMatrixIndexer()
+		{
+		}
+		public SparseColumnFloatMatrixIndexer(BinaryReader reader)
+		{
+			nrows = reader.ReadInt32();
+			int n = reader.ReadInt32();
+			vals = new SparseFloatVector[n];
+			for (int i = 0; i < n; i++)
+			{
+				vals[i] = new SparseFloatVector();
+				vals[i].Read(reader);
+			}
 		}
 		public override void Write(BinaryWriter writer){
 			writer.Write(nrows);
@@ -20,14 +32,14 @@ namespace MqApi.Num.Matrix{
 			nrows = nrows1;
 			vals = new SparseFloatVector[ncols];
 			for (int i = 0; i < ncols; i++){
-				vals[i] = new SparseFloatVector(new int[0], new float[0], nrows);
+				vals[i] = new SparseFloatVector([], [], nrows);
 			}
 		}
 		public override void Set(double[,] value){
 			nrows = value.GetLength(0);
 			vals = new SparseFloatVector[value.GetLength(1)];
 			for (int i = 0; i < vals.Length; i++){
-				List<int> v = new List<int>();
+				List<int> v = [];
 				for (int j = 0; j < nrows; j++){
 					if (value[j, i] == 0){
 						continue;
@@ -43,8 +55,8 @@ namespace MqApi.Num.Matrix{
 			}
 		}
 		public override BaseVector GetRow(int row){
-			List<int> inds = new List<int>();
-			List<float> x = new List<float>();
+			List<int> inds = [];
+			List<float> x = [];
 			for (int i = 0; i < vals.Length; i++){
 				float w = (float) vals[i][row];
 				if (w == 0){

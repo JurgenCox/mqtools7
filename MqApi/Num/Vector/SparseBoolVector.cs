@@ -166,7 +166,7 @@ namespace MqApi.Num.Vector{
 			writer.Write(length);
 		}
 		public override VectorType GetVectorType(){
-			return VectorType.SoarseBool;
+			return VectorType.SparseBool;
 		}
 		public override bool ContainsNaNOrInf(){
 			return false;

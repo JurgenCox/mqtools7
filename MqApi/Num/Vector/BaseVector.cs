@@ -89,7 +89,7 @@ namespace MqApi.Num.Vector{
 				case VectorType.BoolArray:
 					result = new BoolArrayVector();
 					break;
-				case VectorType.SoarseBool:
+				case VectorType.SparseBool:
 					result = new SparseBoolVector();
 					break;
 				case VectorType.DoubleArray:

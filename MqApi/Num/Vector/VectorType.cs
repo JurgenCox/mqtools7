@@ -3,7 +3,7 @@
 		BoolArray,
 		DoubleArray,
 		FloatArray,
-		SoarseBool,
+		SparseBool,
 		SparseFloat
 	}
 }
