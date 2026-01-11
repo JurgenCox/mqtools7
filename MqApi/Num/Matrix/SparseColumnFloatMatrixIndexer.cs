@@ -7,7 +7,7 @@ namespace MqApi.Num.Matrix{
 			this.vals = vals;
 			this.nrows = nrows;
 		}
-		private SparseColumnFloatMatrixIndexer()
+		public SparseColumnFloatMatrixIndexer()
 		{
 		}
 		public SparseColumnFloatMatrixIndexer(BinaryReader reader)

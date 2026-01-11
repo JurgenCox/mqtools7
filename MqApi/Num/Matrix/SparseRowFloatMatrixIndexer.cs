@@ -1,4 +1,6 @@
 ﻿using MqApi.Num.Vector;
+using MqApi.Util;
+
 namespace MqApi.Num.Matrix{
 	public class SparseRowFloatMatrixIndexer : MatrixIndexer{
 		private SparseFloatVector[] vals;
@@ -7,7 +9,7 @@ namespace MqApi.Num.Matrix{
 			this.vals = vals;
 			this.ncolumns = ncolumns;
 		}
-		private SparseRowFloatMatrixIndexer()
+		public SparseRowFloatMatrixIndexer()
 		{
 		}
 		public SparseRowFloatMatrixIndexer(BinaryReader reader)
@@ -142,6 +144,19 @@ namespace MqApi.Num.Matrix{
 				v[i] = (SparseFloatVector) vals[i].Clone();
 			}
 			return new SparseRowFloatMatrixIndexer{vals = v, ncolumns = ncolumns};
+		}
+		public void Add(int[] data, long[] indices, int nThreads)
+		{
+			ThreadDistributor td = new ThreadDistributor(nThreads, data.Length, i =>
+			{
+				Add(data[i], (int)indices[i], i);
+			});
+			td.Start();
+		}
+
+		private void Add(int data, int column, int row)
+		{
+		  vals[row][column] = data;
 		}
 	}
 }
