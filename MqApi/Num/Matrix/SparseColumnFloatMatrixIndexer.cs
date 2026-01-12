@@ -93,9 +93,9 @@ namespace MqApi.Num.Matrix{
 			vals = ArrayUtils.SubArray(vals, columns);
 		}
 		public override MatrixIndexer Transpose(){
-			return new SparseRowFloatMatrixIndexer(vals, nrows);
+			throw new Exception("Never get here.");
 		}
-		public override bool ContainsNaNOrInf(){
+	public override bool ContainsNaNOrInf(){
 			foreach (SparseFloatVector val in vals){
 				if (val.ContainsNaNOrInf()){
 					return true;
@@ -142,6 +142,11 @@ namespace MqApi.Num.Matrix{
 				v[i] = (SparseFloatVector) vals[i].Clone();
 			}
 			return new SparseColumnFloatMatrixIndexer{vals = v, nrows = nrows};
+		}
+
+		public void SetColumn(float[] data, int[] indices, int col)
+		{
+			vals[col] = new SparseFloatVector(indices, data, nrows);
 		}
 	}
 }

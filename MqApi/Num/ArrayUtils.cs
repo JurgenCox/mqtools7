@@ -1940,6 +1940,15 @@ namespace MqApi.Num{
 			}
 			return result;
 		}
+		public static int[] ToInts(IList<long> doubles)
+		{
+			int[] result = new int[doubles.Count];
+			for (int i = 0; i < result.Length; i++)
+			{
+				result[i] = (int)doubles[i];
+			}
+			return result;
+		}
 		public static int[] ToInts(IList<double> doubles){
 			int[] result = new int[doubles.Count];
 			for (int i = 0; i < result.Length; i++){

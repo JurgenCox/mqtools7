@@ -3,9 +3,9 @@ using MqApi.Util;
 
 namespace MqApi.Num.Matrix{
 	public class SparseRowFloatMatrixIndexer : MatrixIndexer{
-		private SparseFloatVector[] vals;
+		private SparseFloatVectorDict[] vals;
 		private int ncolumns;
-		public SparseRowFloatMatrixIndexer(SparseFloatVector[] vals, int ncolumns){
+		public SparseRowFloatMatrixIndexer(SparseFloatVectorDict[] vals, int ncolumns){
 			this.vals = vals;
 			this.ncolumns = ncolumns;
 		}
@@ -16,47 +16,31 @@ namespace MqApi.Num.Matrix{
 		{
 			ncolumns = reader.ReadInt32();
 			int n = reader.ReadInt32();
-			vals = new SparseFloatVector[n];
+			vals = new SparseFloatVectorDict[n];
 			for (int i = 0; i < n; i++)
 			{
-			  vals[i] = new SparseFloatVector();
+			  vals[i] = new SparseFloatVectorDict();
 			  vals[i].Read(reader);
 			}
 		}
 		public override void Write(BinaryWriter writer){
 			writer.Write(ncolumns);
 			writer.Write(vals.Length);
-			foreach (SparseFloatVector val in vals){
+			foreach (SparseFloatVectorDict val in vals){
 				val.Write(writer);
 			}
 		}
 		public override void Init(int nrows, int ncolumns1){
 			ncolumns = ncolumns1;
-			vals = new SparseFloatVector[nrows];
+			vals = new SparseFloatVectorDict[nrows];
 			for (int i = 0; i < nrows; i++){
-				vals[i] = new SparseFloatVector([], [], ncolumns);
+				vals[i] = new SparseFloatVectorDict([], ncolumns);
 			}
 		}
 		public override void Set(double[,] value){
-			ncolumns = value.GetLength(1);
-			vals = new SparseFloatVector[value.GetLength(0)];
-			for (int i = 0; i < vals.Length; i++){
-				List<int> v = [];
-				for (int j = 0; j < ncolumns; j++){
-					if (value[i, j] == 0){
-						continue;
-					}
-					v.Add(j);
-				}
-				int[] v1 = v.ToArray();
-				float[] x = new float[v1.Length];
-				for (int j = 0; j < v1.Length; j++){
-					x[j] = (float) value[i, v1[j]];
-				}
-				vals[i] = new SparseFloatVector(v1, x, ncolumns);
-			}
+			throw new Exception("Never get here.");
 		}
-		public override BaseVector GetRow(int row){
+	public override BaseVector GetRow(int row){
 			return vals[row];
 		}
 		public override BaseVector GetColumn(int col){
@@ -82,23 +66,19 @@ namespace MqApi.Num.Matrix{
 			vals = ArrayUtils.SubArray(vals, rows);
 		}
 		public override MatrixIndexer ExtractColumns(IList<int> columns){
-			SparseFloatVector[] r = new SparseFloatVector[vals.Length];
-			for (int i = 0; i < vals.Length; i++){
-				r[i] = (SparseFloatVector) vals[i].SubArray(columns);
-			}
-			return new SparseRowFloatMatrixIndexer{vals = r, ncolumns = columns.Count};
+			throw new Exception("Never get here.");
 		}
-		public override void ExtractColumnsInPlace(IList<int> columns){
+	public override void ExtractColumnsInPlace(IList<int> columns){
 			for (int i = 0; i < vals.Length; i++){
-				vals[i] = (SparseFloatVector) vals[i].SubArray(columns);
+				vals[i] = (SparseFloatVectorDict) vals[i].SubArray(columns);
 			}
 			ncolumns = columns.Count;
 		}
 		public override MatrixIndexer Transpose(){
-			return new SparseColumnFloatMatrixIndexer(vals, ncolumns);
+			throw new Exception("Never get here.");
 		}
-		public override bool ContainsNaNOrInf(){
-			foreach (SparseFloatVector val in vals){
+	public override bool ContainsNaNOrInf(){
+			foreach (SparseFloatVectorDict val in vals){
 				if (val.ContainsNaNOrInf()){
 					return true;
 				}
@@ -130,26 +110,23 @@ namespace MqApi.Num.Matrix{
 			vals[i][j] = value;
 		}
 		public override void Dispose(){
-			foreach (SparseFloatVector val in vals){
+			foreach (SparseFloatVectorDict val in vals){
 				val.Dispose();
 			}
 			vals = null;
 		}
 		public override object Clone(){
-			if (vals == null){
-				return new SparseRowFloatMatrixIndexer();
-			}
-			SparseFloatVector[] v = new SparseFloatVector[vals.Length];
-			for (int i = 0; i < v.Length; i++){
-				v[i] = (SparseFloatVector) vals[i].Clone();
-			}
-			return new SparseRowFloatMatrixIndexer{vals = v, ncolumns = ncolumns};
+			throw new Exception("Never get here.");
 		}
-		public void Add(int[] data, long[] indices, int nThreads)
+	public void Add(int[] data, long[] indices, int nThreads)
 		{
-			ThreadDistributor td = new ThreadDistributor(nThreads, data.Length, i =>
+
+			ThreadDistributor td = new ThreadDistributor(nThreads, nThreads, a =>
 			{
-				Add(data[i], (int)indices[i], i);
+				for (int i = a; i < data.Length; i += nThreads)
+				{
+					Add(data[i], (int)indices[i], i);
+				}
 			});
 			td.Start();
 		}
