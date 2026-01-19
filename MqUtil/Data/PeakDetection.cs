@@ -10,16 +10,15 @@ using MqUtil.Util;
 namespace MqUtil.Data{
 	public static class PeakDetection{
         public const int halfWidthCentroidMs = 2;
-		public static WritablePeak[] Detect(double matchTol, bool matchInPpm, BasicGroupParams param, RawLayer rawFile,
+		public static WritablePeak[] Detect(double matchTol, bool matchInPpm, RawLayer rawFile,
 			string peaksPath, bool skipBeginning, bool writeTmpFiles, bool hasMassBounds, bool isMsms,
 			bool processPeaks, Responder responder, bool calcNeighbors, int maxCharge, double isoMatchTol, 
 			bool isoMatchTolInPpm, bool calculateResolution, double halfWidth, double valleyFactor,
 			bool advancedPeakSplitting, bool slicePeaks, MsInstrument msInstrument, int missingScans,
-			IntensityDetermination intensDet, int minPeakLen, double intensThreshold)
+			IntensityDetermination intensDet, int minPeakLen, double intensThreshold, bool useCentroids)
 		{
 			bool write = !string.IsNullOrEmpty(peaksPath);
 			List<WritablePeak> peaks = new List<WritablePeak>();
-			bool useCentroids = param.UseMs1Centroids;
 			if (calculateResolution && !isMsms){
 				useCentroids = false;
 			}
