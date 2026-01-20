@@ -1,18 +1,15 @@
 using MqApi.Util;
 namespace MqUtil.Table{
-	public sealed class VirtualDataTable2 : TableModelImpl, ITable{
-		public Func<int, object[]> GetRowData { private get; set; }
+	public sealed class VirtualDataTable3 : TableModelImpl, ITable{
+		public Func<int, int, object> GetCellData { private get; set; }
 		private readonly int rowCount;
 		private List<int> persistentColInds;
 		private DataTable2 persistentTable;
-		//transient
-		private long rowInUse = -1;
-		private object[] rowDataInUse;
-		public VirtualDataTable2(string name, string description, int rowCount) : base(name, description){
+		public VirtualDataTable3(string name, string description, int rowCount) : base(name, description){
 			this.rowCount = rowCount;
 		}
-		public VirtualDataTable2(BinaryReader reader, Func<int, object[]> getRowData) : base(reader) {
-			GetRowData = getRowData;
+		public VirtualDataTable3(BinaryReader reader, Func<int, int, object> getCellData) : base(reader) {
+			GetCellData = getCellData;
 			rowCount = reader.ReadInt32();
 			int[] x = FileUtils.ReadInt32Array(reader);
 			if (x != null){
@@ -56,10 +53,9 @@ namespace MqUtil.Table{
 
 		public void FillPersistentData(){
 			for (int i = 0; i < rowCount; i++){
-				object[] rowData = GetRowData(i);
 				DataRow2 row = persistentTable.NewRow();
 				for (int j = 0; j < persistentColInds.Count; j++){
-					row[j] = rowData[persistentColInds[j]];
+					row[j] = GetCellData(i,persistentColInds[j]);
 				}
 				persistentTable.AddRow(row);
 			}
@@ -71,14 +67,7 @@ namespace MqUtil.Table{
 			if (row >= RowCount || row < 0){
 				return null;
 			}
-			if (rowInUse != row){
-				rowDataInUse = GetRowDataImpl((int)row);
-				rowInUse = row;
-			}
-			if (rowDataInUse == null){
-				return null;
-			}
-			return col >= rowDataInUse.Length ? null : rowDataInUse[col];
+			return GetCellDataImpl((int)row, col);
 		}
 
 		public override void SetEntry(long row, int column, object value){
@@ -92,20 +81,23 @@ namespace MqUtil.Table{
 			persistentTable.SetEntry(row, ind, value);
 		}
 
-		private object[] GetRowDataImpl(int row){
-			if (GetRowData == null){
+		private object GetCellDataImpl(int row, int col){
+			if (persistentColInds != null)
+			{
+				int a = persistentColInds.BinarySearch(col);
+				if (a >= 0)
+				{
+					return persistentTable.GetEntry(row, a);
+				}
+			}
+
+			if (GetCellData == null){
 				return null;
 			}
 			if (row < 0 || row >= rowCount){
 				return null;
 			}
-			object[] result = GetRowData(row);
-			if (persistentColInds != null){
-				for (int i = 0; i < persistentColInds.Count; i++){
-					result[persistentColInds[i]] = persistentTable.GetEntry(row, i);
-				}
-			}
-			return result;
+			return GetCellData(row, col);
 		}
 	}
 }

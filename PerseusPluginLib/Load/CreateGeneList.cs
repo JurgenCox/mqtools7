@@ -14,7 +14,7 @@ namespace PerseusPluginLib.Load{
 		public string Description => "Start with a list of all protein-coding genes from an organism.";
 		public string Name => "Create gene list";
 		public bool IsActive => true;
-		public float DisplayRank => 4;
+		public float DisplayRank => 8;
 		public string[] HelpSupplTables => new string[0];
 		public int NumSupplTables => 0;
 		public string[] HelpDocuments => new string[0];
