@@ -804,6 +804,16 @@ namespace MqUtil.Util{
 				}
 			}
 		}
+		public static string ReportABug
+		{
+			get
+			{
+				switch (TwoLettName)
+				{
+					default: return "Report a bug";
+				}
+			}
+		}
 
 		public static string Save{
 			get{
@@ -910,6 +920,16 @@ namespace MqUtil.Util{
 					case tamil: return "படமாக சேமிக்கவும்";
 					case turkish: return "Görüntü olarak kaydet";
 					default: return "Save as image";
+				}
+			}
+		}
+		public static string Search
+		{
+			get
+			{
+				switch (TwoLettName)
+				{
+					default: return "Search";
 				}
 			}
 		}

@@ -19,7 +19,7 @@ namespace PerseusPluginLib.Load{
 		public int NumSupplTables => 0;
 		public string[] HelpDocuments => new string[0];
 		public int NumDocuments => 0;
-		public string Heading => "Basic";
+		public string Heading => "Advanced";
         public int GetMaxThreads(Parameters parameters){
 			return 1;
 		}
