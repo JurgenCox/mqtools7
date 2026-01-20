@@ -1,12 +1,11 @@
 ﻿using MqApi.Generic;
-using MqApi.Num.Matrix;
+using MqApi.Matrix;
 
 namespace MqApi.SingleCell
 {
   public interface ISingleCellData : IData, IDataWithAnnotationRows, IDataWithAnnotationColumns
   {
-    List<MatrixIndexer> Values { get; set; }
-    List<DataWithAnnotationRows> Annot { get; set; }
-
+    List<IMatrixData> Values { get; set; }
+    IMatrixData CreateMatrixData();
   }
 }
