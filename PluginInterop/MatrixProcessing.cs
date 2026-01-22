@@ -16,8 +16,8 @@ namespace PluginInterop{
 	/// </summary>
 	public abstract class MatrixProcessing : InteropBase, IMatrixProcessing{
 		public abstract string Name{ get; }
-		public string Category => IMatrixProcessingCategories.Plugins;
-        public abstract string Description{ get; }
+		public virtual string Category => IMatrixProcessingCategories.Plugins;
+		public abstract string Description{ get; }
 		public virtual float DisplayRank => 1;
 		public virtual bool IsActive => true;
 		public virtual int GetMaxThreads(Parameters parameters) => 1;
