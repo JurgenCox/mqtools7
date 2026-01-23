@@ -15,8 +15,10 @@ namespace MqUtil.Data{
 		public int[] scoreCountsArray;
 		public bool[] scoreFinishedArray;
 		public PeptideModificationState[] TrueModificationArray{ get; set; }
-		public PeptideModificationState[] labelModificationArray;
-		public int[] MultipletIndexArray{ get; set; }
+		public PeptideModificationState[] TrueModificationArray2 { get; set; }
+        public PeptideModificationState[] labelModificationArray;
+		public PeptideModificationState[] labelModificationArray2;
+        public int[] MultipletIndexArray{ get; set; }
 		public readonly int fragTypeIndex;
 		private readonly int massAnalyzerIndex;
 		private readonly QueryType type;
@@ -93,17 +95,28 @@ namespace MqUtil.Data{
 			Pep = peptides[0].Pep;
 			IsotopeCalculationResult = icr;
 			labelModificationArray = new PeptideModificationState[peptides.Length];
-			TrueModificationArray = new PeptideModificationState[peptides.Length];
-			MultipletIndexArray = new int[peptides.Length];
+			labelModificationArray2 = new PeptideModificationState[peptides.Length];
+            TrueModificationArray = new PeptideModificationState[peptides.Length];
+			TrueModificationArray2 = new PeptideModificationState[peptides.Length];
+            MultipletIndexArray = new int[peptides.Length];
 			scoreFinishedArray = new bool[peptides.Length];
 			scoreCountsArray = new int[peptides.Length];
 			annotationArray = new PeakAnnotation[peptides.Length][];
 			scoresArray = new double[peptides.Length];
-			for (int i = 0; i < peptides.Length; i++){
+			IsCross = false;
+
+            for (int i = 0; i < peptides.Length; i++){
 				labelModificationArray[i] = GetLabelModifications(peptides[i].Peptide1.Modifications, fixedMods,
 					peptides[i].Peptide1.Sequence);
-				TrueModificationArray[i] = peptides[i].Peptide1.Modifications.GetTrueModifications();
-				MultipletIndexArray[i] = multipletIndex;
+                TrueModificationArray[i] = peptides[i].Peptide1.Modifications.GetTrueModifications();
+				if (peptides[i].IsDipeptide)
+				{
+					IsCross = true;
+					labelModificationArray2[i] = GetLabelModifications(peptides[i].Peptide2.Modifications, fixedMods,
+						peptides[i].Peptide2.Sequence);
+					TrueModificationArray2[i] = peptides[i].Peptide2.Modifications.GetTrueModifications();
+                }
+                MultipletIndexArray[i] = multipletIndex;
 				if (multiplicity == 1){
 					MultipletIndexArray[i] = 0;
 				} else if (type != QueryType.Multiplet){
@@ -230,13 +243,18 @@ namespace MqUtil.Data{
 
 		public double Score => scoresArray[0];
 		public PeptideModificationState TrueModifications => TrueModificationArray[0];
-
-		public int GetModCount(string mod){
+		public PeptideModificationState TrueModifications2 => TrueModificationArray2[0];
+        public int GetModCount(string mod){
 			ushort us = Tables.Modifications[mod].Index;
 			return TrueModificationArray[0].ProjectToCounts().GetModificationCount(us);
 		}
+		public int GetModCount2(string mod)
+		{
+			ushort us = Tables.Modifications[mod].Index;
+			return TrueModificationArray2[0].ProjectToCounts().GetModificationCount(us);
+		}
 
-		public MsmsHit(BinaryReader reader){
+        public MsmsHit(BinaryReader reader){
 			Ms3Hits = new List<Ms3Hit>();
 			RawFileIndex = reader.ReadInt32();
 			ScanNumber = reader.ReadInt32();
@@ -310,7 +328,14 @@ namespace MqUtil.Data{
 				labelModificationArray[i] = PeptideModificationState.Read(reader);
 				TrueModificationArray[i] = PeptideModificationState.Read(reader);
 			}
-			RetentionTime = reader.ReadDouble();
+			labelModificationArray2 = new PeptideModificationState[n];
+			TrueModificationArray2 = new PeptideModificationState[n];
+			for (int i = 0; i < n; i++)
+			{
+				labelModificationArray2[i] = PeptideModificationState.Read(reader);
+				TrueModificationArray2[i] = PeptideModificationState.Read(reader);
+			}
+            RetentionTime = reader.ReadDouble();
 			Id = reader.ReadInt32();
 			Mz = reader.ReadDouble();
 			MonoisotopicMz = reader.ReadDouble();
@@ -556,7 +581,17 @@ namespace MqUtil.Data{
 				labelModificationArray[index].Write(writer);
 				TrueModificationArray[index].Write(writer);
 			}
-			writer.Write(RetentionTime);
+			if (labelModificationArray2 == null)
+			{
+				labelModificationArray2 = new PeptideModificationState[0];
+			}
+			writer.Write(labelModificationArray2.Length);
+			for (int index = 0; index < labelModificationArray2.Length; index++)
+			{
+				labelModificationArray2[index].Write(writer);
+				TrueModificationArray2[index].Write(writer);
+			}
+            writer.Write(RetentionTime);
 			writer.Write(Id);
 			writer.Write(Mz);
 			writer.Write(MonoisotopicMz);
@@ -682,8 +717,11 @@ namespace MqUtil.Data{
 		public PeptideModificationState GetFixedAndLabelModifications(string[] fixedModifications, string sequence){
 			return GetFixedAndLabelModifications(fixedModifications, sequence, labelModificationArray[0]);
 		}
-
-		public static PeptideModificationState GetFixedAndLabelModifications(string[] fixedModifications,
+		public PeptideModificationState GetFixedAndLabelModifications2(string[] fixedModifications, string sequence)
+		{
+			return GetFixedAndLabelModifications(fixedModifications, sequence, labelModificationArray2[0]);
+		}
+        public static PeptideModificationState GetFixedAndLabelModifications(string[] fixedModifications,
 			string sequence, PeptideModificationState labelMods){
 			PeptideModificationState result =
 				labelMods != null ? labelMods.Clone() : new PeptideModificationState(sequence.Length);
