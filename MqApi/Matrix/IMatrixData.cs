@@ -13,5 +13,7 @@ namespace MqApi.Matrix{
 		string QualityName{ get; set; }
 		bool QualityBiggerIsBetter{ get; set; }
 		bool HasQuality{ get; }
+		void CloneFrom(IMatrixData other);
+
 	}
 }

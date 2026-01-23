@@ -196,7 +196,10 @@ namespace MqApi.Num.Vector{
 			return new SparseFloatVector(newIndices.ToArray(), newValues.ToArray(), inds.Count);
 		}
 		public override IEnumerator<double> GetEnumerator(){
-			throw new NotImplementedException();
+			double[] x = Unpack();
+			foreach (double foo in x){
+				yield return foo;
+			}
 		}
 		public override void Read(BinaryReader reader){
 			indices = FileUtils.ReadInt32Array(reader);
