@@ -102,7 +102,11 @@ namespace PluginInterop.Python{
 				return new Tuple<string, bool>(
 					"A valid Python installation was not found.\n" + "Could not import one or more packages:\n" +
 					string.Join(", ", packages), false);
-			}){Filter = interpreterFilter};
+			})
+			{
+				Filter = interpreterFilter, 
+				Edit = EditorType.CodePython
+			};
 			if (tryFindExecutable(out string path)){
 				fileParam.Value = path;
 			}

@@ -3,6 +3,8 @@ namespace MqApi.Param{
 		public string Filter{ get; set; }
 		public Func<string, string> ProcessFileName{ get; set; }
 		public bool Save{ get; set; }
+		public EditorType Edit { get; set; }
+
 		/// <summary>
 		/// for xml serialization only
 		/// </summary>
@@ -15,13 +17,15 @@ namespace MqApi.Param{
 			Default = value;
 			Filter = null;
 			Save = false;
+			Edit = EditorType.None;
 		}
 		protected FileParam(string name, string help, string url, bool visible, string value, string default1,
-			string filter, Func<string, string> processFileName, bool save) : base(name, help, url, visible, value,
+			string filter, Func<string, string> processFileName, bool save, EditorType edit = EditorType.None) : base(name, help, url, visible, value,
 			default1){
 			Filter = filter;
 			ProcessFileName = processFileName;
 			Save = save;
+			Edit = edit;
 		}
 		public override void Read(BinaryReader reader){
 			base.Read(reader);
@@ -42,7 +46,7 @@ namespace MqApi.Param{
 		}
 		public override ParamType Type => ParamType.Server;
 		public override object Clone(){
-			return new FileParam(Name, Help, Url, Visible, Value, Default, Filter, ProcessFileName, Save);
+			return new FileParam(Name, Help, Url, Visible, Value, Default, Filter, ProcessFileName, Save, Edit);
 		}
 	}
 }

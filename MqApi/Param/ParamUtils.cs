@@ -98,6 +98,7 @@
 					Filter = q.Filter,
 					ProcessFileName = q.ProcessFileName,
 					Save = q.Save,
+					Edit = q.Edit,
 					Url = q.Url
 				};
 				foreach (ValueChangedHandler act in q.GetPropertyChangedHandlers()){
@@ -114,6 +115,7 @@
 					Filter = q.Filter,
 					ProcessFileName = q.ProcessFileName,
 					Save = q.Save,
+					Edit = q.Edit,
 					Url = q.Url
 				};
 				foreach (ValueChangedHandler act in q.GetPropertyChangedHandlers()){

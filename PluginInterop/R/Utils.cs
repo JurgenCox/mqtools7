@@ -80,7 +80,7 @@ namespace PluginInterop.R{
 					false);
 			}
 			CheckedFileParam fileParam =
-				new CheckedFileParam(interpreterLabel, CheckFileName){Filter = interpreterFilter};
+				new CheckedFileParam(interpreterLabel, CheckFileName){Filter = interpreterFilter, Edit = EditorType.CodeR};
 			if (tryFindExecutable(out string path)){
 				fileParam.Value = path;
 			}
@@ -121,7 +121,7 @@ namespace PluginInterop.R{
 				return new Tuple<string, bool>(
 					"A valid Python installation was not found.\n" + "Could not import one or more packages:\n" +
 					string.Join(", ", packages), false);
-			}){Filter = interpreterFilter};
+			}){Filter = interpreterFilter, Edit = EditorType.CodeR};
 			string path;
 			if (tryFindExecutable(out path)){
 				fileParam.Value = path;
