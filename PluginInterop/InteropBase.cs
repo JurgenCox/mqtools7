@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using MqApi.Param;
 namespace PluginInterop{
 	/// <summary>
@@ -76,7 +74,7 @@ namespace PluginInterop{
 		/// FileParam for specifying the code file. See <see cref="TryGetCodeFile"/>.
 		/// </summary>
 		protected virtual FileParam CodeFileParam(){
-			return new FileParam(CodeLabel){Filter = CodeFilter};
+			return new FileParam(CodeLabel){Filter = CodeFilter, Edit = Edit};
 		}
 		/// <summary>
 		/// Returns true and the path of the executable if found.
@@ -91,5 +89,6 @@ namespace PluginInterop{
 		protected virtual StringParam AdditionalArgumentsParam(){
 			return new StringParam(AdditionalArgumentsLabel);
 		}
+		public abstract EditorType Edit { get; }
 	}
 }

@@ -12,5 +12,6 @@ namespace PluginInterop.R{
 		protected override bool TryFindExecutable(out string path){
 			return Utils.TryFindRExecutable(out path);
 		}
+		public override EditorType Edit => EditorType.CodeR;
 	}
 }

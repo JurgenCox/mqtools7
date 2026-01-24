@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Text;
 using MqApi.Param;
 namespace PluginInterop.R{
@@ -80,7 +76,7 @@ namespace PluginInterop.R{
 					false);
 			}
 			CheckedFileParam fileParam =
-				new CheckedFileParam(interpreterLabel, CheckFileName){Filter = interpreterFilter, Edit = EditorType.CodeR};
+				new CheckedFileParam(interpreterLabel, CheckFileName){Filter = interpreterFilter};
 			if (tryFindExecutable(out string path)){
 				fileParam.Value = path;
 			}
@@ -121,7 +117,7 @@ namespace PluginInterop.R{
 				return new Tuple<string, bool>(
 					"A valid Python installation was not found.\n" + "Could not import one or more packages:\n" +
 					string.Join(", ", packages), false);
-			}){Filter = interpreterFilter, Edit = EditorType.CodeR};
+			}){Filter = interpreterFilter};
 			string path;
 			if (tryFindExecutable(out path)){
 				fileParam.Value = path;

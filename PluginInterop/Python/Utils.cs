@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Text;
 using MqApi.Param;
 namespace PluginInterop.Python{
@@ -104,8 +100,7 @@ namespace PluginInterop.Python{
 					string.Join(", ", packages), false);
 			})
 			{
-				Filter = interpreterFilter, 
-				Edit = EditorType.CodePython
+				Filter = interpreterFilter
 			};
 			if (tryFindExecutable(out string path)){
 				fileParam.Value = path;
