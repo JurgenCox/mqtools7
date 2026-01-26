@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using MqApi.Num;
 using MqApi.Util;
 using MqUtil.Mol;
@@ -7,18 +8,18 @@ using MqUtil.Ms.Enums;
 using MqUtil.Ms.Search;
 using MqUtil.Ms.Utils;
 
-namespace MqUtil.Data{
-	public class MsmsHit : IDisposable{
+namespace MqUtil.Data {
+	public class MsmsHit : IDisposable {
 		public List<Ms3Hit> Ms3Hits{ get; set; }
 		public PeakAnnotation[][] annotationArray;
 		public double[] scoresArray;
 		public int[] scoreCountsArray;
 		public bool[] scoreFinishedArray;
 		public PeptideModificationState[] TrueModificationArray{ get; set; }
-		public PeptideModificationState[] TrueModificationArray2 { get; set; }
-        public PeptideModificationState[] labelModificationArray;
+		public PeptideModificationState[] TrueModificationArray2{ get; set; }
+		public PeptideModificationState[] labelModificationArray;
 		public PeptideModificationState[] labelModificationArray2;
-        public int[] MultipletIndexArray{ get; set; }
+		public int[] MultipletIndexArray{ get; set; }
 		public readonly int fragTypeIndex;
 		private readonly int massAnalyzerIndex;
 		private readonly QueryType type;
@@ -30,9 +31,9 @@ namespace MqUtil.Data{
 		public double[] MassDiffs{ get; set; }
 		public double[] Masses{ get; set; }
 		public int Nloss{ get; set; }
-		public double IntensityCoverage { get; set; }
-		public double UnfragmentedPrecursorIntensity { get; set; }
-		public double UnfragmentedPrecursorFraction { get; set; }
+		public double IntensityCoverage{ get; set; }
+		public double UnfragmentedPrecursorIntensity{ get; set; }
+		public double UnfragmentedPrecursorFraction{ get; set; }
 		public double PeakCoverage{ get; set; }
 		public int Id{ get; set; }
 		public int EvidenceId{ get; set; }
@@ -56,17 +57,18 @@ namespace MqUtil.Data{
 		public ReporterResult ReporterResult{ get; set; }
 		public IsotopeCalculationResult IsotopeCalculationResult{ get; set; }
 		public AndromedaPeptide[] Peptides{ get; set; }
-		public double[] IntensitiesChargeSplit { get; set; } = new double[0];
-		public PeakAnnotation[] AnnotationChargeSplit { get; set; } = new PeakAnnotation[0];
-		public double[] MassDiffsChargeSplit { get; set; } = new double[0];
-		public double[] MassesChargeSplit { get; set; } = new double[0];
-		public double[] IntensitiesChargeSplitComplele { get; set; } = new double[0];
-		public double[] MassesChargeSplitComplele { get; set; } = new double[0];
-		public bool[] IsFromSecondSequence { get; set; } = new bool[0];
-		public CrossLinkSpecificFragmentAnnotation[] ClRelatedPeakAnnotation { get; set; } = new CrossLinkSpecificFragmentAnnotation[0];
-		public bool IsCross { get; set; }
-        public LinkPatternData LinkPatternData { get; set; }
-        public MsmsHit(AndromedaPeptide[] peptides, int scanNumber, int scanEventIndex, int fileIndex, QueryType type,
+		public double[] IntensitiesChargeSplit{ get; set; } = new double[0];
+		public PeakAnnotation[] AnnotationChargeSplit{ get; set; } = new PeakAnnotation[0];
+		public double[] MassDiffsChargeSplit{ get; set; } = new double[0];
+		public double[] MassesChargeSplit{ get; set; } = new double[0];
+		public double[] IntensitiesChargeSplitComplele{ get; set; } = new double[0];
+		public double[] MassesChargeSplitComplele{ get; set; } = new double[0];
+		public bool[] IsFromSecondSequence{ get; set; } = new bool[0];
+		public CrossLinkSpecificFragmentAnnotation[] ClRelatedPeakAnnotation{ get; set; } = new CrossLinkSpecificFragmentAnnotation[0];
+		public bool IsCross{ get; set; }
+		public LinkPatternData LinkPatternData{ get; set; }
+		public bool[] HasLink{ get; set; }
+		public MsmsHit(AndromedaPeptide[] peptides, int scanNumber, int scanEventIndex, int fileIndex, QueryType type,
 			int multipletIndex, double retentionTime, double mz, double monoisotopicMz, object fixedMods,
 			byte multiplicity, string[][] labels, int fragTypeIndex, int massAnalyzerIndex,
 			double intensityFractionWindow, double intensityFractionTotal, double basePeakFraction,
@@ -95,28 +97,21 @@ namespace MqUtil.Data{
 			Pep = peptides[0].Pep;
 			IsotopeCalculationResult = icr;
 			labelModificationArray = new PeptideModificationState[peptides.Length];
+			TrueModificationArray = new PeptideModificationState[peptides.Length];
 			labelModificationArray2 = new PeptideModificationState[peptides.Length];
-            TrueModificationArray = new PeptideModificationState[peptides.Length];
 			TrueModificationArray2 = new PeptideModificationState[peptides.Length];
-            MultipletIndexArray = new int[peptides.Length];
+			MultipletIndexArray = new int[peptides.Length];
 			scoreFinishedArray = new bool[peptides.Length];
 			scoreCountsArray = new int[peptides.Length];
 			annotationArray = new PeakAnnotation[peptides.Length][];
 			scoresArray = new double[peptides.Length];
-			IsCross = false;
-
-            for (int i = 0; i < peptides.Length; i++){
+			HasLink = new bool[peptides.Length];
+			for (int i = 0; i<peptides.Length; i++){
 				labelModificationArray[i] = GetLabelModifications(peptides[i].Peptide1.Modifications, fixedMods,
 					peptides[i].Peptide1.Sequence);
-                TrueModificationArray[i] = peptides[i].Peptide1.Modifications.GetTrueModifications();
-				if (peptides[i].IsDipeptide)
-				{
-					IsCross = true;
-					labelModificationArray2[i] = GetLabelModifications(peptides[i].Peptide2.Modifications, fixedMods,
-						peptides[i].Peptide2.Sequence);
-					TrueModificationArray2[i] = peptides[i].Peptide2.Modifications.GetTrueModifications();
-                }
-                MultipletIndexArray[i] = multipletIndex;
+				TrueModificationArray[i] = peptides[i].Peptide1.Modifications.GetTrueModifications();
+				MultipletIndexArray[i] = multipletIndex;
+				HasLink[i] = peptides[i].IsDipeptide;
 				if (multiplicity == 1){
 					MultipletIndexArray[i] = 0;
 				} else if (type != QueryType.Multiplet){
@@ -129,19 +124,21 @@ namespace MqUtil.Data{
 							break;
 						}
 					}
-					if (MultipletIndexArray[i] < 0){
-						MultipletIndexArray[i] = PeptideModificationState.CalcLabelIndexNterm(labelModificationArray[i], multiplicity, labels);
+					if (MultipletIndexArray[i]<0){
+						MultipletIndexArray[i] =
+							PeptideModificationState.CalcLabelIndexNterm(labelModificationArray[i], multiplicity, labels);
 					}
-					if (MultipletIndexArray[i] < 0){
-						MultipletIndexArray[i] = PeptideModificationState.CalcLabelIndexCterm(labelModificationArray[i], multiplicity, labels);
+					if (MultipletIndexArray[i]<0){
+						MultipletIndexArray[i] =
+							PeptideModificationState.CalcLabelIndexCterm(labelModificationArray[i], multiplicity, labels);
 					}
 				}
 			}
 		}
 
-		public int Charge => (int) Math.Round(Peptides[0].Mass / Mz);
+		public int Charge => (int)Math.Round(Peptides[0].Mass / Mz);
 
-		private static PeptideModificationState GetLabelModifications(PeptideModificationState modIn, object labelMods,
+		public static PeptideModificationState GetLabelModifications(PeptideModificationState modIn, object labelMods,
 			string sequence){
 			PeptideModificationState result = modIn.GetFreshCopy(modIn.Length);
 			if (modIn.NTermModification != ushort.MaxValue && !Modification.IsStandardVarMod(modIn.NTermModification)){
@@ -150,7 +147,7 @@ namespace MqUtil.Data{
 			if (modIn.CTermModification != ushort.MaxValue && !Modification.IsStandardVarMod(modIn.CTermModification)){
 				result.CTermModification = modIn.CTermModification;
 			}
-			for (int i = 0; i < modIn.Length; i++){
+			for (int i = 0; i<modIn.Length; i++){
 				ushort m = modIn.GetModificationAt(i);
 				if (m != ushort.MaxValue && !Modification.IsStandardVarMod(m)){
 					result.SetModificationAt(i, m);
@@ -159,13 +156,13 @@ namespace MqUtil.Data{
 				}
 			}
 			if (labelMods is ushort[]){
-				foreach (ushort labelMod in (ushort[]) labelMods){
+				foreach (ushort labelMod in (ushort[])labelMods){
 					if (!Modification.IsStandardVarMod(labelMod)){
 						AddLabelMod(labelMod, modIn, sequence, result);
 					}
 				}
 			} else{
-				foreach (string labelMod in (string[]) labelMods){
+				foreach (string labelMod in (string[])labelMods){
 					if (Tables.Modifications.ContainsKey(labelMod)){
 						Modification m = Tables.Modifications[labelMod];
 						if (!Modification.IsStandardVarMod(m.Index)){
@@ -185,9 +182,9 @@ namespace MqUtil.Data{
 		private static void AddLabelMod(Modification2 mod, PeptideModificationState modIn, string sequence,
 			PeptideModificationState result){
 			if (mod.IsInternal){
-				for (int j = 0; j < mod.AaCount; j++){
+				for (int j = 0; j<mod.AaCount; j++){
 					char c = mod.GetAaAt(j);
-					for (int i = 0; i < modIn.Length; i++){
+					for (int i = 0; i<modIn.Length; i++){
 						if (sequence[i] == c){
 							result.SetModificationAt(i, mod.Index);
 						}
@@ -206,9 +203,9 @@ namespace MqUtil.Data{
 			PeptideModificationState result){
 			Modification mod = Tables.ModificationList[labelMod];
 			if (mod.IsInternal){
-				for (int j = 0; j < mod.AaCount; j++){
+				for (int j = 0; j<mod.AaCount; j++){
 					char c = mod.GetAaAt(j);
-					for (int i = 0; i < modIn.Length; i++){
+					for (int i = 0; i<modIn.Length; i++){
 						if (sequence[i] == c){
 							result.SetModificationAt(i, mod.Index);
 						}
@@ -225,10 +222,10 @@ namespace MqUtil.Data{
 
 		public ReporterResult[] GetReporterResults(){
 			ReporterResult[] ms3 = GetMs3ReporterResults();
-			if (ms3.Length > 0){
+			if (ms3.Length>0){
 				return ms3;
 			}
-			return ReporterResult != null ? new[]{ReporterResult} : new ReporterResult[0];
+			return ReporterResult != null ? new[] { ReporterResult } : new ReporterResult[0];
 		}
 
 		private ReporterResult[] GetMs3ReporterResults(){
@@ -244,17 +241,16 @@ namespace MqUtil.Data{
 		public double Score => scoresArray[0];
 		public PeptideModificationState TrueModifications => TrueModificationArray[0];
 		public PeptideModificationState TrueModifications2 => TrueModificationArray2[0];
-        public int GetModCount(string mod){
+		public int GetModCount(string mod){
 			ushort us = Tables.Modifications[mod].Index;
 			return TrueModificationArray[0].ProjectToCounts().GetModificationCount(us);
 		}
-		public int GetModCount2(string mod)
-		{
+		public int GetModCount2(string mod){
 			ushort us = Tables.Modifications[mod].Index;
 			return TrueModificationArray2[0].ProjectToCounts().GetModificationCount(us);
 		}
 
-        public MsmsHit(BinaryReader reader){
+		public MsmsHit(BinaryReader reader){
 			Ms3Hits = new List<Ms3Hit>();
 			RawFileIndex = reader.ReadInt32();
 			ScanNumber = reader.ReadInt32();
@@ -324,18 +320,11 @@ namespace MqUtil.Data{
 			int n = reader.ReadInt32();
 			labelModificationArray = new PeptideModificationState[n];
 			TrueModificationArray = new PeptideModificationState[n];
-			for (int i = 0; i < n; i++){
+			for (int i = 0; i<n; i++){
 				labelModificationArray[i] = PeptideModificationState.Read(reader);
 				TrueModificationArray[i] = PeptideModificationState.Read(reader);
 			}
-			labelModificationArray2 = new PeptideModificationState[n];
-			TrueModificationArray2 = new PeptideModificationState[n];
-			for (int i = 0; i < n; i++)
-			{
-				labelModificationArray2[i] = PeptideModificationState.Read(reader);
-				TrueModificationArray2[i] = PeptideModificationState.Read(reader);
-			}
-            RetentionTime = reader.ReadDouble();
+			RetentionTime = reader.ReadDouble();
 			Id = reader.ReadInt32();
 			Mz = reader.ReadDouble();
 			MonoisotopicMz = reader.ReadDouble();
@@ -350,16 +339,16 @@ namespace MqUtil.Data{
 			PeakCoverage = reader.ReadDouble();
 			int len = reader.ReadInt32();
 			Peptides = new AndromedaPeptide[len];
-			for (int i = 0; i < len; i++){
+			for (int i = 0; i<len; i++){
 				Peptides[i] = new AndromedaPeptide(reader);
 			}
 			scoresArray = FileUtils.ReadDoubleArray(reader);
 			n = reader.ReadInt32();
 			annotationArray = new PeakAnnotation[n][];
-			for (int i = 0; i < n; i++){
+			for (int i = 0; i<n; i++){
 				int len1 = reader.ReadInt32();
 				annotationArray[i] = new PeakAnnotation[len1];
-				for (int j = 0; j < len1; j++){
+				for (int j = 0; j<len1; j++){
 					int annotType = reader.ReadInt32();
 					annotationArray[i][j] = ReadAnnotation(annotType, reader);
 				}
@@ -368,7 +357,7 @@ namespace MqUtil.Data{
 			Intensities = new double[len];
 			MassDiffs = new double[len];
 			Masses = new double[len];
-			for (int i = 0; i < len; i++){
+			for (int i = 0; i<len; i++){
 				Intensities[i] = reader.ReadDouble();
 				MassDiffs[i] = reader.ReadDouble();
 				Masses[i] = reader.ReadDouble();
@@ -376,13 +365,13 @@ namespace MqUtil.Data{
 			modProbabilities = new Dictionary<ushort, double[]>();
 			len = reader.ReadInt32();
 			ushort[] keys = new ushort[len];
-			for (int i = 0; i < keys.Length; i++){
+			for (int i = 0; i<keys.Length; i++){
 				keys[i] = reader.ReadUInt16();
 			}
 			foreach (ushort key in keys){
 				len = reader.ReadInt32();
 				double[] value = new double[len];
-				for (int i = 0; i < value.Length; i++){
+				for (int i = 0; i<value.Length; i++){
 					value[i] = reader.ReadDouble();
 				}
 				modProbabilities.Add(key, value);
@@ -390,13 +379,13 @@ namespace MqUtil.Data{
 			modScoreDiffs = new Dictionary<ushort, double[]>();
 			len = reader.ReadInt32();
 			keys = new ushort[len];
-			for (int i = 0; i < keys.Length; i++){
+			for (int i = 0; i<keys.Length; i++){
 				keys[i] = reader.ReadUInt16();
 			}
 			foreach (ushort key in keys){
 				len = reader.ReadInt32();
 				double[] value = new double[len];
-				for (int i = 0; i < value.Length; i++){
+				for (int i = 0; i<value.Length; i++){
 					value[i] = reader.ReadDouble();
 				}
 				modScoreDiffs.Add(key, value);
@@ -410,13 +399,13 @@ namespace MqUtil.Data{
 				IsotopeCalculationResult = new IsotopeCalculationResult(reader);
 			}
 			len = reader.ReadInt32();
-			for (int i = 0; i < len; i++){
+			for (int i = 0; i<len; i++){
 				Ms3Hits.Add(new Ms3Hit(reader));
 			}
 			IntensitiesChargeSplit = FileUtils.ReadDoubleArray(reader);
 			len = reader.ReadInt32();
 			AnnotationChargeSplit = new PeakAnnotation[len];
-			for (int i = 0; i < len; i++) {
+			for (int i = 0; i<len; i++){
 				int annotType = reader.ReadInt32();
 				AnnotationChargeSplit[i] = ReadAnnotation(annotType, reader);
 			}
@@ -425,18 +414,33 @@ namespace MqUtil.Data{
 			IntensitiesChargeSplitComplele = FileUtils.ReadDoubleArray(reader);
 			MassesChargeSplitComplele = FileUtils.ReadDoubleArray(reader);
 			IsFromSecondSequence = FileUtils.ReadBooleanArray(reader);
-            len = reader.ReadInt32();
-            ClRelatedPeakAnnotation = new CrossLinkSpecificFragmentAnnotation[len];
-            for (int i = 0; i < len; i++)
-            {
-                ClRelatedPeakAnnotation[i] = (CrossLinkSpecificFragmentAnnotation)reader.ReadInt32();
-            }
+			len = reader.ReadInt32();
+			ClRelatedPeakAnnotation = new CrossLinkSpecificFragmentAnnotation[len];
+			for (int i = 0; i<len; i++){
+				ClRelatedPeakAnnotation[i] = (CrossLinkSpecificFragmentAnnotation)reader.ReadInt32();
+			}
 			IsCross = reader.ReadBoolean();
-			if (IsCross)
+			if (!IsCross){
+				return;
+			}
 			{
-                LinkPatternData = LinkPatternData.FromBinary(reader);
-            }
-        }
+				LinkPatternData = LinkPatternData.FromBinary(reader);
+				n = reader.ReadInt32();
+				labelModificationArray2 = new PeptideModificationState[n];
+				TrueModificationArray2 = new PeptideModificationState[n];
+				HasLink = new bool[n];
+				for (int i = 0; i<n; i++){
+					HasLink[i] = reader.ReadBoolean();
+					if (HasLink[i]){
+						labelModificationArray2[i] = PeptideModificationState.Read(reader);
+						TrueModificationArray2[i] = PeptideModificationState.Read(reader);
+					} else{
+						labelModificationArray2[i] = new PeptideModificationState(0);
+						TrueModificationArray2[i] = new PeptideModificationState(0);
+					}
+				}
+			}
+		}
 
 		private static PeakAnnotation ReadAnnotation(int type, BinaryReader reader){
 			if (type == 0){
@@ -467,15 +471,17 @@ namespace MqUtil.Data{
 		public long Combinatorics => scoreCountsArray[0];
 		public PeakAnnotation[] Annotation => annotationArray[0];
 
-		public double ScoreDiff{
-			get{
+		public double ScoreDiff
+		{
+			get
+			{
 				if (modScoreDiffs.Count == 0){
 					return double.NaN;
 				}
 				double result = 0;
 				foreach (double[] modScoreDiff in modScoreDiffs.Values){
 					double max = ArrayUtils.Max(modScoreDiff);
-					if (max > result){
+					if (max>result){
 						result = max;
 					}
 				}
@@ -483,15 +489,17 @@ namespace MqUtil.Data{
 			}
 		}
 
-		public double LocalizationProb{
-			get{
+		public double LocalizationProb
+		{
+			get
+			{
 				if (modProbabilities.Count == 0){
 					return double.NaN;
 				}
 				double result = 0;
 				foreach (double[] a in modProbabilities.Values){
 					double max = ArrayUtils.Max(a);
-					if (max > result){
+					if (max>result){
 						result = max;
 					}
 				}
@@ -500,7 +508,6 @@ namespace MqUtil.Data{
 		}
 
 		public EtdSeriesType EtdType => etdType;
-
 
 
 		public MsmsMassAnalyzer GetMassAnalyzer(){
@@ -520,47 +527,47 @@ namespace MqUtil.Data{
 			writer.Write(massAnalyzerIndex);
 			switch (type){
 				case QueryType.Multiplet:
-					writer.Write((byte) 0);
+					writer.Write((byte)0);
 					break;
 				case QueryType.Isotope:
-					writer.Write((byte) 1);
+					writer.Write((byte)1);
 					break;
 				case QueryType.Peak:
-					writer.Write((byte) 2);
+					writer.Write((byte)2);
 					break;
 			}
 			switch (etdType){
 				case EtdSeriesType.Restricted:
-					writer.Write((byte) 0);
+					writer.Write((byte)0);
 					break;
 				case EtdSeriesType.RestrictedPlusY:
-					writer.Write((byte) 1);
+					writer.Write((byte)1);
 					break;
 				case EtdSeriesType.RestrictedPlusYb:
-					writer.Write((byte) 2);
+					writer.Write((byte)2);
 					break;
 				case EtdSeriesType.Complete:
-					writer.Write((byte) 3);
+					writer.Write((byte)3);
 					break;
 				case EtdSeriesType.CompletePlusY:
-					writer.Write((byte) 4);
+					writer.Write((byte)4);
 					break;
 				case EtdSeriesType.CompletePlusYb:
-					writer.Write((byte) 5);
+					writer.Write((byte)5);
 					break;
 				case EtdSeriesType.Unknown:
-					writer.Write((byte) 6);
+					writer.Write((byte)6);
 					break;
 			}
 			switch (ethcdType){
 				case EthcdSeriesType.Etd:
-					writer.Write((byte) 0);
+					writer.Write((byte)0);
 					break;
 				case EthcdSeriesType.Cid:
-					writer.Write((byte) 1);
+					writer.Write((byte)1);
 					break;
 				case EthcdSeriesType.Unknown:
-					writer.Write((byte) 2);
+					writer.Write((byte)2);
 					break;
 			}
 			writer.Write(Pep);
@@ -577,21 +584,11 @@ namespace MqUtil.Data{
 				labelModificationArray = new PeptideModificationState[0];
 			}
 			writer.Write(labelModificationArray.Length);
-			for (int index = 0; index < labelModificationArray.Length; index++){
+			for (int index = 0; index<labelModificationArray.Length; index++){
 				labelModificationArray[index].Write(writer);
 				TrueModificationArray[index].Write(writer);
 			}
-			if (labelModificationArray2 == null)
-			{
-				labelModificationArray2 = new PeptideModificationState[0];
-			}
-			writer.Write(labelModificationArray2.Length);
-			for (int index = 0; index < labelModificationArray2.Length; index++)
-			{
-				labelModificationArray2[index].Write(writer);
-				TrueModificationArray2[index].Write(writer);
-			}
-            writer.Write(RetentionTime);
+			writer.Write(RetentionTime);
 			writer.Write(Id);
 			writer.Write(Mz);
 			writer.Write(MonoisotopicMz);
@@ -621,7 +618,7 @@ namespace MqUtil.Data{
 					writer.Write(0);
 				} else{
 					writer.Write(t.Length);
-					foreach (PeakAnnotation t1 in t) {
+					foreach (PeakAnnotation t1 in t){
 						int annotType = GetAnnotType(t1);
 						writer.Write(annotType);
 						t1.Write(writer);
@@ -632,7 +629,7 @@ namespace MqUtil.Data{
 				Intensities = new double[0];
 			}
 			writer.Write(Intensities.Length);
-			for (int i = 0; i < Intensities.Length; i++){
+			for (int i = 0; i<Intensities.Length; i++){
 				writer.Write(Intensities[i]);
 				writer.Write(MassDiffs[i]);
 				writer.Write(Masses[i]);
@@ -651,7 +648,7 @@ namespace MqUtil.Data{
 					writer.Write(0);
 				} else{
 					writer.Write(value.Length);
-					foreach (double t in value) {
+					foreach (double t in value){
 						writer.Write(t);
 					}
 				}
@@ -666,9 +663,9 @@ namespace MqUtil.Data{
 			}
 			foreach (ushort key in keys){
 				double[] value = modScoreDiffs[key];
-				if (value == null) {
+				if (value == null){
 					writer.Write(0);
-				} else {
+				} else{
 					writer.Write(value.Length);
 					foreach (double t in value){
 						writer.Write(t);
@@ -694,7 +691,7 @@ namespace MqUtil.Data{
 			}
 			FileUtils.Write(IntensitiesChargeSplit, writer);
 			writer.Write(AnnotationChargeSplit.Length);
-			foreach (PeakAnnotation t1 in AnnotationChargeSplit) {
+			foreach (PeakAnnotation t1 in AnnotationChargeSplit){
 				int annotType = GetAnnotType(t1);
 				writer.Write(annotType);
 				t1.Write(writer);
@@ -703,25 +700,36 @@ namespace MqUtil.Data{
 			FileUtils.Write(MassesChargeSplit, writer);
 			FileUtils.Write(IntensitiesChargeSplitComplele, writer);
 			FileUtils.Write(MassesChargeSplitComplele, writer);
-            FileUtils.Write(IsFromSecondSequence, writer);
-            writer.Write(ClRelatedPeakAnnotation.Length);
-            foreach (CrossLinkSpecificFragmentAnnotation clAnnot in ClRelatedPeakAnnotation){
-                writer.Write((int)clAnnot);
-            }
+			FileUtils.Write(IsFromSecondSequence, writer);
+			writer.Write(ClRelatedPeakAnnotation.Length);
+			foreach (CrossLinkSpecificFragmentAnnotation clAnnot in ClRelatedPeakAnnotation){
+				writer.Write((int)clAnnot);
+			}
 			writer.Write(IsCross);
-            if (IsCross){
-                LinkPatternData.Write(writer);
-            }
-        }
+			if (!IsCross){
+				return;
+			}
+			{
+				LinkPatternData.Write(writer);
+				writer.Write(Peptides.Length);
+				for (int index = 0; index<Peptides.Length; index++){
+					writer.Write(HasLink[index]);
+					if (!HasLink[index]){
+						continue;
+					}
+					labelModificationArray2[index].Write(writer);
+					TrueModificationArray2[index].Write(writer);
+				}
+			}
+		}
 
 		public PeptideModificationState GetFixedAndLabelModifications(string[] fixedModifications, string sequence){
 			return GetFixedAndLabelModifications(fixedModifications, sequence, labelModificationArray[0]);
 		}
-		public PeptideModificationState GetFixedAndLabelModifications2(string[] fixedModifications, string sequence)
-		{
+		public PeptideModificationState GetFixedAndLabelModifications2(string[] fixedModifications, string sequence){
 			return GetFixedAndLabelModifications(fixedModifications, sequence, labelModificationArray2[0]);
 		}
-        public static PeptideModificationState GetFixedAndLabelModifications(string[] fixedModifications,
+		public static PeptideModificationState GetFixedAndLabelModifications(string[] fixedModifications,
 			string sequence, PeptideModificationState labelMods){
 			PeptideModificationState result =
 				labelMods != null ? labelMods.Clone() : new PeptideModificationState(sequence.Length);
@@ -740,13 +748,13 @@ namespace MqUtil.Data{
 		public static void ApplyFixedModification(PeptideModificationState state, Modification mod, string sequence,
 			bool isNterm, bool isCterm){
 			ModificationPosition pos = mod.Position;
-			for (int i = 0; i < mod.AaCount; i++){
-				for (int j = 0; j < sequence.Length; j++){
+			for (int i = 0; i<mod.AaCount; i++){
+				for (int j = 0; j<sequence.Length; j++){
 					if ((pos == ModificationPosition.notNterm || pos == ModificationPosition.notTerm) && j == 0){
 						continue;
 					}
 					if ((pos == ModificationPosition.notCterm || pos == ModificationPosition.notTerm) &&
-					    j == sequence.Length - 1){
+						j == sequence.Length - 1){
 						continue;
 					}
 					if (sequence[j] == mod.GetAaAt(i)){
@@ -786,12 +794,12 @@ namespace MqUtil.Data{
 			return GetPositionalProbability(mod, pos, modProbabilities);
 		}
 
-		public static double GetPositionalProbability(ushort mod, int pos, Dictionary<ushort, double[]> modProbabilities) {
-			if (!modProbabilities.ContainsKey(mod)) {
+		public static double GetPositionalProbability(ushort mod, int pos, Dictionary<ushort, double[]> modProbabilities){
+			if (!modProbabilities.ContainsKey(mod)){
 				return 0;
 			}
 			double[] f = modProbabilities[mod];
-			if (pos < 0 || pos >= f.Length) {
+			if (pos<0 || pos>=f.Length){
 				return 0;
 			}
 			return f[pos];
@@ -802,7 +810,7 @@ namespace MqUtil.Data{
 				return double.NaN;
 			}
 			double[] f = modScoreDiffs[mod];
-			if (pos < 0 || pos >= f.Length){
+			if (pos<0 || pos>=f.Length){
 				return double.NaN;
 			}
 			return f[pos];
@@ -845,7 +853,7 @@ namespace MqUtil.Data{
 				return new int[0];
 			}
 			int[] result = new int[Ms3Hits.Count];
-			for (int i = 0; i < result.Length; i++){
+			for (int i = 0; i<result.Length; i++){
 				result[i] = Ms3Hits[i].ScanNumber;
 			}
 			return result;
