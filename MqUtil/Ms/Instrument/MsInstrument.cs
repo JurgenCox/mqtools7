@@ -44,7 +44,7 @@ namespace MqUtil.Ms.Instrument{
 		public abstract LfqRatioType DiaLfqRatioTypeDefault{ get; }
 		public double DiaPrecTolPpmFeatureClusteringDefault => 2;
 		public int DiaScoreNDefault => 12;
-		public int DiaScoreNAdditionalDefault => 5;
+		public int DiaScoreNAdditionalDefault => 0;
 		public int DiaMaxTrainInstancesDefault => 500000;
 		public double DiaFragTolPpmFeatureClusteringDefault => 2;
 		public double DiaMinScoreDefault => 1.99;
