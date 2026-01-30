@@ -84,6 +84,12 @@ namespace MqUtil.Ms.Instrument{
 		public abstract float[] SmoothIntensityProfile(float[] origProfile);
 		public bool DiaDeleteIntermediateResultsDefault => true;
 		public abstract int DiaNumNonleadingMatchesDefault{ get; }
+		public double DiaFragCorrelationThresholdDefault => 0.3;
+		public abstract double DiaFragIntensityThreshold1Default { get; }
+		public abstract double DiaFragIntensityThreshold2Default { get; }
+		public abstract double DiaFragIntensityThreshold3Default { get; }
+		public abstract double DiaFragIntensityThreshold4Default { get; }
+
 		public override string ToString(){
 			return Name;
 		}

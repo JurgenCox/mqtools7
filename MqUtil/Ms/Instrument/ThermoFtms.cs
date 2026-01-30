@@ -8,5 +8,10 @@ namespace MqUtil.Ms.Instrument{
 		public override double DiaInitialFragMassTolPpmDefault => 20;
 		public override DiaQuantMethod DiaQuantMethodDefault => DiaQuantMethod.MixedLfqSplit;
 		public override bool UseMs1CentroidsDefault => false;
+		public override double DiaFragIntensityThreshold1Default => 0;
+		public override double DiaFragIntensityThreshold2Default => 0;
+		public override double DiaFragIntensityThreshold3Default => 0;
+		public override double DiaFragIntensityThreshold4Default => 0;
+
 	}
 }
