@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using MqApi.Document;
 using MqApi.Drawing;
 using MqApi.Generic;
@@ -14,12 +12,12 @@ namespace PerseusPluginLib.Significance{
 		public string Category => IMatrixProcessingCategories.StatisticalAnalysis;
         public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
-		public string[] HelpDocuments => new string[0];
+		public string[] HelpDocuments => [];
 		public int NumDocuments => 0;
-		public string[] HelpSupplTables => new string[0];
+		public string[] HelpSupplTables => [];
 		public int NumSupplTables => 0;
 		public string Name => "Significance A";
-		public string Heading => "Outliers";
+		public string Heading => "Outlier analysis";
 		public bool IsActive => true;
 		public float DisplayRank => 0;
 		public string Url =>
@@ -81,9 +79,9 @@ namespace PerseusPluginLib.Significance{
 			for (int i = 0; i < result.Length; i++){
 				result[i] = 1;
 			}
-			List<double> lRatio = new List<double>();
-			List<double> lIntensity = new List<double>();
-			List<int> indices = new List<int>();
+			List<double> lRatio = [];
+			List<double> lIntensity = [];
+			List<int> indices = [];
 			for (int i = 0; i < ratios.Length; i++){
 				if (!double.IsNaN(ratios[i]) && !double.IsInfinity(ratios[i])){
 					lRatio.Add(ratios[i]);
@@ -104,13 +102,13 @@ namespace PerseusPluginLib.Significance{
 					Values = choice,
 					Help = "Columns for which the Significance A should be calculated."
 				}, new SingleChoiceParam("Side"){
-					Values = new[]{"both", "right", "left"},
+					Values = ["both", "right", "left"],
 					Help =
 						"'Both' stands for the two-sided test in which the the null hypothesis can be rejected regardless of the direction" +
 						" of the effect. 'Left' and 'right' are the respective one sided tests."
 				}, new SingleChoiceParam("Use for truncation"){
 					Value = 1,
-					Values = new[]{"P value", "Benjamini-Hochberg FDR"},
+					Values = ["P value", "Benjamini-Hochberg FDR"],
 					Help =
 						"Choose here whether the truncation should be based on the p values or if the Benjamini Hochberg correction for " +
 						"multiple hypothesis testing should be applied."

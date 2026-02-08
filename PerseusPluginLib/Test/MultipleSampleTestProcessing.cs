@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using MqApi.Document;
 using MqApi.Drawing;
 using MqApi.Generic;
@@ -18,12 +16,12 @@ namespace PerseusPluginLib.Test{
 		public string Category => IMatrixProcessingCategories.StatisticalAnalysis;
         public Bitmap2 DisplayImage => PerseusPluginUtils.GetImage("pn.png");
 		public string Name => "Multiple-sample tests";
-		public string Heading => "Group comparison tests";
+		public string Heading => "Differential expression";
 		public bool IsActive => true;
 		public float DisplayRank => 2;
-		public string[] HelpSupplTables => new string[0];
+		public string[] HelpSupplTables => [];
 		public int NumSupplTables => 0;
-		public string[] HelpDocuments => new string[0];
+		public string[] HelpDocuments => [];
 		public int NumDocuments => 0;
 		public string Url =>
             "https://cox-labs.github.io/coxdocs/multiplesampletestprocessing.html";
@@ -112,7 +110,7 @@ namespace PerseusPluginLib.Test{
 					List<int[]>[] colIndsPreserveX0 = new List<int[]>[groupNames.Length];
 					colIndsPreserveX = new int[groupNames.Length][][];
 					for (int i = 0; i < colIndsPreserveX0.Length; i++){
-						colIndsPreserveX0[i] = new List<int[]>();
+						colIndsPreserveX0[i] = [];
 					}
 					foreach (int[] inds in colIndsPreserve){
 						int index = DetermineGroup(colInds, inds);
@@ -162,7 +160,7 @@ namespace PerseusPluginLib.Test{
 			};
 		}
 		internal static Parameters GetTestSubParams(UnivariateTest test){
-			List<Parameter> p = new List<Parameter>();
+			List<Parameter> p = [];
 			if (test.HasS0){
 				p.Add(new DoubleParam("S0", 0){
 					Help =
@@ -173,7 +171,7 @@ namespace PerseusPluginLib.Test{
 			}
 			if (test.HasSides){
 				p.Add(new SingleChoiceParam("Side"){
-					Values = new[]{"both", "right", "left"},
+					Values = ["both", "right", "left"],
 					Help =
 						"'Both' stands for the two-sided test in which the the null hypothesis can be rejected regardless of the direction" +
 						" of the effect. 'Left' and 'right' are the respective one sided tests."
@@ -239,14 +237,14 @@ namespace PerseusPluginLib.Test{
 		private static string[][] CalcPvalueSignificance(IList<double> pvals, double threshold){
 			string[][] result = new string[pvals.Count][];
 			for (int i = 0; i < result.Length; i++){
-				result[i] = pvals[i] <= threshold ? new[]{"+"} : new string[0];
+				result[i] = pvals[i] <= threshold ? ["+"] : [];
 			}
 			return result;
 		}
 		private static void Calc1(int p, IList<List<double>> pq1, IMatrixData data, MultipleSampleTest test,
 			int[][] colInds, double s0, int[][][] colIndsPreserve){
 			Random2 r2 = new Random2(p);
-			pq1[p] = new List<double>();
+			pq1[p] = [];
 			int[][] colIndP;
 			if (colIndsPreserve != null){
 				PermBasedFdrUtil.BalancedPermutationsSubgroups(colIndsPreserve, out colIndP, r2);
@@ -268,11 +266,11 @@ namespace PerseusPluginLib.Test{
 			List<double>[] pq1 = new List<double>[nperm];
 			new ThreadDistributor(nthreads, nperm, p => Calc1(p, pq1, data, test, colInds, s0, colIndsPreserve))
 				.Start();
-			List<double> pq = new List<double>();
+			List<double> pq = [];
 			for (int p = 0; p < nperm; p++){
 				pq.AddRange(pq1[p]);
 			}
-			List<int> indices = new List<int>();
+			List<int> indices = [];
 			for (int i = 0; i < pq.Count; i++){
 				indices.Add(-1);
 			}
@@ -301,16 +299,16 @@ namespace PerseusPluginLib.Test{
 			}
 			string[][] result = new string[pvalsS0.Count][];
 			for (int i = 0; i < result.Length; i++){
-				result[i] = new string[0];
+				result[i] = [];
 			}
 			int[] o1 = pvalsS0.Order();
 			for (int i = 0; i <= lastind; i++){
-				result[o1[i]] = new[]{"+"};
+				result[o1[i]] = ["+"];
 			}
 			return result;
 		}
 		private static double[] GetValues(int row, IEnumerable<int> cols, IMatrixData data){
-			List<double> result = new List<double>();
+			List<double> result = [];
 			foreach (int col in cols){
 				double val = data.Values.Get(row, col);
 				if (!double.IsNaN(val) && !double.IsInfinity(val)){

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using MqApi.Document;
+﻿using MqApi.Document;
 using MqApi.Drawing;
 using MqApi.Generic;
 using MqApi.Matrix;
@@ -8,20 +6,20 @@ using MqApi.Param;
 namespace PerseusPluginLib.Quality{
 	public class CreateQualityMatrix : IMatrixProcessing{
 		public bool HasButton => false;
-		public string Category => IMatrixProcessingCategories.StatisticalAnalysis;
+		public string Category => IMatrixProcessingCategories.DataHandling;
         public Bitmap2 DisplayImage => null;
 		public string Description
 			=>
 				"Create a matrix of quality values from a set of numerical columns. There has to " +
 				"be one numerical column per main column.";
 		public string HelpOutput => "";
-		public string[] HelpSupplTables => new string[0];
+		public string[] HelpSupplTables => [];
 		public int NumSupplTables => 0;
 		public string Name => "Create quality matrix";
 		public string Heading => "Quality";
 		public bool IsActive => true;
 		public float DisplayRank => 0;
-		public string[] HelpDocuments => new string[0];
+		public string[] HelpDocuments => [];
 		public int NumDocuments => 0;
 		public int GetMaxThreads(Parameters parameters){
 			return 1;
@@ -30,7 +28,7 @@ namespace PerseusPluginLib.Quality{
 			=> "https://cox-labs.github.io/coxdocs/createqualitymatrix.html";
 		public Parameters GetParameters(IMatrixData mdata, ref string errorString){
 			string[] reducedExpColNames = ReduceNames(mdata.ColumnNames);
-			List<Parameter> p = new List<Parameter>();
+			List<Parameter> p = [];
 			for (int i = 0; i < mdata.ColumnCount; i++){
 				SingleChoiceParam scp = new SingleChoiceParam(mdata.ColumnNames[i]){
 					Values = mdata.NumericColumnNames,

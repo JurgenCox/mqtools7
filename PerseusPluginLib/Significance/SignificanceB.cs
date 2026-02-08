@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using MqApi.Document;
 using MqApi.Drawing;
 using MqApi.Generic;
@@ -16,12 +13,12 @@ namespace PerseusPluginLib.Significance{
 		public string Category => IMatrixProcessingCategories.StatisticalAnalysis;
         public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
-		public string[] HelpDocuments => new string[0];
+		public string[] HelpDocuments => [];
 		public int NumDocuments => 0;
-		public string[] HelpSupplTables => new string[0];
+		public string[] HelpSupplTables => [];
 		public int NumSupplTables => 0;
 		public string Name => "Significance B";
-		public string Heading => "Outliers";
+		public string Heading => "Outlier analysis";
 		public bool IsActive => true;
 		public float DisplayRank => 1;
 		public string Url
@@ -101,12 +98,12 @@ namespace PerseusPluginLib.Significance{
 					Repeats = true,
 					Help = "Intensity columns for which the Significance B should be calculated."
 				}, new SingleChoiceParam("Side"){
-					Values = new[]{"both", "right", "left"},
+					Values = ["both", "right", "left"],
 					Help =
 						"'Both' stands for the two-sided test in which the the null hypothesis can be rejected regardless of the direction" +
 						" of the effect. 'Left' and 'right' are the respective one sided tests."
 				}, new SingleChoiceParam("Use for truncation"){
-					Values = new[]{"P value", "Benjamini-Hochberg FDR"},
+					Values = ["P value", "Benjamini-Hochberg FDR"],
 					Value = 1,
 					Help =
 						"Choose here whether the truncation should be based on the p values or if the Benjamini Hochberg correction for " +

@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using MqApi.Document;
 using MqApi.Drawing;
 using MqApi.Generic;
@@ -13,15 +11,15 @@ namespace PerseusPluginLib.Basic{
         public bool HasButton => false;
 		public Bitmap2 DisplayImage => null;
 		public string Name => "Performance curves";
-		public string Heading => "Basic";
+		public string Heading => "Machine learning";
 		public string HelpOutput => "";
-		public string[] HelpSupplTables => new string[0];
+		public string[] HelpSupplTables => [];
 		public int NumSupplTables => 0;
 		public string Description =>
 			"Calculation of predictive performance measures like precision-recall or ROC curves.";
 		public bool IsActive => true;
-		public float DisplayRank => 10;
-		public string[] HelpDocuments => new string[0];
+		public float DisplayRank => 100;
+		public string[] HelpDocuments => [];
 		public int NumDocuments => 0;
 		public string Url =>
             "https://cox-labs.github.io/coxdocs/performancecurves.html";
@@ -45,8 +43,8 @@ namespace PerseusPluginLib.Basic{
 				return;
 			}
 			bool[] indCol = GetIndicatorColumn(catCol, word, data);
-			List<string> expColNames = new List<string>();
-			List<double[]> expCols = new List<double[]>();
+			List<string> expColNames = [];
+			List<double[]> expCols = [];
 			foreach (int scoreColumn in scoreColumns){
 				double[] vals = scoreColumn < data.NumericColumnCount
 					? data.NumericColumns[scoreColumn]
@@ -60,9 +58,9 @@ namespace PerseusPluginLib.Basic{
 			double[,] expData = ToMatrix(expCols);
 			data.ColumnNames = expColNames;
 			data.Values.Set(expData);
-			data.SetAnnotationColumns(new List<string>(), new List<string[]>(), new List<string>(),
-				new List<string[][]>(), new List<string>(), new List<double[]>(), new List<string>(),
-				new List<double[][]>());
+			data.SetAnnotationColumns([], [], [],
+				[], [], [], [],
+				[]);
 		}
 		private static void CalcCurves(bool[] indicatorCol, bool falseAreIndicated, double[] vals, bool largeIsGood,
 			PerformanceColumnType[] types, string name, List<double[]> expCols, List<string> expColNames,
@@ -106,7 +104,7 @@ namespace PerseusPluginLib.Basic{
 			string[] numChoice = ArrayUtils.Concat(mdata.NumericColumnNames, mdata.ColumnNames);
 			return new Parameters(
 				new SingleChoiceParam("Indicated are"){
-					Values = new[]{"False", "True"},
+					Values = ["False", "True"],
 					Help = "Specify whether rows containing the 'Indicator' are true or false."
 				},
 				new SingleChoiceParam("In column"){
@@ -118,7 +116,7 @@ namespace PerseusPluginLib.Basic{
 						"The string that will be searched in the above specified categorical column to define which rows are right or wrong predicted."
 				},
 				new MultiChoiceParam("Scores"){
-					Value = new[]{0},
+					Value = [0],
 					Values = numChoice,
 					Help =
 						"The expression columns that contain the classification scores by which the rows will be ranked."
