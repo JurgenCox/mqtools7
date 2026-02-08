@@ -2,7 +2,7 @@ using MqApi.Drawing;
 using MqApi.Param;
 namespace PluginInterop.Python{
 	public class MatrixProcessing : PluginInterop.MatrixProcessing{
-		public override string Name => "Matrix => Python";
+		public override string Name => "Python";
 		public override string Description => "Run Python script";
 		protected override string CodeFilter => "Python script, *.py | *.py";
 		public override Bitmap2 DisplayImage => Bitmap2.GetImage("python.png");

@@ -179,7 +179,7 @@ namespace MqUtil.Util{
 					case estonian: return "Kas soovite enne sessiooni laadimist salvestada kõik muudatused?";
 					case finnish: return "Haluatko tallentaa muutokset ennen istunnon lataamista?";
 					case french: return "Voulez-vous enregistrer les modifications avant de charger la session?";
-					case german: return "Möchten Sie Änderungen speichern, bevor Sie die Sitzung laden?";
+					case german: return "Möchten Sie Änderungen speichern, bevor Sie die Session laden?";
 					case greek: return "Θέλετε να αποθηκεύσετε οποιεσδήποτε αλλαγές πριν φορτώσετε τη σύνοδο;";
 					case hebrew: return "האם תרצה לשמור שינויים לפני טעינת ההפעלה?";
 					case hindi: return "क्या आप सत्र को लोड करने से पहले कोई परिवर्तन सहेजना चाहेंगे?";
@@ -216,7 +216,7 @@ namespace MqUtil.Util{
 					case finnish: return "Haluatko tallentaa muutokset ennen uuden istunnon aloittamista?";
 					case french:
 						return "Voulez-vous enregistrer les modifications avant de commencer une nouvelle session?";
-					case german: return "Möchten Sie Änderungen speichern, bevor Sie eine neue Sitzung beginnen?";
+					case german: return "Möchten Sie Änderungen speichern, bevor Sie eine neue Session beginnen?";
 					case greek: return "Θέλετε να αποθηκεύσετε τις αλλαγές πριν ξεκινήσετε μια νέα συνεδρία;";
 					case hebrew: return "האם ברצונך לשמור שינויים לפני שתתחיל הפעלה חדשה?";
 					case hindi: return "क्या आप नया सत्र शुरू करने से पहले कोई बदलाव करना चाहेंगे?";
@@ -1009,34 +1009,34 @@ namespace MqUtil.Util{
 		public static string Session{
 			get{
 				switch (TwoLettName){
-					case arabic: return "جلسة";
-					case bulgarian: return "сесия";
-					case chinese: return "会议";
-					case czech: return "zasedání";
-					case danish: return "session";
-					case dutch: return "sessie";
-					case estonian: return "seanss";
-					case finnish: return "istunto";
-					case french: return "session";
-					case german: return "Sitzung";
-					case greek: return "συνεδρία";
-					case hebrew: return "מוֹשָׁב";
-					case hindi: return "अधिवेशन";
-					case italian: return "sessione";
-					case japanese: return "セッション";
-					case korean: return "세션";
-					case latvian: return "sesija";
-					case lithuanian: return "sesija";
-					case norwegian: return "økt";
-					case persian: return "جلسه";
-					case polish: return "sesja";
-					case portuguese: return "sessão";
-					case romanian: return "sesiune";
-					case russian: return "сессия";
-					case spanish: return "sesión";
-					case swedish: return "session";
-					case tamil: return "அமர்வு";
-					case turkish: return "oturum";
+					//case arabic: return "جلسة";
+					//case bulgarian: return "сесия";
+					//case chinese: return "会议";
+					//case czech: return "zasedání";
+					//case danish: return "session";
+					//case dutch: return "sessie";
+					//case estonian: return "seanss";
+					//case finnish: return "istunto";
+					//case french: return "session";
+					//case german: return "Sitzung";
+					//case greek: return "συνεδρία";
+					//case hebrew: return "מוֹשָׁב";
+					//case hindi: return "अधिवेशन";
+					//case italian: return "sessione";
+					//case japanese: return "セッション";
+					//case korean: return "세션";
+					//case latvian: return "sesija";
+					//case lithuanian: return "sesija";
+					//case norwegian: return "økt";
+					//case persian: return "جلسه";
+					//case polish: return "sesja";
+					//case portuguese: return "sessão";
+					//case romanian: return "sesiune";
+					//case russian: return "сессия";
+					//case spanish: return "sesión";
+					//case swedish: return "session";
+					//case tamil: return "அமர்வு";
+					//case turkish: return "oturum";
 					default: return "session";
 				}
 			}

@@ -24,11 +24,11 @@ namespace PluginInterop{
 		public virtual bool HasButton => false;
 		public virtual Bitmap2 DisplayImage => null;
 		public virtual string Url => projectUrl;
-		public virtual string Heading => "External";
+		public virtual string Heading => "Embedded script";
 		public virtual string HelpOutput => "";
-		public virtual string[] HelpSupplTables => new string[0];
+		public virtual string[] HelpSupplTables => [];
 		public virtual int NumSupplTables => 0;
-		public virtual string[] HelpDocuments => new string[0];
+		public virtual string[] HelpDocuments => [];
 		public virtual int NumDocuments => 0;
 		protected virtual bool AdditionalMatrices => false;
 		/// <summary>
@@ -74,7 +74,7 @@ namespace PluginInterop{
 		/// your custom parameters. To pass parameters as XML file you can use <see cref="Utils.WriteParametersToFile"/>.
 		/// </summary>
 		protected virtual Parameter[] SpecificParameters(IMatrixData data, ref string errString){
-			return new Parameter[]{CodeFileParam(), AdditionalArgumentsParam()};
+			return [CodeFileParam(), AdditionalArgumentsParam()];
 		}
 		/// <summary>
 		/// Create the parameters for the GUI with default of generic 'Executable', 'Code file' and 'Additional arguments' parameters.
@@ -90,7 +90,7 @@ namespace PluginInterop{
 			parameters.AddParameterGroup(specificParameters, "Specific", false);
 			Parameter previewButton = Utils.DataPreviewButton(data);
 			Parameter parametersPreviewButton = Utils.ParametersPreviewButton(parameters);
-			parameters.AddParameterGroup(new[]{ExecutableParam(), previewButton, parametersPreviewButton}, "Generic",
+			parameters.AddParameterGroup([ExecutableParam(), previewButton, parametersPreviewButton], "Generic",
 				false);
 			return parameters;
 		}
