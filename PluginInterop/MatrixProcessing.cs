@@ -16,7 +16,7 @@ namespace PluginInterop{
 	/// </summary>
 	public abstract class MatrixProcessing : InteropBase, IMatrixProcessing{
 		public abstract string Name{ get; }
-		public virtual string Category => IMatrixProcessingCategories.Plugins;
+		public virtual string Category => null;
 		public abstract string Description{ get; }
 		public virtual float DisplayRank => 1;
 		public virtual bool IsActive => true;
