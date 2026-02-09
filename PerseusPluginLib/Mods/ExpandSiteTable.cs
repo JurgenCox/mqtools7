@@ -11,7 +11,7 @@ namespace PerseusPluginLib.Mods{
 	public class ExpandSiteTable : IMatrixProcessing{
 		private const int maxInd = 3;
 		public bool HasButton => false;
-		public string Category => IMatrixProcessingCategories.Plugins;
+		public string Category => null;
         public Bitmap2 DisplayImage => null;
 		public string Description =>
 			"The '___1', '___2' and '___3' versions of MaxQuant output table columns are rearranged in the matrix " +

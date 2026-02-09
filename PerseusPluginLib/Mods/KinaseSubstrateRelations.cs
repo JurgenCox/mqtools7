@@ -11,7 +11,7 @@ using MqUtil.Parse;
 namespace PerseusPluginLib.Mods{
 	public class KinaseSubstrateRelations : IMatrixProcessing{
 		public bool HasButton => false;
-		public string Category => IMatrixProcessingCategories.Plugins;
+		public string Category => null;
         public Bitmap2 DisplayImage => null;
 		public string Description
 			=>

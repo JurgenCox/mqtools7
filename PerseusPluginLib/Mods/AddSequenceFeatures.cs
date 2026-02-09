@@ -11,7 +11,7 @@ using MqUtil.Parse;
 using MqUtil.Parse.Uniprot;
 namespace PerseusPluginLib.Mods{
 	public class AddSequenceFeatures : IMatrixProcessing{
-		public string Category => IMatrixProcessingCategories.Plugins;
+		public string Category => null;
         public string Name => "Add sequence features";
 		public float DisplayRank => 12;
 		public string Description => "Site-specific sequence features are added, which were extracted from UniProt.";

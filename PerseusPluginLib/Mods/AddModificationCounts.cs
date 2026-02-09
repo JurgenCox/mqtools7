@@ -9,7 +9,7 @@ using MqApi.Param;
 using MqUtil.Parse;
 namespace PerseusPluginLib.Mods{
 	public class AddModificationCounts : IMatrixProcessing{
-		public string Category => IMatrixProcessingCategories.Plugins;
+		public string Category => null;
         public bool HasButton => false;
 		public string Url
 			=>

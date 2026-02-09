@@ -6,7 +6,7 @@ using MqApi.Matrix;
 using MqApi.Param;
 namespace PerseusPluginLib.Mods{
 	public class ShortenMotifs : IMatrixProcessing{
-		public string Category => IMatrixProcessingCategories.Plugins;
+		public string Category => null;
         public string Name => "Shorten motif length";
 		public float DisplayRank => 18;
 		public string Description => "Sequence windows are shortened based on start and length parameters.";
