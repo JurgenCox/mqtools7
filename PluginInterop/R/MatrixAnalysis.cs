@@ -6,7 +6,7 @@ namespace PluginInterop.R{
 			return Utils.CreateCheckedFileParam(InterpreterLabel, InterpreterFilter, TryFindExecutable);
 		}
 		protected override bool TryFindExecutable(out string path){
-			return Utils.TryFindRExecutable(out path);
+			return Utils.GetRScriptPath(out path);
 		}
 	}
 }
