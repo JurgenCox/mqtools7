@@ -90,5 +90,15 @@ namespace PluginInterop{
 			return new StringParam(AdditionalArgumentsLabel);
 		}
 		public abstract EditorType Edit { get; }
-	}
+		public static string GetAppDataPerseus()
+		{
+			string applicationFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+			string perseusFolder = Path.Combine(applicationFolder, "Perseus");
+			if (!Directory.Exists(perseusFolder))
+			{
+				Directory.CreateDirectory(perseusFolder);
+			}
+			return perseusFolder;
+		}
+    }
 }
