@@ -74,7 +74,11 @@ namespace PluginInterop{
 		/// your custom parameters. To pass parameters as XML file you can use <see cref="Utils.WriteParametersToFile"/>.
 		/// </summary>
 		protected virtual Parameter[] SpecificParameters(IMatrixData data, ref string errString){
-			return [CodeFileParam(), AdditionalArgumentsParam()];
+			SingleChoiceParam scriptMode = new ("Script mode")
+			{
+				Values = ["Internal", "External"]
+			};
+			return [scriptMode,CodeFileParam(), AdditionalArgumentsParam()];
 		}
 		/// <summary>
 		/// Create the parameters for the GUI with default of generic 'Executable', 'Code file' and 'Additional arguments' parameters.
@@ -83,6 +87,7 @@ namespace PluginInterop{
 		/// </summary>
 		public virtual Parameters GetParameters(IMatrixData data, ref string errString){
 			Parameters parameters = new Parameters();
+
 			Parameter[] specificParameters = SpecificParameters(data, ref errString);
 			if (!string.IsNullOrEmpty(errString)){
 				return null;
