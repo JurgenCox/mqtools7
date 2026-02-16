@@ -33,11 +33,12 @@ namespace PluginInterop{
 			string inFile = Path.GetTempFileName();
 			PerseusUtils.WriteMatrixToFile(inData, inFile);
 			string outFolder = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-			if (!TryGetCodeFile(param, out string codeFile)){
+			if (!TryGetCodeFile(param, out string codeFile, out ScriptMode scriptMode))
+			{
 				processInfo.ErrString = $"Code file '{codeFile}' was not found";
 				return;
 			}
-			string[] suppFiles = SupplDataTypes.Select(Utils.CreateTemporaryPath).ToArray();
+            string[] suppFiles = SupplDataTypes.Select(Utils.CreateTemporaryPath).ToArray();
 			string commandLineArguments = GetCommandLineArguments(param);
 			string args = $"{codeFile} {commandLineArguments} {inFile} {outFolder} {string.Join(" ", suppFiles)}";
 			Debug.WriteLine($"executing > {remoteExe} {args}");
@@ -45,16 +46,13 @@ namespace PluginInterop{
 				processInfo.ErrString = processInfoErrString;
 				return;
 			}
-			FolderFormat.Read(outData, outFolder, processInfo);
+			if (scriptMode == ScriptMode.Internal)
+			{
+				File.Delete(codeFile);
+			}
+            FolderFormat.Read(outData, outFolder, processInfo);
 			supplData = Utils.ReadSupplementaryData(suppFiles, SupplDataTypes, processInfo, inData);
-		}
-		/// <summary>
-		/// Create the parameters for the GUI with default of generic 'Code file'
-		/// and 'Additional arguments' parameters. Overwrite this function for custom structured parameters.
-		/// </summary>
-		protected virtual Parameter[] SpecificParameters(IMatrixData data, ref string errString){
-			return new Parameter[]{CodeFileParam(), AdditionalArgumentsParam()};
-		}
+        }
 		/// <summary>
 		/// Create the parameters for the GUI with default of generic 'Executable', 'Code file' and 'Additional arguments' parameters.
 		/// Includes buttons for preview downloads of 'Data' and 'Parameters' for development purposes.
@@ -62,7 +60,7 @@ namespace PluginInterop{
 		/// </summary>
 		public virtual Parameters GetParameters(IMatrixData data, ref string errString){
 			Parameters parameters = new Parameters();
-			Parameter[] specificParameters = SpecificParameters(data, ref errString);
+			Parameter[] specificParameters = SpecificParameters(ref errString);
 			if (!string.IsNullOrEmpty(errString)){
 				return null;
 			}

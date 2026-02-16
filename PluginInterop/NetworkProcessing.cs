@@ -32,11 +32,12 @@ namespace PluginInterop{
 			string inFolder = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 			FolderFormat.Write(ndata, inFolder);
 			string outFolder = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-			if (!TryGetCodeFile(param, out string codeFile)){
+			if (!TryGetCodeFile(param, out string codeFile, out ScriptMode scriptMode))
+			{
 				processInfo.ErrString = $"Code file '{codeFile}' was not found";
 				return;
 			}
-			string[] suppFiles = SupplDataTypes.Select(Utils.CreateTemporaryPath).ToArray();
+            string[] suppFiles = SupplDataTypes.Select(Utils.CreateTemporaryPath).ToArray();
 			string commandLineArguments = GetCommandLineArguments(param);
 			string args = $"{codeFile} {commandLineArguments} {inFolder} {outFolder} {string.Join(" ", suppFiles)}";
 			Debug.WriteLine($"executing > {remoteExe} {args}");
@@ -44,10 +45,14 @@ namespace PluginInterop{
 				processInfo.ErrString = processInfoErrString;
 				return;
 			}
-			ndata.Clear();
+			if (scriptMode == ScriptMode.Internal)
+			{
+				File.Delete(codeFile);
+			}
+            ndata.Clear();
 			FolderFormat.Read(ndata, outFolder, processInfo);
 			supplData = Utils.ReadSupplementaryData(suppFiles, SupplDataTypes, processInfo, ndata);
-		}
+        }
 		/// <summary>
 		/// Create the parameters for the GUI with default of generic 'Code file'
 		/// and 'Additional arguments' parameters. Overwrite this function for custom structured parameters.
@@ -62,7 +67,7 @@ namespace PluginInterop{
 		/// </summary>
 		public virtual Parameters GetParameters(INetworkData data, ref string errString){
 			Parameters parameters = new Parameters();
-			Parameter[] specificParameters = SpecificParameters(data, ref errString);
+			Parameter[] specificParameters = SpecificParameters(ref errString);
 			if (!string.IsNullOrEmpty(errString)){
 				return null;
 			}
