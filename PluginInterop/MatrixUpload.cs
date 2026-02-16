@@ -34,25 +34,19 @@ namespace PluginInterop{
 			parameters.AddParameterGroup(new[]{ExecutableParam(), parametersPreviewButton}, "Generic", false);
 			return parameters;
 		}
-		/// <summary>
-		/// Create specific processing parameters. Defaults to 'Code file'. You can provide custom parameters
-		/// by overriding this function. Called by <see cref="GetParameters"/>.
-		/// </summary>
-		protected virtual Parameter[] SpecificParameters(ref string errString){
-			return new Parameter[]{CodeFileParam(), AdditionalArgumentsParam()};
-		}
-		public void LoadData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
+        public void LoadData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
 			ref IDocumentData[] documents, ProcessInfo processInfo){
 			string remoteExe = GetExectuable(param);
 			if (string.IsNullOrWhiteSpace(remoteExe)){
 				processInfo.ErrString = remoteExeNotSpecified;
 			}
 			string outFile = Path.GetTempFileName();
-			if (!TryGetCodeFile(param, out string codeFile)){
+			if (!TryGetCodeFile(param, out string codeFile, out ScriptMode scriptMode))
+			{
 				processInfo.ErrString = $"Code file '{codeFile}' was not found";
 				return;
 			}
-			if (supplTables == null){
+            if (supplTables == null){
 				supplTables = Enumerable.Range(0, NumSupplTables).Select(i => (IMatrixData) mdata.CreateNewInstance())
 					.ToArray();
 			}
@@ -64,10 +58,14 @@ namespace PluginInterop{
 				processInfo.ErrString = processInfoErrString;
 				return;
 			}
-			PerseusUtil.ReadMatrixFromFile(mdata, processInfo, outFile, '\t');
+			if (scriptMode == ScriptMode.Internal)
+			{
+				File.Delete(codeFile);
+			}
+            PerseusUtil.ReadMatrixFromFile(mdata, processInfo, outFile, '\t');
 			for (int i = 0; i < NumSupplTables; i++){
 				PerseusUtil.ReadMatrixFromFile(supplTables[i], processInfo, suppFiles[i], '\t');
 			}
-		}
+        }
 	}
 }

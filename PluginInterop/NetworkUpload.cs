@@ -33,13 +33,6 @@ namespace PluginInterop{
 			parameters.AddParameterGroup(new[]{ExecutableParam(), parametersPreviewButton}, "Generic", false);
 			return parameters;
 		}
-		/// <summary>
-		/// Create specific processing parameters. Defaults to 'Code file'. You can provide custom parameters
-		/// by overriding this function. Called by <see cref="GetParameters"/>.
-		/// </summary>
-		protected virtual Parameter[] SpecificParameters(ref string errString){
-			return new Parameter[]{CodeFileParam(), AdditionalArgumentsParam()};
-		}
 		public void LoadData(INetworkData ndata, Parameters param, ref IData[] supplData,
 			ProcessInfo processInfo){
 			string remoteExe = GetExectuable(param);
@@ -47,11 +40,12 @@ namespace PluginInterop{
 				processInfo.ErrString = remoteExeNotSpecified;
 			}
 			string outFolder = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-			if (!TryGetCodeFile(param, out string codeFile)){
+			if (!TryGetCodeFile(param, out string codeFile, out ScriptMode scriptMode))
+			{
 				processInfo.ErrString = $"Code file '{codeFile}' was not found";
 				return;
 			}
-			string[] suppFiles = SupplDataTypes.Select(Utils.CreateTemporaryPath).ToArray();
+            string[] suppFiles = SupplDataTypes.Select(Utils.CreateTemporaryPath).ToArray();
 			string commandLineArguments = GetCommandLineArguments(param);
 			string args = $"{codeFile} {commandLineArguments} {outFolder} {string.Join(" ", suppFiles)}";
 			Debug.WriteLine($"executing > {remoteExe} {args}");
@@ -59,8 +53,12 @@ namespace PluginInterop{
 				processInfo.ErrString = processInfoErrString;
 				return;
 			}
-			FolderFormat.Read(ndata, outFolder, processInfo);
+			if (scriptMode == ScriptMode.Internal)
+			{
+				File.Delete(codeFile);
+			}
+            FolderFormat.Read(ndata, outFolder, processInfo);
 			supplData = Utils.ReadSupplementaryData(suppFiles, SupplDataTypes, processInfo, ndata);
-		}
+        }
 	}
 }

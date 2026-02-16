@@ -1,4 +1,6 @@
+using MqApi.Matrix;
 using MqApi.Param;
+
 namespace PluginInterop{
 	/// <summary>
 	/// Base class for all interop functionality.
@@ -32,21 +34,46 @@ namespace PluginInterop{
 		/// These parameters circumvent the usual XML serialization of parameters and are meant for simple scripts.
 		/// </summary>
 		protected virtual string AdditionalArgumentsLabel => "Additional arguments";
-		/// <summary>
-		/// Extract the code file as a string. See <see cref="CodeFileParam"/>.
-		/// </summary>
-		protected virtual bool TryGetCodeFile(Parameters param, out string codeFile){
+		protected virtual bool TryGetCodeFile(Parameters param, out string codeFile, out ScriptMode scriptMode){
+			ParameterWithSubParams<int> scriptModeParam = param.GetParamWithSubParams<int>("Script mode");
+			scriptMode = (ScriptMode)scriptModeParam.Value;
+			Parameters paramsModel = scriptModeParam.GetSubParameters();
+			codeFile = Path.Combine(Path.GetTempPath(), $"Perseus_{Path.GetRandomFileName()}");
+			if (scriptMode == ScriptMode.Internal)
+			{
+				string[] scriptText = paramsModel.GetParam<string[]>("Script text").Value;
+				StreamWriter writer = new(codeFile);
+				foreach (string text in scriptText)
+				{
+					writer.WriteLine(text);
+				}
+				writer.Close();
+			}
+			else
+			{
+				codeFile = paramsModel.GetParam<string>(CodeLabel).Value;
+				if (string.IsNullOrEmpty(codeFile) || !File.Exists(codeFile))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+		protected virtual bool TryGetCodeFile(Parameters param, out string codeFile)
+		{
 			codeFile = param.GetParam<string>(CodeLabel).Value;
-			if (string.IsNullOrEmpty(codeFile) || !File.Exists(codeFile)){
+			if (string.IsNullOrEmpty(codeFile) || !File.Exists(codeFile))
+			{
 				return false;
 			}
 			return true;
 		}
-		/// <summary>
-		/// Get parameters passed on the command line. Defaults to <see cref="AdditionalArgumentsLabel"/>.
-		/// Other plugins might save parameters to XML file and pass the file path <see cref="Utils.WriteParametersToFile"/>.
-		/// </summary>
-		protected virtual string GetCommandLineArguments(Parameters param){
+
+        /// <summary>
+        /// Get parameters passed on the command line. Defaults to <see cref="AdditionalArgumentsLabel"/>.
+        /// Other plugins might save parameters to XML file and pass the file path <see cref="Utils.WriteParametersToFile"/>.
+        /// </summary>
+        protected virtual string GetCommandLineArguments(Parameters param){
 			Parameter parameter = param.GetParamNoException(AdditionalArgumentsLabel);
 			if (parameter == null){
 				throw new Exception($"Expected standard parameter \"{AdditionalArgumentsLabel}\" could not be found. " +
@@ -70,16 +97,13 @@ namespace PluginInterop{
 			}
 			return executableParam;
 		}
-		/// <summary>
-		/// FileParam for specifying the code file. See <see cref="TryGetCodeFile"/>.
-		/// </summary>
 		protected virtual FileParam CodeFileParam(){
 			return new FileParam(CodeLabel){Filter = CodeFilter, Edit = Edit};
 		}
-		/// <summary>
-		/// Returns true and the path of the executable if found.
-		/// </summary>
-		protected virtual bool TryFindExecutable(out string path){
+        /// <summary>
+        /// Returns true and the path of the executable if found.
+        /// </summary>
+        protected virtual bool TryFindExecutable(out string path){
 			path = null;
 			return false;
 		}
@@ -90,7 +114,27 @@ namespace PluginInterop{
 			return new StringParam(AdditionalArgumentsLabel);
 		}
 		public abstract EditorType Edit { get; }
-		public static string GetAppDataPerseus()
+		protected virtual Parameter[] SpecificParameters(ref string errString)
+		{
+			SingleChoiceWithSubParams scriptMode = new("Script mode", 1)
+			{
+				Values = ["External", "Internal"],
+				SubParams = [new Parameters(CodeFileParam()), new Parameters(new MultiStringParam("Script text"))]
+
+			};
+			return [scriptMode, AdditionalArgumentsParam()];
+		}
+		protected virtual Parameter[] SpecificParameters(IMatrixData mdata,ref string errString)
+		{
+			SingleChoiceWithSubParams scriptMode = new("Script mode", 1)
+			{
+				Values = ["External", "Internal"],
+				SubParams = [new Parameters(CodeFileParam()), new Parameters(new MultiStringParam("Script text"))]
+
+			};
+			return [scriptMode, AdditionalArgumentsParam()];
+		}
+        public static string GetAppDataPerseus()
 		{
 			string applicationFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 			string perseusFolder = Path.Combine(applicationFolder, "Perseus");
