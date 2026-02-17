@@ -2450,7 +2450,6 @@ namespace MqApi.Num{
 		}
 		public static int ClosestIndex(double[] array, double value){
 			if (array == null) return -1;
-			lock (array){
 				if (double.IsNaN(value)){
 					return -1;
 				}
@@ -2483,11 +2482,9 @@ namespace MqApi.Num{
 					return b;
 				}
 				return b - 1;
-			}
 		}
 		public static int ClosestIndex(List<double> array, double value){
 			if (array == null) return -1;
-			lock (array){
 				if (double.IsNaN(value)){
 					return -1;
 				}
@@ -2520,8 +2517,83 @@ namespace MqApi.Num{
 					return b;
 				}
 				return b - 1;
-			}
 		}
+		public static int ClosestIndex<T>(List<T> array, T value) where T : IComparable<T>
+		{
+			if (array == null || value == null) return -1;
+				int n = array.Count;
+				if (n == 0)
+				{
+					return -1;
+				}
+				if (n == 1)
+				{
+					return 0;
+				}
+				if (value.CompareTo(array[n - 1]) > 0)
+				{
+					return n - 1;
+				}
+				if (value.CompareTo(array[0]) < 0)
+				{
+					return 0;
+				}
+				int a = array.BinarySearch(value);
+				if (a >= 0)
+				{
+					return a;
+				}
+				int b = -1 - a;
+				if (b == 0)
+				{
+					return b;
+				}
+				if (b >= n)
+				{
+					//can only happen if the array contains NaNs
+					return n - 1;
+				}
+				return b - 1;
+		}
+		public static int ClosestIndex<T>(T[] array, T value) where T : IComparable<T>
+		{
+			if (array == null || value == null) return -1;
+			int n = array.Length;
+			if (n == 0)
+			{
+				return -1;
+			}
+			if (n == 1)
+			{
+				return 0;
+			}
+			if (value.CompareTo(array[n - 1]) > 0)
+			{
+				return n - 1;
+			}
+			if (value.CompareTo(array[0]) < 0)
+			{
+				return 0;
+			}
+			int a = Array.BinarySearch(array, value);
+			if (a >= 0)
+			{
+				return a;
+			}
+			int b = -1 - a;
+			if (b == 0)
+			{
+				return b;
+			}
+			if (b >= n)
+			{
+				//can only happen if the array contains NaNs
+				return n - 1;
+			}
+			return b - 1;
+		}
+
+
 		public static int ClosestIndex(float[] array, float value){
 			if (float.IsNaN(value)){
 				return -1;
@@ -2539,7 +2611,7 @@ namespace MqApi.Num{
 			if (value < array[0]) {
 				return 0;
 			}
-            int a = Array.BinarySearch(array, value);
+			int a = Array.BinarySearch(array, value);
 			if (a >= 0){
 				return a;
 			}
