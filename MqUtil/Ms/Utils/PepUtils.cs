@@ -169,7 +169,17 @@ namespace MqUtil.Ms.Utils{
 		}
 		public static (string[][] proteinNames, string[][] peptideSequences, byte[][] isMutated)
 			GetProteinAndPeptideLists(Dictionary<string, HashSet<string>> protein2Pep, bool splitTaxonomy,
-				TaxonomyRank rank, ProteinSet proteinSet){
+				TaxonomyRank rank, ProteinSet proteinSet)
+		{
+			(string[][] proteinNames, string[][] peptideSequences, byte[][] isMutated) =
+				CreateProteinAndPeptideLists(protein2Pep, splitTaxonomy, rank, proteinSet);
+			ClusterProteins(ref proteinNames, ref peptideSequences, ref isMutated, splitTaxonomy, rank, proteinSet);
+			return (proteinNames, peptideSequences, isMutated);
+		}
+		public static (string[][] proteinNames, string[][] peptideSequences, byte[][] isMutated)
+			GetProteinAndPeptideLists(Dictionary<string, ISet<string>> protein2Pep, bool splitTaxonomy,
+				TaxonomyRank rank, ProteinSet proteinSet)
+		{
 			(string[][] proteinNames, string[][] peptideSequences, byte[][] isMutated) =
 				CreateProteinAndPeptideLists(protein2Pep, splitTaxonomy, rank, proteinSet);
 			ClusterProteins(ref proteinNames, ref peptideSequences, ref isMutated, splitTaxonomy, rank, proteinSet);
@@ -196,10 +206,25 @@ namespace MqUtil.Ms.Utils{
 		}
 		private static (string[][] proteinNames, string[][] peptideSequences, byte[][] isMutated)
 			CreateProteinAndPeptideLists(Dictionary<string, HashSet<string>> protein2Pep, bool splitTaxonomy,
-				TaxonomyRank rank, ProteinSet proteinSet){
+				TaxonomyRank rank, ProteinSet proteinSet)
+		{
 			string[] proteinIds = protein2Pep.Keys.ToArray();
 			string[][] peptideSeq = new string[protein2Pep.Count][];
-			for (int i = 0; i < proteinIds.Length; i++){
+			for (int i = 0; i < proteinIds.Length; i++)
+			{
+				peptideSeq[i] = protein2Pep[proteinIds[i]].ToArray();
+				Array.Sort(peptideSeq[i]);
+			}
+			return CreateProteinAndPeptideLists2(proteinIds, peptideSeq, null, splitTaxonomy, rank, proteinSet);
+		}
+		private static (string[][] proteinNames, string[][] peptideSequences, byte[][] isMutated)
+			CreateProteinAndPeptideLists(Dictionary<string, ISet<string>> protein2Pep, bool splitTaxonomy,
+				TaxonomyRank rank, ProteinSet proteinSet)
+		{
+			string[] proteinIds = protein2Pep.Keys.ToArray();
+			string[][] peptideSeq = new string[protein2Pep.Count][];
+			for (int i = 0; i < proteinIds.Length; i++)
+			{
 				peptideSeq[i] = protein2Pep[proteinIds[i]].ToArray();
 				Array.Sort(peptideSeq[i]);
 			}
