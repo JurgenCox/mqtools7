@@ -16,7 +16,7 @@ namespace PluginInterop.Python{
 				ReqiredPythonPackages);
 		}
 		protected override bool TryFindExecutable(out string path){
-			return Utils.TryFindPythonExecutable(out path);
+			return Utils.GetPythonPath(out path);
 		}
 		public override EditorType Edit => EditorType.CodePython;
 	}

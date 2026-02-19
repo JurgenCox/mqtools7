@@ -36,12 +36,27 @@ namespace PluginInterop.Python{
 			path = default(string);
 			return false;
 		}
-		/// <summary>
-		/// Returns true if executable path points to python and can import perseuspy.
-		/// </summary>
-		/// <param name="exeName"></param>
-		/// <returns></returns>
-		public static bool CheckPythonInstallation(string exeName){
+
+		public static bool GetPythonPath(out string path)
+		{
+			string perseusFolder = InteropBase.GetAppDataPerseus();
+			string rPathFile = Path.Combine(perseusFolder, "pyPath");
+			if (!File.Exists(rPathFile))
+			{
+				path = "Please set the python path";
+				return false;
+			}
+			StreamReader reader = new StreamReader(rPathFile);
+			path = reader.ReadLine();
+			reader.Close();
+			return true;
+		}
+        /// <summary>
+        /// Returns true if executable path points to python and can import perseuspy.
+        /// </summary>
+        /// <param name="exeName"></param>
+        /// <returns></returns>
+        public static bool CheckPythonInstallation(string exeName){
 			return CheckPythonInstallation(exeName, new[]{"perseuspy"});
 		}
 		/// <summary>
