@@ -77,14 +77,11 @@ namespace PluginInterop.R{
 		public static FileParam CreateCheckedFileParam(string interpreterLabel, string interpreterFilter,
 			Python.Utils.TryFindExecutableDelegate tryFindExecutable){
 			Tuple<string, bool> CheckFileName(string s){
-				if (string.IsNullOrWhiteSpace(s)){
-					return null;
-				}
 				if (CheckRInstallation(s)){
 					return new Tuple<string, bool>("R installation was found", true);
 				}
 				return new Tuple<string, bool>(
-					"A valid R installation was not found. Make sure to select a R installation with 'PerseusR' installed. Also make sure to select Rscript.exe.",
+					"Please set the Rscript.exe path at the tab 'Tools'",
 					false);
 			}
 			CheckedFileParam fileParam =
