@@ -18,6 +18,20 @@ namespace MqUtil.Data{
 				data[row].Remove(col);
 			}
 		}
+		public void SetRowFalse(int row)
+		{
+			data[row] = null;
+		}
+		public void SetColumnFalse(int col)
+		{
+			for (int i = 0; i < RowCount; i++)
+			{
+				if (data[i] != null)
+				{
+					data[i].Remove(col);
+				}
+			}
+		}
 		public bool Get(int row, int col){
 			return data[row] != null && data[row].Contains(col);
 		}

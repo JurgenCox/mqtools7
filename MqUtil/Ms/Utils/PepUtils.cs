@@ -1,4 +1,5 @@
-﻿using MqApi.Num;
+﻿using System.ComponentModel;
+using MqApi.Num;
 using MqApi.Util;
 using MqUtil.Data;
 using MqUtil.Mol;
@@ -106,39 +107,8 @@ namespace MqUtil.Ms.Utils{
 			});
 			responder?.Comment("Clustering proteins...1");
 			td.Start();
-			int count;
 			responder?.Comment("Clustering proteins...2");
-			do
-			{
-				count = 0;
-				int start = 0;
-				while (true){
-					int container = -1;
-					int contained = -1;
-					for (int i = start; i < proteinIds.Length; i++){
-						container = GetContainer(i, contains);
-						if (container != -1){
-							contained = i;
-							break;
-						}
-					}
-					if (container == -1){
-						break;
-					}
-					for (int i = 0; i < n; i++){
-						contains.Set(i, contained, false);
-						contains.Set(contained, i, false);
-					}
-					pepSeqs[contained] = new string[0];
-					if (isMutated != null){
-						isMutated[contained] = new byte[0];
-					}
-					proteinIds[container] = ArrayUtils.Concat(proteinIds[container], proteinIds[contained]);
-					proteinIds[contained] = new string[0];
-					start = contained + 1;
-					count++;
-				}
-			} while (count > 0);
+			Cluster(contains, proteinIds, pepSeqs, isMutated);
 			responder?.Comment("Clustering proteins...3");
 			List<int> valids = new List<int>();
 			for (int i = 0; i < n; i++){
@@ -152,6 +122,47 @@ namespace MqUtil.Ms.Utils{
 				isMutated = isMutated.SubArray(valids);
 			}
 			responder?.Comment("Clustering proteins...4");
+		}
+
+		private static void Cluster(IndexedBitMatrix contains, string[][] proteinIds, string[][] pepSeqs, 
+			byte[][] isMutated)
+		{
+			int n = proteinIds.Length;
+			int count;
+			do
+			{
+				count = 0;
+				int start = 0;
+				while (true)
+				{
+					int container = -1;
+					int contained = -1;
+					for (int i = start; i < n; i++)
+					{
+						container = GetContainer(i, contains);
+						if (container != -1)
+						{
+							contained = i;
+							break;
+						}
+					}
+					if (container == -1)
+					{
+						break;
+					}
+					contains.SetRowFalse(contained);
+					contains.SetColumnFalse(contained);
+					pepSeqs[contained] = [];
+					if (isMutated != null)
+					{
+						isMutated[contained] = [];
+					}
+					proteinIds[container] = ArrayUtils.Concat(proteinIds[container], proteinIds[contained]);
+					proteinIds[contained] = [];
+					start = contained + 1;
+					count++;
+				}
+			} while (count > 0);
 		}
 		private static int GetContainer(int contained, IndexedBitMatrix contains){
 			int n = contains.RowCount;
