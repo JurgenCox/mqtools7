@@ -265,14 +265,13 @@ namespace MqUtil.Ms.Search {
 		}
 
 
-		public bool IsForward(ProteinSet proteinSet) {
-			return HasAForwardHit(proteinSet);
+		public bool IsForward(ProteinSet proteinSet){
+			return IsDipeptide ? HasAFullForwardHit(proteinSet) 
+				: HasAForwardHit(proteinSet);
 		}
-
 		public bool IsForward(bool[] isDecoy) {
 			return HasAForwardHit(isDecoy);
 		}
-
 		public bool HasAForwardHit(ProteinSet proteinSet) {
 			foreach (int t1 in Peptide1.ProteinIndices) {
 				if (!proteinSet.GetIsDecoy(t1)) {
@@ -306,8 +305,31 @@ namespace MqUtil.Ms.Search {
 			}
 			return false;
 		}
-
-		public bool IsHalfDecoy(ProteinSet proteinSet) {
+		private bool HasAFullForwardHit(ProteinSet proteinSet)
+		{
+			bool isTargetA = false;
+			bool isTargetB = false;
+			foreach (int t1 in Peptide1.ProteinIndices)
+			{
+				if (!proteinSet.GetIsDecoy(t1))
+				{
+					isTargetA = true;
+				}
+			}
+			if (Peptide2 == null)
+			{
+				return isTargetA;
+			}
+			foreach (int t2 in Peptide2.ProteinIndices)
+			{
+				if (!proteinSet.GetIsDecoy(t2))
+				{
+					isTargetB = true;
+				}
+			}
+			return isTargetA && isTargetB;
+		}
+        public bool IsHalfDecoy(ProteinSet proteinSet) {
 			return HasAHalfDecoyHit(proteinSet);
 		}
 
@@ -319,20 +341,15 @@ namespace MqUtil.Ms.Search {
 					isTargetA = true;
 				}
 			}
-			if (Peptide2 != null) {
-				foreach (int t2 in Peptide2.ProteinIndices) {
-					if (!proteinSet.GetIsDecoy(t2)) {
-						isTargetB = true;
-					}
-				}
-				if (isTargetA && !isTargetB) {
-					return true;
-				}
-				if (!isTargetA && isTargetB) {
-					return true;
+			if (Peptide2 == null){
+				return false;
+			}
+			foreach (int t2 in Peptide2.ProteinIndices) {
+				if (!proteinSet.GetIsDecoy(t2)) {
+					isTargetB = true;
 				}
 			}
-			return false;
+			return isTargetA !=isTargetB;
 		}
 		public bool IsFullDecoy(ProteinSet proteinSet) {
 			return HasFullDecoyHit(proteinSet);
@@ -343,7 +360,7 @@ namespace MqUtil.Ms.Search {
             bool isTargetA = Peptide1.ProteinIndices.Any(t1 => !proteinSet.GetIsDecoy(t1));
 
             if (Peptide2 == null)
-                return true;
+                return !isTargetA;
 
             bool isTargetB = Peptide2.ProteinIndices.Any(t2 => !proteinSet.GetIsDecoy(t2));
 

@@ -104,14 +104,11 @@ namespace PluginInterop.Python{
 		public static FileParam CreateCheckedFileParam(string interpreterLabel, string interpreterFilter,
 			TryFindExecutableDelegate tryFindExecutable, string[] packages){
 			CheckedFileParam fileParam = new CheckedFileParam(interpreterLabel, s => {
-				if (string.IsNullOrWhiteSpace(s)){
-					return null;
-				}
 				if (CheckPythonInstallation(s, packages)){
 					return new Tuple<string, bool>("Python installation was found", true);
 				}
 				return new Tuple<string, bool>(
-					"A valid Python installation was not found.\n" + "Could not import one or more packages:\n" +
+					"Please set the python.exe path at the tab 'Tools'\n" + "Also make sure to install the required packages:\n" +
 					string.Join(", ", packages), false);
 			})
 			{
