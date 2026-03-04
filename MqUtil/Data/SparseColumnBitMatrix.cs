@@ -40,5 +40,18 @@
 				}
 			}
 		}
+		public void SetColumnCompressed(int col, int[] inds)
+		{
+			data[col] = new SortedSet<int>(inds);
+		}
+		public int GetFirstInColumn(int col)
+		{
+			SortedSet<int> d = data[col];
+			if (d == null || d.Count == 0)
+			{
+				return -1;
+			}
+			return d.First();
+		}
 	}
 }

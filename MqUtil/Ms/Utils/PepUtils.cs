@@ -91,18 +91,24 @@ namespace MqUtil.Ms.Utils{
 					isMutated[i] = isMutated[i].SubArray(o);
 				}
 			}
-			SparseBitMatrix contains = new SparseRowBitMatrix(n, n);
-			ThreadDistributor td = new ThreadDistributor(nThreads, n, i =>
+			SparseColumnBitMatrix contains = new SparseColumnBitMatrix(n, n);
+			ThreadDistributor td = new ThreadDistributor(nThreads, n, j =>
 			{
-				string[] p1 = ps[i];
-				for (int j = 0; j < n; j++)
+				List<int> indices = new List<int>();
+				for (int i = 0; i < n; i++)
 				{
 					if (i == j)
 					{
 						continue;
 					}
-					contains.Set(i, j,
-						(!splitTaxonomy || taxIds[i].Equals(taxIds[j])) && Contains(p1, ps[j]));
+					if ((!splitTaxonomy || taxIds[i].Equals(taxIds[j])) && Contains(ps[i], ps[j]))
+					{
+						indices.Add(i);
+					}
+				}
+				if (indices.Count > 0)
+				{
+					contains.SetColumnCompressed(j, indices.ToArray());
 				}
 			});
 			responder?.Comment("Clustering proteins...1");
@@ -124,7 +130,7 @@ namespace MqUtil.Ms.Utils{
 			responder?.Comment("Clustering proteins...4");
 		}
 
-		private static void Cluster(SparseBitMatrix contains, string[][] proteinIds, string[][] pepSeqs, 
+		private static void Cluster(SparseColumnBitMatrix contains, string[][] proteinIds, string[][] pepSeqs, 
 			byte[][] isMutated)
 		{
 			int n = proteinIds.Length;
@@ -139,7 +145,7 @@ namespace MqUtil.Ms.Utils{
 					int contained = -1;
 					for (int i = start; i < n; i++)
 					{
-						container = GetContainer(i, contains);
+						container = contains.GetFirstInColumn(i);
 						if (container != -1)
 						{
 							contained = i;
@@ -164,14 +170,9 @@ namespace MqUtil.Ms.Utils{
 				}
 			} while (count > 0);
 		}
-		private static int GetContainer(int contained, SparseBitMatrix contains){
-			int n = contains.RowCount;
-			for (int i = 0; i < n; i++){
-				if (contains.Get(i, contained)){
-					return i;
-				}
-			}
-			return -1;
+		private static int GetContainer(int contained, SparseColumnBitMatrix contains)
+		{
+			return contains.GetFirstInColumn(contained);
 		}
 		private static bool Contains(string[] p1, ICollection<string> p2){
 			if (p2.Count > p1.Length){
