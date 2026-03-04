@@ -91,7 +91,7 @@ namespace MqUtil.Ms.Utils{
 					isMutated[i] = isMutated[i].SubArray(o);
 				}
 			}
-			IndexedBitMatrix contains = new IndexedBitMatrix(n, n);
+			SparseBitMatrix contains = new SparseRowBitMatrix(n, n);
 			ThreadDistributor td = new ThreadDistributor(nThreads, n, i =>
 			{
 				string[] p1 = ps[i];
@@ -124,7 +124,7 @@ namespace MqUtil.Ms.Utils{
 			responder?.Comment("Clustering proteins...4");
 		}
 
-		private static void Cluster(IndexedBitMatrix contains, string[][] proteinIds, string[][] pepSeqs, 
+		private static void Cluster(SparseBitMatrix contains, string[][] proteinIds, string[][] pepSeqs, 
 			byte[][] isMutated)
 		{
 			int n = proteinIds.Length;
@@ -164,7 +164,7 @@ namespace MqUtil.Ms.Utils{
 				}
 			} while (count > 0);
 		}
-		private static int GetContainer(int contained, IndexedBitMatrix contains){
+		private static int GetContainer(int contained, SparseBitMatrix contains){
 			int n = contains.RowCount;
 			for (int i = 0; i < n; i++){
 				if (contains.Get(i, contained)){

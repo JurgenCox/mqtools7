@@ -199,7 +199,7 @@ namespace PerseusPluginLib.Basic{
 			for (int i = 0; i < n; i++){
 				Array.Sort(geneIds[i]);
 			}
-			IndexedBitMatrix contains = new IndexedBitMatrix(n, n);
+			SparseBitMatrix contains = new SparseRowBitMatrix(n, n);
 			for (int i = 0; i < n; i++){
 				for (int j = 0; j < n; j++){
 					if (i == j){
@@ -246,7 +246,7 @@ namespace PerseusPluginLib.Basic{
 			rowInds = rowInds.SubArray(a);
 			geneIds = geneIds.SubArray(a);
 		}
-		private static int GetContainer(int contained, IndexedBitMatrix contains){
+		private static int GetContainer(int contained, SparseBitMatrix contains){
 			int n = contains.RowCount;
 			for (int i = 0; i < n; i++){
 				if (contains.Get(i, contained)){
