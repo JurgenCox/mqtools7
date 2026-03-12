@@ -28,8 +28,8 @@ namespace MqUtil.Ms.Data
             if (!keys.Contains(key))
             {
                 keys.Add(key);
-                string key_merged = key.Item1 + "_" + key.Item2;
-                writer.Write(key_merged);
+				writer.Write(key.Item1);
+                writer.Write(key.Item2);
                 FileUtils.Write(value1, writer);
 				FileUtils.Write(value2, writer);
             }
@@ -54,17 +54,22 @@ namespace MqUtil.Ms.Data
             int n = reader.ReadInt32();
             for (int i = 0; i < n; i++)
             {
-                string protIdMerged = reader.ReadString();
-                string[] parts = protIdMerged.Split('_');
-                Tuple<string, string> protId = new Tuple<string, string>(parts[0], parts[1]);
+                string protId1 = reader.ReadString();
+				string protId2 = reader.ReadString();
+                Tuple<string, string> protIds = new Tuple<string, string>(protId1, protId2);
+				Tuple<string, string> protIds2 = new Tuple<string, string>(protId1, protId2);
                 string[] peptides1 = FileUtils.ReadStringArray(reader);
 				string[] peptides2 = FileUtils.ReadStringArray(reader);
-                if (!map.ContainsKey(protId)){
-                    continue;
+                if (!map.ContainsKey(protIds)){
+					if(!map.ContainsKey(protIds2)){
+						continue;
+					}
+					protIds = protIds2;
+					(peptides1, peptides2) = (peptides2, peptides1);
                 }
-                result.Add(protId, new Dictionary<Tuple<string, string>, bool>());
-                Dictionary<Tuple<string, string>, bool> x = result[protId];
-                HashSet<Tuple<string, string>> peptideSearch = map[protId];
+                result.Add(protIds, new Dictionary<Tuple<string, string>, bool>());
+                Dictionary<Tuple<string, string>, bool> x = result[protIds];
+                HashSet<Tuple<string, string>> peptideSearch = map[protIds];
                 foreach (Tuple<string, string> s in peptideSearch)
                 {
                     bool contains1 = Array.BinarySearch(peptides1, s.Item1) >= 0;

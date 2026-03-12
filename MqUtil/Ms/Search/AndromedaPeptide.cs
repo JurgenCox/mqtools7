@@ -266,8 +266,7 @@ namespace MqUtil.Ms.Search {
 
 
 		public bool IsForward(ProteinSet proteinSet){
-			return IsDipeptide ? HasAFullForwardHit(proteinSet) 
-				: HasAForwardHit(proteinSet);
+			return HasAForwardHit(proteinSet);
 		}
 		public bool IsForward(bool[] isDecoy) {
 			return HasAForwardHit(isDecoy);
