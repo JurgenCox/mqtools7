@@ -1,9 +1,12 @@
+using MqApi.Matrix;
+
 namespace MqApi.Param{
 	public class FileParam : Parameter<string>{
 		public string Filter{ get; set; }
 		public Func<string, string> ProcessFileName{ get; set; }
 		public bool Save{ get; set; }
 		public EditorType Edit { get; set; }
+		public IMatrixData Data { get; set; }
 
 		/// <summary>
 		/// for xml serialization only

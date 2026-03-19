@@ -29,7 +29,7 @@ namespace PluginInterop{
 		/// </summary>
 		public virtual Parameters GetParameters(ref string errString){
 			Parameters parameters = new Parameters();
-			parameters.AddParameterGroup(SpecificParameters(ref errString), "Specific", false);
+			parameters.AddParameterGroup(SpecificParameters(ref errString, null), "Specific", false);
 			Parameter parametersPreviewButton = Utils.ParametersPreviewButton(parameters);
 			parameters.AddParameterGroup(new[]{ExecutableParam(), parametersPreviewButton}, "Generic", false);
 			return parameters;

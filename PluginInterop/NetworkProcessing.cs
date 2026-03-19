@@ -58,7 +58,7 @@ namespace PluginInterop{
 		/// and 'Additional arguments' parameters. Overwrite this function for custom structured parameters.
 		/// </summary>
 		protected virtual Parameter[] SpecificParameters(INetworkData data, ref string errString){
-			return new Parameter[]{CodeFileParam(), AdditionalArgumentsParam()};
+			return new Parameter[]{CodeFileParam(null), AdditionalArgumentsParam()};
 		}
 		/// <summary>
 		/// Create the parameters for the GUI with default of generic 'Executable', 'Code file' and 'Additional arguments' parameters.
@@ -67,7 +67,7 @@ namespace PluginInterop{
 		/// </summary>
 		public virtual Parameters GetParameters(INetworkData data, ref string errString){
 			Parameters parameters = new Parameters();
-			Parameter[] specificParameters = SpecificParameters(ref errString);
+			Parameter[] specificParameters = SpecificParameters(ref errString, null);
 			if (!string.IsNullOrEmpty(errString)){
 				return null;
 			}

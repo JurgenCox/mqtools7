@@ -81,7 +81,7 @@ namespace PluginInterop{
 		public virtual Parameters GetParameters(IMatrixData data, ref string errString){
 			Parameters parameters = new Parameters();
 
-			Parameter[] specificParameters = SpecificParameters(ref errString);
+			Parameter[] specificParameters = SpecificParameters(ref errString, data);
 			if (!string.IsNullOrEmpty(errString)){
 				return null;
 			}

@@ -97,8 +97,8 @@ namespace PluginInterop{
 			}
 			return executableParam;
 		}
-		protected virtual FileParam CodeFileParam(){
-			return new FileParam(CodeLabel){Filter = CodeFilter, Edit = Edit};
+		protected virtual FileParam CodeFileParam(IMatrixData mdata){
+			return new FileParam(CodeLabel){Filter = CodeFilter, Edit = Edit, Data = Edit != EditorType.None? mdata : null};
 		}
         /// <summary>
         /// Returns true and the path of the executable if found.
@@ -114,12 +114,12 @@ namespace PluginInterop{
 			return new StringParam(AdditionalArgumentsLabel);
 		}
 		public abstract EditorType Edit { get; }
-		protected virtual Parameter[] SpecificParameters(ref string errString)
+		protected Parameter[] SpecificParameters(ref string errString, IMatrixData mdata)
 		{
 			SingleChoiceWithSubParams scriptMode = new("Script mode", 1)
 			{
 				Values = ["External", "Internal"],
-				SubParams = [new Parameters(CodeFileParam()), new Parameters(new MultiStringParam("Script text"))]
+				SubParams = [new Parameters(CodeFileParam(mdata)), new Parameters(new MultiStringParam("Script text"))]
 
 			};
 			return [scriptMode, AdditionalArgumentsParam()];
@@ -129,7 +129,7 @@ namespace PluginInterop{
 			SingleChoiceWithSubParams scriptMode = new("Script mode", 1)
 			{
 				Values = ["External", "Internal"],
-				SubParams = [new Parameters(CodeFileParam()), new Parameters(new MultiStringParam("Script text"))]
+				SubParams = [new Parameters(CodeFileParam(mdata)), new Parameters(new MultiStringParam("Script text"))]
 
 			};
 			return [scriptMode, AdditionalArgumentsParam()];
