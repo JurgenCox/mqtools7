@@ -114,6 +114,7 @@ namespace MqUtil.Mol{
 				case "no rank":
 					return TaxonomyRank.NoRank;
 				case "superkingdom":
+				case "domain":
 					return TaxonomyRank.Superkingdom;
 				case "genus":
 					return TaxonomyRank.Genus;
@@ -172,7 +173,7 @@ namespace MqUtil.Mol{
 				case "cohort":
 					return TaxonomyRank.Cohort;
 				default:
-					throw new Exception("Unknown rank: " + s);
+					return TaxonomyRank.NoRank;
 			}
 		}
 
@@ -194,6 +195,47 @@ namespace MqUtil.Mol{
 				return n;
 			}
 			return "";
+		}
+
+		public bool ContainsNode(int taxid){
+			return taxId2Item.ContainsKey(taxid);
+		}
+
+		public string GetName(int taxid){
+			return taxId2Item.TryGetValue(taxid, out TaxonomyItem it) ? it.GetScientificName() : "";
+		}
+
+		public string GetRank(int taxid){
+			return taxId2Item.TryGetValue(taxid, out TaxonomyItem it) ? it.Rank.ToString().ToLowerInvariant() : "";
+		}
+
+		public IEnumerable<int> GetAncestors(int taxid){
+			if (!taxId2Item.TryGetValue(taxid, out TaxonomyItem cur)){
+				yield break;
+			}
+			const int maxDepth = 50;
+			for (int i = 0; i < maxDepth; i++){
+				int parent = cur.ParentTaxId;
+				if (parent == cur.TaxId){
+					yield break;
+				}
+				yield return parent;
+				if (!taxId2Item.TryGetValue(parent, out cur)){
+					yield break;
+				}
+			}
+		}
+
+		public bool IsDescendantOf(int taxid, int ancestor){
+			if (taxid == ancestor){
+				return true;
+			}
+			foreach (int anc in GetAncestors(taxid)){
+				if (anc == ancestor){
+					return true;
+				}
+			}
+			return false;
 		}
 		public static string[] GetScientificNames(int[] id) {
 			string[] result = new string[id.Length];

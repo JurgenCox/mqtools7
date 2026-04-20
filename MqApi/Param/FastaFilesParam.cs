@@ -25,6 +25,13 @@ namespace MqApi.Param{
 			HasVariationData = hasVariationData;
 			HasModifications = hasModifications;
 		}
+		protected FastaFilesParam(string name, string help, string url, bool visible, string[][] value,
+			string[][] default1, bool hasVariationData, bool hasModifications, bool hasMetaproteomics) : base(name, help,
+			url, visible, value, default1){
+			HasVariationData = hasVariationData;
+			HasModifications = hasModifications;
+			HasMetaproteomics = hasMetaproteomics;
+		}
 		public override void Read(BinaryReader reader){
 			base.Read(reader);
 			Value = FileUtils.Read2DStringArray(reader);
@@ -37,6 +44,7 @@ namespace MqApi.Param{
 		}
 		public bool HasVariationData{ get; set; }
 		public bool HasModifications{ get; set; }
+		public bool HasMetaproteomics{ get; set; }
 		public override string StringValue{
 			get => StringUtils.Concat(";", ",", Value);
 			set{
@@ -58,7 +66,8 @@ namespace MqApi.Param{
 		public override float Height => 200f;
 		public override ParamType Type => ParamType.Server;
 		public override object Clone(){
-			return new FastaFilesParam(Name, Help, Url, Visible, Value, Default, HasVariationData, HasModifications);
+			return new FastaFilesParam(Name, Help, Url, Visible, Value, Default, HasVariationData, HasModifications,
+				HasMetaproteomics);
 		}
 	}
 }

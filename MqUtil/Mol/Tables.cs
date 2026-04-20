@@ -164,6 +164,27 @@ namespace MqUtil.Mol{
 			return !Databases.ContainsKey(s) ? "" : Databases[s].Taxid;
 		}
 
+		internal static string GetKoParseRule(string path){
+			string s = path.Contains(Path.DirectorySeparatorChar)
+				? path.Substring(path.LastIndexOf(Path.DirectorySeparatorChar) + 1)
+				: path;
+			return !Databases.ContainsKey(s) ? "" : (Databases[s].KoParseRule ?? "");
+		}
+
+		internal static string GetCogParseRule(string path){
+			string s = path.Contains(Path.DirectorySeparatorChar)
+				? path.Substring(path.LastIndexOf(Path.DirectorySeparatorChar) + 1)
+				: path;
+			return !Databases.ContainsKey(s) ? "" : (Databases[s].CogParseRule ?? "");
+		}
+
+		internal static string GetEcParseRule(string path){
+			string s = path.Contains(Path.DirectorySeparatorChar)
+				? path.Substring(path.LastIndexOf(Path.DirectorySeparatorChar) + 1)
+				: path;
+			return !Databases.ContainsKey(s) ? "" : (Databases[s].EcParseRule ?? "");
+		}
+
 		public static string[] GetEnzymes(){
 			string[] tmp = Enzymes.Keys.ToArray();
 			Array.Sort(tmp);
