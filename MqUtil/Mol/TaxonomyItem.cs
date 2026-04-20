@@ -1,16 +1,15 @@
 ﻿namespace MqUtil.Mol{
 	public class TaxonomyItem{
-		private readonly int parentTaxId;
 		private int divisionId;
 		private int geneticCodeId;
 		private int mitoGeneticCodeId;
 		private readonly List<string> names = new List<string>();
 		private readonly List<TaxonomyNameType> nameTypes = new List<TaxonomyNameType>();
 
-		public TaxonomyItem(int taxId, int parentTaxId, TaxonomyRank rank, int divisionId, int geneticCodeId,
+		public TaxonomyItem(int taxId, int ParentTaxId, TaxonomyRank rank, int divisionId, int geneticCodeId,
 			int mitoGeneticCodeId){
 			this.TaxId = taxId;
-			this.parentTaxId = parentTaxId;
+			this.ParentTaxId = ParentTaxId;
 			this.Rank = rank;
 			this.divisionId = divisionId;
 			this.geneticCodeId = geneticCodeId;
@@ -19,6 +18,7 @@
 
 		public TaxonomyRank Rank { get; }
 		public int TaxId { get; }
+		public int ParentTaxId { get; }
 
 		public void AddName(string name, TaxonomyNameType nameType){
 			names.Add(name);
@@ -38,10 +38,10 @@
 			if (rank1 == Rank){
 				return this;
 			}
-			if (!taxonomyItems.taxId2Item.ContainsKey(parentTaxId)){
+			if (!taxonomyItems.taxId2Item.ContainsKey(ParentTaxId)){
 				return null;
 			}
-			TaxonomyItem parent = taxonomyItems.taxId2Item[parentTaxId];
+			TaxonomyItem parent = taxonomyItems.taxId2Item[ParentTaxId];
 			return parent.GetParentOfRank(taxonomyItems, rank1);
 		}
 	}

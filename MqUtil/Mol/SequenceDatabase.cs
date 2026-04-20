@@ -46,11 +46,20 @@ namespace MqUtil.Mol{
 		public string ModificationParseRule { get; set; }
 
 		/// <summary>
-		/// Regular expression which describes how to parse the fasta sequence header to 
+		/// Regular expression which describes how to parse the fasta sequence header to
 		/// obtain the string containing definition of taxonomies.
 		/// </summary>
 		[XmlAttribute("taxonomy_parse_rule")]
 		public string TaxonomyParseRule { get; set; }
+
+		[XmlAttribute("ko_parse_rule")]
+		public string KoParseRule { get; set; }
+
+		[XmlAttribute("cog_parse_rule")]
+		public string CogParseRule { get; set; }
+
+		[XmlAttribute("ec_parse_rule")]
+		public string EcParseRule { get; set; }
 
 		/// <summary>
 		/// The human readable species of this database which should be the NCBI entry name
