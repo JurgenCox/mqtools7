@@ -1,4 +1,5 @@
-﻿using MqUtil.Mol;
+﻿using MqUtil.Annotation;
+using MqUtil.Mol;
 namespace MqUtil.Util {
 	public abstract class InputParameter {
 		public string Name { get; }
@@ -14,6 +15,7 @@ namespace MqUtil.Util {
 		public abstract string ElementTypeName { get; }
 		public abstract object DefaultValue { get; }
 		public abstract bool IsFastaFileInfo { get; }
+		public abstract bool IsAnnotationFileInfo { get; }
 		public abstract bool IsIsobaricLabelInfo { get; }
 	}
 
@@ -47,6 +49,9 @@ namespace MqUtil.Util {
 				if (t == typeof(FastaFileInfo)) {
 					return "FastaFileInfo";
 				}
+				if (t == typeof(AnnotationFileInfo)) {
+					return "AnnotationFileInfo";
+				}
 				if (t == typeof(IsobaricLabelInfo)) {
 					return "IsobaricLabelInfo";
 				}
@@ -69,6 +74,15 @@ namespace MqUtil.Util {
 					return Type.GetElementType() == typeof(FastaFileInfo);
 				}
 				return Type == typeof(FastaFileInfo);
+			}
+		}
+
+		public override bool IsAnnotationFileInfo {
+			get {
+				if (IsArray) {
+					return Type.GetElementType() == typeof(AnnotationFileInfo);
+				}
+				return Type == typeof(AnnotationFileInfo);
 			}
 		}
 	}

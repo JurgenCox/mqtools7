@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using MqApi.Util;
+using MqUtil.Annotation;
 using MqUtil.Mol;
 using MqUtil.Util;
 namespace MqUtil.Base {
@@ -38,6 +39,22 @@ namespace MqUtil.Base {
 				return (FastaFileInfo[])x;
 			} catch (Exception) {
 				return new FastaFileInfo[0];
+			}
+		}
+
+		private static AnnotationFileInfo[] GetAnnotationFileInfoArray(InputParameter item, object o) {
+			FieldInfo field = o.GetType().GetField(item.VariableName);
+			object x;
+			if (field != null) {
+				x = field.GetValue(o);
+			} else {
+				PropertyInfo prop = o.GetType().GetProperty(item.VariableName);
+				x = prop.GetValue(o);
+			}
+			try {
+				return (AnnotationFileInfo[])x;
+			} catch (Exception) {
+				return new AnnotationFileInfo[0];
 			}
 		}
 
@@ -115,6 +132,11 @@ namespace MqUtil.Base {
 							WriteFastaFileInfo(writer, baseIndent + indent, val.ElementTypeName, o1);
 						}
 					}
+				} else if (val.IsAnnotationFileInfo) {
+					AnnotationFileInfo[] info = GetAnnotationFileInfoArray(val, obj) ?? new AnnotationFileInfo[0];
+					foreach (AnnotationFileInfo o1 in info) {
+						WriteAnnotationFileInfo(writer, baseIndent + indent, val.ElementTypeName, o1);
+					}
 				} else if (val.IsIsobaricLabelInfo) {
 					IsobaricLabelInfo[] info = GetIsobaricLabelInfoArray(val, obj);
 					if (verboseIsobaricLabels) {
@@ -146,6 +168,14 @@ namespace MqUtil.Base {
 			writer.WriteLine(indent1 + "<" + name + ">");
 			foreach (InputParameter ip in ffi.vals) {
 				WriteElement(writer, indent1 + indent, ip.Name, GetScalar(ip, ffi));
+			}
+			writer.WriteLine(indent1 + "</" + name + ">");
+		}
+
+		private static void WriteAnnotationFileInfo(TextWriter writer, string indent1, string name, AnnotationFileInfo afi) {
+			writer.WriteLine(indent1 + "<" + name + ">");
+			foreach (InputParameter ip in afi.vals) {
+				WriteElement(writer, indent1 + indent, ip.Name, GetScalar(ip, afi));
 			}
 			writer.WriteLine(indent1 + "</" + name + ">");
 		}
