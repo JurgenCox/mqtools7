@@ -5,7 +5,7 @@ namespace MqUtil.Ms.Instrument{
 		}
 		public override string Name => "Orbitrap";
 		public override double DiaInitialPrecMassTolPpmDefault => 10;
-		public override double DiaInitialFragMassTolPpmDefault => 20;
+		public override double DiaInitialFragMassTolPpmDefault => 15;
 		public override DiaQuantMethod DiaQuantMethodDefault => DiaQuantMethod.MixedLfqSplit;
 		public override bool UseMs1CentroidsDefault => false;
 		public override double DiaFragIntensityThreshold1Default => 0;
