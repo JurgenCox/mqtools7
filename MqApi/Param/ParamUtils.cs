@@ -202,7 +202,7 @@
 			if (p is MultiStringParam){
 				MultiStringParam q = (MultiStringParam) p;
 				MultiStringParam b = new MultiStringParam(q.Name, q.Value){
-					Help = q.Help, Visible = q.Visible, Default = q.Default, Url = q.Url
+					Help = q.Help, Visible = q.Visible, Default = q.Default, Url = q.Url, Edit = q.Edit, Data = q.Data
 				};
 				foreach (ValueChangedHandler act in q.GetPropertyChangedHandlers()){
 					b.ValueChanged += act;
