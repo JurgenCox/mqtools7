@@ -1,7 +1,19 @@
-﻿using MqApi.Num;
+﻿using MqApi.Matrix;
+using MqApi.Num;
 using MqApi.Util;
 namespace MqApi.Param{
 	public class MultiStringParam : Parameter<string[]>{
+		/// <summary>
+		/// When set to something other than <see cref="EditorType.None"/>, the GUI shows an
+		/// "Edit" button next to the text area that opens the inline code editor (same editor as
+		/// the external script <see cref="FileParam"/>). Used e.g. for the internal "Script text".
+		/// </summary>
+		public EditorType Edit{ get; set; }
+		/// <summary>
+		/// Matrix data passed to the inline editor so it can export the current table for
+		/// Inspect / Test runs. Only relevant when <see cref="Edit"/> is not None.
+		/// </summary>
+		public IMatrixData Data{ get; set; }
 		/// <summary>
 		/// for xml serialization only
 		/// </summary>
@@ -46,7 +58,7 @@ namespace MqApi.Param{
 		public override float Height => 150f;
 		public override ParamType Type => ParamType.Server;
 		public override object Clone(){
-			return new MultiStringParam(Name, Help, Url, Visible, Value, Default);
+			return new MultiStringParam(Name, Help, Url, Visible, Value, Default){Edit = Edit, Data = Data};
 		}
 	}
 }

@@ -48,6 +48,9 @@ namespace MqApi.Param{
 			Value = "";
 		}
 		public override ParamType Type => ParamType.Server;
+		// File parameters with an inline code editor use a two-row control (buttons on top,
+		// path box below), so they need more height than a plain single-line file parameter.
+		public override float Height => Edit != EditorType.None ? 56 : base.Height;
 		public override object Clone(){
 			return new FileParam(Name, Help, Url, Visible, Value, Default, Filter, ProcessFileName, Save, Edit);
 		}
