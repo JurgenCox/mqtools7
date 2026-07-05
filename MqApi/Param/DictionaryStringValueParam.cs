@@ -76,9 +76,11 @@ namespace MqApi.Param{
 		}
 		public override void ReadXml(XmlReader reader){
 			ReadBasicAttributes(reader);
-			XmlSerializer serializer = new XmlSerializer(typeof(SerializableDictionary<string, int>));
+			XmlSerializer serializer = new XmlSerializer(typeof(SerializableDictionary<string, string>));
+			reader.ReadStartElement();
 			reader.ReadStartElement("Value");
 			Value = ((SerializableDictionary<string, string>) serializer.Deserialize(reader)).ToDictionary();
+			reader.ReadEndElement();
 			reader.ReadEndElement();
 		}
 		public override object Clone(){
