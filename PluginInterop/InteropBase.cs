@@ -119,7 +119,7 @@ namespace PluginInterop{
 			SingleChoiceWithSubParams scriptMode = new("Script mode", 1)
 			{
 				Values = ["External", "Internal"],
-				SubParams = [new Parameters(CodeFileParam(mdata)), new Parameters(new MultiStringParam("Script text"))]
+				SubParams = [new Parameters(CodeFileParam(mdata)), new Parameters(ScriptTextParam(mdata))]
 
 			};
 			return [scriptMode, AdditionalArgumentsParam()];
@@ -129,10 +129,19 @@ namespace PluginInterop{
 			SingleChoiceWithSubParams scriptMode = new("Script mode", 1)
 			{
 				Values = ["External", "Internal"],
-				SubParams = [new Parameters(CodeFileParam(mdata)), new Parameters(new MultiStringParam("Script text"))]
+				SubParams = [new Parameters(CodeFileParam(mdata)), new Parameters(ScriptTextParam(mdata))]
 
 			};
 			return [scriptMode, AdditionalArgumentsParam()];
+		}
+		/// <summary>
+		/// Parameter holding the inline ("Internal" mode) script text. Carries the editor type and
+		/// matrix data so the GUI can offer the same inline code editor as the external script file.
+		/// </summary>
+		protected virtual MultiStringParam ScriptTextParam(IMatrixData mdata){
+			return new MultiStringParam("Script text"){
+				Edit = Edit, Data = Edit != EditorType.None ? mdata : null
+			};
 		}
         public static string GetAppDataPerseus()
 		{

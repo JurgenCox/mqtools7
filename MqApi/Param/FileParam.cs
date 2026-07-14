@@ -48,8 +48,17 @@ namespace MqApi.Param{
 			Value = "";
 		}
 		public override ParamType Type => ParamType.Server;
+		// File parameters with an inline code editor use a two-row control (buttons on top,
+		// path box below), so they need more height than a plain single-line file parameter.
+		public override float Height => Edit != EditorType.None ? 56 : base.Height;
 		public override object Clone(){
-			return new FileParam(Name, Help, Url, Visible, Value, Default, Filter, ProcessFileName, Save, Edit);
+			// Data (the live matrix reference for the inline code editor) must be carried across, otherwise
+			// cloning the parameters (e.g. EditParameters, template application) leaves the external "Script
+			// file" editor with no matrix data ("No matrix data is available"). MultiStringParam.Clone does
+			// the same for the internal "Script text" side.
+			return new FileParam(Name, Help, Url, Visible, Value, Default, Filter, ProcessFileName, Save, Edit){
+				Data = Data
+			};
 		}
 	}
 }
