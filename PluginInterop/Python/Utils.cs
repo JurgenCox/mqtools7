@@ -14,6 +14,13 @@ namespace PluginInterop.Python{
 				path = "python";
 				return true;
 			}
+			// Linux/Mac commonly ship the interpreter as "python3" (no bare "python"); try it before
+			// falling back to the Windows-only ProgramFiles/LocalAppData install-folder probe below.
+			if (CheckPythonInstallation("python3")){
+				Debug.WriteLine("Found 'python3' in PATH");
+				path = "python3";
+				return true;
+			}
 			List<string> folders =
 				new[]{
 					Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
