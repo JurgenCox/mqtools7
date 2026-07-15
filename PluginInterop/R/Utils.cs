@@ -50,7 +50,10 @@ namespace PluginInterop.R{
 		/// <param name="exeName"></param>
 		/// <returns></returns>
 		public static bool CheckRInstallation(string exeName){
-			if (!exeName.EndsWith("Rscript.exe")) { return false; }
+			// Accept both the Windows "Rscript.exe" and the bare "Rscript" (Linux/Mac, or a PATH-resolved
+			// name). Comparing the extension-less file name keeps the "is this really Rscript" guard while
+			// no longer rejecting the cross-platform executable name.
+			if (!Path.GetFileNameWithoutExtension(exeName).Equals("Rscript", StringComparison.OrdinalIgnoreCase)) { return false; }
 			try{
 				Process p = new Process{
 					StartInfo ={
