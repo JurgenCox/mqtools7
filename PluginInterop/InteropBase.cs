@@ -145,7 +145,23 @@ namespace PluginInterop{
 		}
         public static string GetAppDataPerseus()
 		{
+			// Per-user config folder, so several users can share one Perseus installation without
+			// overwriting each other's settings (RPath, pyPath, ...):
+			//   Windows   -> %LocalAppData%\Perseus
+			//   Linux/Mac -> $XDG_DATA_HOME/Perseus or ~/.local/share/Perseus (never the shared install dir)
 			string applicationFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+			if (string.IsNullOrEmpty(applicationFolder))
+			{
+				// SpecialFolder.LocalApplicationData can be empty in some headless/Unix environments; fall
+				// back to the user's home so the location stays user-specific rather than shared.
+				string home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+				if (string.IsNullOrEmpty(home))
+				{
+					home = Environment.GetEnvironmentVariable("HOME") ??
+					       Environment.GetEnvironmentVariable("USERPROFILE") ?? ".";
+				}
+				applicationFolder = Path.Combine(home, ".local", "share");
+			}
 			string perseusFolder = Path.Combine(applicationFolder, "Perseus");
 			if (!Directory.Exists(perseusFolder))
 			{
