@@ -58,6 +58,42 @@ namespace PluginInterop{
 			});
 		}
 		/// <summary>
+		/// Returns true if the executable can be started on this machine, either because it is an existing
+		/// file or because it is a bare name that resolves against PATH. <paramref name="resolved"/> is the
+		/// full path in that case.
+		/// </summary>
+		public static bool TryResolveExecutable(string exe, out string resolved){
+			resolved = exe;
+			if (string.IsNullOrWhiteSpace(exe)){
+				return false;
+			}
+			exe = exe.Trim();
+			if (File.Exists(exe)){
+				resolved = exe;
+				return true;
+			}
+			if (exe.IndexOfAny(new[]{'/', '\\'}) >= 0){
+				return false;
+			}
+			string[] extensions = OperatingSystem.IsWindows()
+				? (Environment.GetEnvironmentVariable("PATHEXT") ?? ".EXE;.CMD;.BAT").Split(';')
+				: new[]{""};
+			foreach (string folder in (Environment.GetEnvironmentVariable("PATH") ?? "").Split(Path.PathSeparator)){
+				string dir = folder.Trim().Trim('"');
+				if (string.IsNullOrEmpty(dir) || dir.IndexOfAny(Path.GetInvalidPathChars()) >= 0){
+					continue;
+				}
+				foreach (string extension in extensions){
+					string candidate = Path.Combine(dir, exe + extension);
+					if (File.Exists(candidate)){
+						resolved = candidate;
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+		/// <summary>
 		/// Runs the executable with the provided arguments. Returns the exit code of the process,
 		/// where 0 indicates success.
 		/// </summary>
@@ -83,7 +119,13 @@ namespace PluginInterop{
 				Debug.WriteLine(error.Data);
 				errorData.Add(error.Data);
 			};
-			process.Start();
+			try{
+				process.Start();
+			} catch (Exception e){
+				errorString = $"Could not start '{remoteExe}'. {e.Message}";
+				process.Dispose();
+				return -1;
+			}
 			process.BeginErrorReadLine();
 			process.BeginOutputReadLine();
 			process.WaitForExit();

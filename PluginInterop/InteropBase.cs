@@ -1,5 +1,6 @@
 using MqApi.Matrix;
 using MqApi.Param;
+using MqApi.Util;
 
 namespace PluginInterop{
 	/// <summary>
@@ -30,34 +31,60 @@ namespace PluginInterop{
 		/// </summary>
 		protected virtual string CodeFilter => "Script";
 		/// <summary>
+		/// Name of the hidden parameter carrying a copy of the script text. It is not shown in the GUI;
+		/// it exists so a saved session can be opened on a machine where the script path does not exist.
+		/// </summary>
+		protected virtual string ScriptTextLabel => "Script text";
+		/// <summary>
+		/// Extension used when a script has to be materialized on disk.
+		/// </summary>
+		protected virtual string CodeExtension =>
+			Edit switch{
+				EditorType.CodeR => ".R",
+				EditorType.CodePython => ".py",
+				_ => ".txt"
+			};
+		/// <summary>
 		/// Unstructured parameters label in GUI.
 		/// These parameters circumvent the usual XML serialization of parameters and are meant for simple scripts.
 		/// </summary>
 		protected virtual string AdditionalArgumentsLabel => "Additional arguments";
-		protected virtual bool TryGetCodeFile(Parameters param, out string codeFile, out ScriptMode scriptMode){
-			ParameterWithSubParams<int> scriptModeParam = param.GetParamWithSubParams<int>("Script mode");
-			scriptMode = (ScriptMode)scriptModeParam.Value;
-			Parameters paramsModel = scriptModeParam.GetSubParameters();
-			codeFile = Path.Combine(Path.GetTempPath(), $"Perseus_{Path.GetRandomFileName()}");
-			if (scriptMode == ScriptMode.Internal)
-			{
-				string[] scriptText = paramsModel.GetParam<string[]>("Script text").Value;
-				StreamWriter writer = new(codeFile);
-				foreach (string text in scriptText)
-				{
-					writer.WriteLine(text);
-				}
-				writer.Close();
+		/// <summary>
+		/// Resolves the script file to run. A script is always backed by a file, so when the stored path
+		/// is empty or gone (a session written on another machine, or a script that was only ever typed
+		/// into the editor) the stored <see cref="ScriptTextLabel"/> is written into
+		/// <see cref="GetScriptFilesFolder"/> and the path parameter is repointed at it.
+		/// </summary>
+		protected virtual bool ResolveCodeFile(Parameters param, out string codeFile, out string errString){
+			errString = null;
+			Parameter<string> pathParam = param.GetParam<string>(CodeLabel);
+			codeFile = pathParam.Value;
+			if (!string.IsNullOrWhiteSpace(codeFile) && File.Exists(codeFile)){
+				return true;
 			}
-			else
-			{
-				codeFile = paramsModel.GetParam<string>(CodeLabel).Value;
-				if (string.IsNullOrEmpty(codeFile) || !File.Exists(codeFile))
-				{
-					return false;
-				}
+			string[] scriptText = param.GetParamNoException(ScriptTextLabel) is Parameter<string[]> textParam
+				? textParam.Value
+				: null;
+			if (scriptText == null || scriptText.All(string.IsNullOrWhiteSpace)){
+				errString = string.IsNullOrWhiteSpace(codeFile)
+					? "No script has been selected. Use 'Select' to pick a script file, or 'Edit' to write one."
+					: $"The script file '{codeFile}' was not found on this machine and this step carries no " +
+					  "stored script text to fall back on.";
+				return false;
 			}
-			return true;
+			try{
+				string baseName = string.IsNullOrWhiteSpace(codeFile)
+					? "script"
+					: Path.GetFileNameWithoutExtension(codeFile);
+				codeFile = FileUtils.GetNextAvailableFileName(Path.Combine(GetScriptFilesFolder(), baseName),
+					CodeExtension);
+				File.WriteAllLines(codeFile, scriptText);
+				pathParam.Value = codeFile;
+				return true;
+			} catch (Exception ex){
+				errString = $"The stored script text could not be written to disk: {ex.Message}";
+				return false;
+			}
 		}
 		protected virtual bool TryGetCodeFile(Parameters param, out string codeFile)
 		{
@@ -88,6 +115,30 @@ namespace PluginInterop{
 			return param.GetParam<string>(InterpreterLabel).Value;
 		}
 		/// <summary>
+		/// Resolves the interpreter stored in the parameters against this machine. A session saved on one
+		/// machine keeps the interpreter it was configured with (e.g. "python" on Windows), which need not
+		/// exist elsewhere (Linux/Mac usually only have "python3"), so fall back to <see cref="TryFindExecutable"/>.
+		/// </summary>
+		protected bool TryResolveExecutable(Parameters param, out string exe, out string errString){
+			errString = null;
+			exe = GetExectuable(param);
+			if (string.IsNullOrWhiteSpace(exe)){
+				errString = remoteExeNotSpecified;
+				return false;
+			}
+			if (Utils.TryResolveExecutable(exe, out string resolved)){
+				exe = resolved;
+				return true;
+			}
+			if (TryFindExecutable(out string fallback) && Utils.TryResolveExecutable(fallback, out string resolvedFallback)){
+				exe = resolvedFallback;
+				return true;
+			}
+			errString = $"The executable '{exe}' configured in this step was not found on this machine and no " +
+			            $"replacement could be located. " + remoteExeNotSpecified;
+			return false;
+		}
+		/// <summary>
 		/// FileParam for specifying the executable. See <see cref="GetExectuable"/>.
 		/// </summary>
 		protected virtual FileParam ExecutableParam(){
@@ -116,32 +167,19 @@ namespace PluginInterop{
 		public abstract EditorType Edit { get; }
 		protected Parameter[] SpecificParameters(ref string errString, IMatrixData mdata)
 		{
-			SingleChoiceWithSubParams scriptMode = new("Script mode", 1)
-			{
-				Values = ["External", "Internal"],
-				SubParams = [new Parameters(CodeFileParam(mdata)), new Parameters(ScriptTextParam(mdata))]
-
-			};
-			return [scriptMode, AdditionalArgumentsParam()];
+			return [CodeFileParam(mdata), ScriptTextParam(), AdditionalArgumentsParam()];
 		}
 		protected virtual Parameter[] SpecificParameters(IMatrixData mdata,ref string errString)
 		{
-			SingleChoiceWithSubParams scriptMode = new("Script mode", 1)
-			{
-				Values = ["External", "Internal"],
-				SubParams = [new Parameters(CodeFileParam(mdata)), new Parameters(ScriptTextParam(mdata))]
-
-			};
-			return [scriptMode, AdditionalArgumentsParam()];
+			return [CodeFileParam(mdata), ScriptTextParam(), AdditionalArgumentsParam()];
 		}
 		/// <summary>
-		/// Parameter holding the inline ("Internal" mode) script text. Carries the editor type and
-		/// matrix data so the GUI can offer the same inline code editor as the external script file.
+		/// Hidden copy of the script text, kept beside the script path so a session stays runnable when
+		/// it is opened where that path does not exist. Never edited directly - the script file is the
+		/// single source of truth and this is refreshed from it whenever the session is saved.
 		/// </summary>
-		protected virtual MultiStringParam ScriptTextParam(IMatrixData mdata){
-			return new MultiStringParam("Script text"){
-				Edit = Edit, Data = Edit != EditorType.None ? mdata : null
-			};
+		protected virtual MultiStringParam ScriptTextParam(){
+			return new MultiStringParam(ScriptTextLabel){Visible = false};
 		}
         public static string GetAppDataPerseus()
 		{
@@ -168,6 +206,19 @@ namespace PluginInterop{
 				Directory.CreateDirectory(perseusFolder);
 			}
 			return perseusFolder;
+		}
+		/// <summary>
+		/// Where scripts are materialized when they have no file of their own yet: a script typed into
+		/// the editor, or one restored from a session whose original path does not exist here.
+		/// </summary>
+		public static string GetScriptFilesFolder()
+		{
+			string scriptFilesFolder = Path.Combine(GetAppDataPerseus(), "scriptFiles");
+			if (!Directory.Exists(scriptFilesFolder))
+			{
+				Directory.CreateDirectory(scriptFilesFolder);
+			}
+			return scriptFilesFolder;
 		}
     }
 }

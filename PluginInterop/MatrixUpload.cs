@@ -36,14 +36,14 @@ namespace PluginInterop{
 		}
         public void LoadData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
 			ref IDocumentData[] documents, ProcessInfo processInfo){
-			string remoteExe = GetExectuable(param);
-			if (string.IsNullOrWhiteSpace(remoteExe)){
-				processInfo.ErrString = remoteExeNotSpecified;
+			if (!TryResolveExecutable(param, out string remoteExe, out string exeErrString)){
+				processInfo.ErrString = exeErrString;
+				return;
 			}
 			string outFile = Path.GetTempFileName();
-			if (!TryGetCodeFile(param, out string codeFile, out ScriptMode scriptMode))
+			if (!ResolveCodeFile(param, out string codeFile, out string codeErrString))
 			{
-				processInfo.ErrString = $"Code file '{codeFile}' was not found";
+				processInfo.ErrString = codeErrString;
 				return;
 			}
             if (supplTables == null){
@@ -57,10 +57,6 @@ namespace PluginInterop{
 			if (Utils.RunProcess(remoteExe, args, processInfo.Status, out string processInfoErrString) != 0){
 				processInfo.ErrString = processInfoErrString;
 				return;
-			}
-			if (scriptMode == ScriptMode.Internal)
-			{
-				File.Delete(codeFile);
 			}
             PerseusUtil.ReadMatrixFromFile(mdata, processInfo, outFile, '\t');
 			for (int i = 0; i < NumSupplTables; i++){

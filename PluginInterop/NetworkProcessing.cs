@@ -25,16 +25,16 @@ namespace PluginInterop{
 		public virtual DataType[] SupplDataTypes => Enumerable.Repeat(DataType.Matrix, NumSupplTables).ToArray();
 		public void ProcessData(INetworkData ndata, Parameters param, ref IData[] supplData,
 			ProcessInfo processInfo){
-			string remoteExe = param.GetParam<string>(InterpreterLabel).Value;
-			if (string.IsNullOrWhiteSpace(remoteExe)){
-				processInfo.ErrString = remoteExeNotSpecified;
+			if (!TryResolveExecutable(param, out string remoteExe, out string exeErrString)){
+				processInfo.ErrString = exeErrString;
+				return;
 			}
 			string inFolder = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 			FolderFormat.Write(ndata, inFolder);
 			string outFolder = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-			if (!TryGetCodeFile(param, out string codeFile, out ScriptMode scriptMode))
+			if (!ResolveCodeFile(param, out string codeFile, out string codeErrString))
 			{
-				processInfo.ErrString = $"Code file '{codeFile}' was not found";
+				processInfo.ErrString = codeErrString;
 				return;
 			}
             string[] suppFiles = SupplDataTypes.Select(Utils.CreateTemporaryPath).ToArray();
@@ -44,10 +44,6 @@ namespace PluginInterop{
 			if (Utils.RunProcess(remoteExe, args, processInfo.Status, out string processInfoErrString) != 0){
 				processInfo.ErrString = processInfoErrString;
 				return;
-			}
-			if (scriptMode == ScriptMode.Internal)
-			{
-				File.Delete(codeFile);
 			}
             ndata.Clear();
 			FolderFormat.Read(ndata, outFolder, processInfo);

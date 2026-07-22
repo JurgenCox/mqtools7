@@ -29,39 +29,28 @@ namespace PluginInterop.Python{
 		}
 		public override EditorType Edit => EditorType.CodePython;
 
-		// Gets the user's Python code and turns it into a temporary runtime wrapper script.
+		// Reads the user's Python script and turns it into a temporary runtime wrapper script.
 		//
-		// Internal mode stores code directly in the parameter.
-		// External mode stores a path to a .py file, so we read that file first.
-		//
-		// We return the generated wrapper path instead of the original user script path.
-		// The wrapper provides df, runs the user's code, checks result_df, and writes the Perseus output.
-		protected override bool TryGetCodeFile(Parameters param, out string codeFile, out ScriptMode scriptMode)
+		// We return the generated wrapper path instead of the user's own script path. The wrapper
+		// provides df, runs the user's code, checks result_df, and writes the Perseus output.
+		protected override bool ResolveCodeFile(Parameters param, out string codeFile, out string errString)
 		{
-			codeFile = string.Empty;
-			scriptMode = ScriptMode.Internal;
-
-			ParameterWithSubParams<int> scriptModeParam = param.GetParamWithSubParams<int>("Script mode");
-			scriptMode = (ScriptMode)scriptModeParam.Value;
-			Parameters paramsModel = scriptModeParam.GetSubParameters();
-
+			if (!base.ResolveCodeFile(param, out string userCodeFile, out errString))
+			{
+				codeFile = userCodeFile;
+				return false;
+			}
 			string rawUserCode;
-			if (scriptMode == ScriptMode.Internal)
+			try
 			{
-				string[] scriptText = paramsModel.GetParam<string[]>("Script text").Value;
-				rawUserCode = string.Join(Environment.NewLine, scriptText ?? Array.Empty<string>());
+				rawUserCode = File.ReadAllText(userCodeFile);
 			}
-			else
+			catch (Exception ex)
 			{
-				string rawCodeFile = paramsModel.GetParam<string>(CodeLabel).Value;
-				if (string.IsNullOrWhiteSpace(rawCodeFile) || !File.Exists(rawCodeFile))
-				{
-					return false;
-				}
-
-				rawUserCode = File.ReadAllText(rawCodeFile);
+				codeFile = userCodeFile;
+				errString = $"The script file '{userCodeFile}' could not be read: {ex.Message}";
+				return false;
 			}
-
 			codeFile = BuildWrappedPythonRuntimeScript(rawUserCode, NumSupplTables);
 			return true;
 		}
@@ -72,10 +61,9 @@ namespace PluginInterop.Python{
 		public override void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
 			ref IDocumentData[] documents, ProcessInfo processInfo)
 		{
-			string remoteExe = param.GetParam<string>(InterpreterLabel).Value;
-			if (string.IsNullOrWhiteSpace(remoteExe))
+			if (!TryResolveExecutable(param, out string remoteExe, out string exeErrString))
 			{
-				processInfo.ErrString = remoteExeNotSpecified;
+				processInfo.ErrString = exeErrString;
 				return;
 			}
 
@@ -84,9 +72,9 @@ namespace PluginInterop.Python{
 
 			string outFile = Path.GetTempFileName();
 
-			if (!TryGetCodeFile(param, out string codeFile, out ScriptMode scriptMode))
+			if (!ResolveCodeFile(param, out string codeFile, out string codeErrString))
 			{
-				processInfo.ErrString = $"Code file '{codeFile}' was not found";
+				processInfo.ErrString = codeErrString;
 				return;
 			}
 
