@@ -35,14 +35,19 @@ namespace PluginInterop.R{
 		public static bool GetRScriptPath(out string path){
 			string perseusFolder = InteropBase.GetAppDataPerseus();
 			string rPathFile = Path.Combine(perseusFolder, "RPath");
-			if (!File.Exists(rPathFile)){
-				path = "Please set the Rscript path";
-				return false;
+			if (File.Exists(rPathFile)){
+				StreamReader reader = new StreamReader(rPathFile);
+				path = reader.ReadLine();
+				reader.Close();
+				if (!string.IsNullOrWhiteSpace(path) && global::PluginInterop.Utils.TryResolveExecutable(path, out _)){
+					return true;
+				}
 			}
-			StreamReader reader = new StreamReader(rPathFile);
-			path = reader.ReadLine();
-			reader.Close();
-			return true;
+			if (TryFindRExecutable(out path)){
+				return true;
+			}
+			path = "Please set the Rscript path";
+			return false;
 		}
 		/// <summary>
 		/// Returns true if executable path points to python and can import perseuspy.

@@ -26,16 +26,16 @@ namespace PluginInterop{
 		public virtual DataType[] SupplDataTypes => Enumerable.Repeat(DataType.Matrix, NumSupplTables).ToArray();
 		public void ProcessData(IMatrixData inData, INetworkData outData, Parameters param,
 			ref IData[] supplData, ProcessInfo processInfo){
-			string remoteExe = param.GetParam<string>(InterpreterLabel).Value;
-			if (string.IsNullOrWhiteSpace(remoteExe)){
-				processInfo.ErrString = remoteExeNotSpecified;
+			if (!TryResolveExecutable(param, out string remoteExe, out string exeErrString)){
+				processInfo.ErrString = exeErrString;
+				return;
 			}
 			string inFile = Path.GetTempFileName();
 			PerseusUtils.WriteMatrixToFile(inData, inFile);
 			string outFolder = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-			if (!TryGetCodeFile(param, out string codeFile, out ScriptMode scriptMode))
+			if (!ResolveCodeFile(param, out string codeFile, out string codeErrString))
 			{
-				processInfo.ErrString = $"Code file '{codeFile}' was not found";
+				processInfo.ErrString = codeErrString;
 				return;
 			}
             string[] suppFiles = SupplDataTypes.Select(Utils.CreateTemporaryPath).ToArray();
@@ -45,10 +45,6 @@ namespace PluginInterop{
 			if (Utils.RunProcess(remoteExe, args, processInfo.Status, out string processInfoErrString) != 0){
 				processInfo.ErrString = processInfoErrString;
 				return;
-			}
-			if (scriptMode == ScriptMode.Internal)
-			{
-				File.Delete(codeFile);
 			}
             FolderFormat.Read(outData, outFolder, processInfo);
 			supplData = Utils.ReadSupplementaryData(suppFiles, SupplDataTypes, processInfo, inData);
@@ -60,7 +56,7 @@ namespace PluginInterop{
 		/// </summary>
 		public virtual Parameters GetParameters(IMatrixData data, ref string errString){
 			Parameters parameters = new Parameters();
-			Parameter[] specificParameters = SpecificParameters(ref errString, null);
+			Parameter[] specificParameters = SpecificParameters(ref errString, data);
 			if (!string.IsNullOrEmpty(errString)){
 				return null;
 			}

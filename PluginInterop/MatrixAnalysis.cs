@@ -18,18 +18,17 @@ namespace PluginInterop{
 		public virtual string Heading => "External";
 		public virtual DataType[] SupplDataTypes => new DataType[0];
 		public IAnalysisResult AnalyzeData(IMatrixData mdata, Parameters param, ProcessInfo processInfo){
-			string remoteExe = param.GetParam<string>(InterpreterLabel).Value;
-			if (string.IsNullOrWhiteSpace(remoteExe)){
-				processInfo.ErrString = remoteExeNotSpecified;
+			if (!TryResolveExecutable(param, out string remoteExe, out string exeErrString)){
+				processInfo.ErrString = exeErrString;
 				return null;
 			}
 			string inFile = Path.GetTempFileName();
 			PerseusUtils.WriteMatrixToFile(mdata, inFile);
 			string[] outFiles = new[]{Path.GetTempFileName()}
 				.Concat(SupplDataTypes.Select(dataType => Path.GetTempFileName())).ToArray();
-			if (!TryGetCodeFile(param, out string codeFile, out ScriptMode scriptMode))
+			if (!ResolveCodeFile(param, out string codeFile, out string codeErrString))
 			{
-				processInfo.ErrString = $"Code file '{codeFile}' was not found";
+				processInfo.ErrString = codeErrString;
 				return null;
 			}
             string commandLineArguments = GetCommandLineArguments(param);
@@ -37,10 +36,6 @@ namespace PluginInterop{
 			if (Utils.RunProcess(remoteExe, args, processInfo.Status, out string errorString) != 0){
 				processInfo.ErrString = errorString;
 				return null;
-			}
-			if (scriptMode == ScriptMode.Internal)
-			{
-				File.Delete(codeFile);
 			}
             return GenerateResult(outFiles, mdata, processInfo);
 		}
@@ -51,7 +46,7 @@ namespace PluginInterop{
         /// </summary>
         public virtual Parameters GetParameters(IMatrixData data, ref string errString){
 			Parameters parameters = new Parameters();
-			Parameter[] specificParameters = SpecificParameters(ref errString, null);
+			Parameter[] specificParameters = SpecificParameters(ref errString, data);
 			if (!string.IsNullOrEmpty(errString)){
 				return null;
 			}
