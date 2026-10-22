@@ -253,6 +253,7 @@ namespace MqUtil.Ms.Data{
 			writer.Close();
 			names2.Clear();
 			lengths2.Clear();
+			decoy2.Clear();
 			filePos2.Clear();
 			GC.Collect();
 		}
