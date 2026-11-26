@@ -58,6 +58,7 @@ namespace PluginInterop.Python{
 		// Runs Python processing using the generated runtime wrapper.
 		// The wrapper makes the runtime behavior match the inline editor: user code receives df
 		// and must assign result_df.
+		// Built-in scripts (TryGetCodeFile overridden) run as is, without the wrapper.
 		public override void ProcessData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
 			ref IDocumentData[] documents, ProcessInfo processInfo)
 		{
@@ -72,7 +73,7 @@ namespace PluginInterop.Python{
 
 			string outFile = Path.GetTempFileName();
 
-			if (!ResolveCodeFile(param, out string codeFile, out string codeErrString))
+			if (!ResolveScriptToRun(param, out string codeFile, out string codeErrString))
 			{
 				processInfo.ErrString = codeErrString;
 				return;
