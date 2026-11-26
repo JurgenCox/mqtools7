@@ -109,8 +109,6 @@ namespace MqUtil.Ms.Utils {
 				CTermFragInfo1[i] = new LinkSiteInfo();
 			}
 
-			AddIntraLinks(ntermFrag1, ctermFrag1, ntermFragMass1, ctermFragMass1,
-				NTermFragInfo1, CTermFragInfo1, intraLinks1, crossLinker);
 			AddUnsatLinks(ntermFragMass1, ctermFragMass1, unsatLinks1, crossLinker.HydrolyzedMass, 
 				NTermFragInfo1, CTermFragInfo1);
 
@@ -129,14 +127,14 @@ namespace MqUtil.Ms.Utils {
 					CTermFragInfo2 [j] = new LinkSiteInfo();
 				}
 
-				AddIntraLinks(ntermFrag2, ctermFrag2, ntermFragMass2, ctermFragMass2, 
-					NTermFragInfo2, CTermFragInfo2, intraLinks2, crossLinker);
 				AddUnsatLinks(ntermFragMass2, ctermFragMass2, unsatLinks2, crossLinker.HydrolyzedMass, NTermFragInfo2, CTermFragInfo2);
 				AddInterLinks(ntermFrag1, ctermFrag1, ntermFrag2, ctermFrag2, 
 					ntermFragMass1, ctermFragMass1, ntermFragMass2, ctermFragMass2,
 					ntermFragP1, ctermFragP1, ntermFragP2, ctermFragP2,
 					NTermFragInfo1, CTermFragInfo1, NTermFragInfo2, CTermFragInfo2,
 					crossLinker, interLinks);
+				AddIntraLinks(ntermFrag2, ctermFrag2, ntermFragMass2, ctermFragMass2, 
+					NTermFragInfo2, CTermFragInfo2, intraLinks2, crossLinker);
 
 				ntermFragInds2 = ArrayUtils.IndicesOf(ntermFrag2, true);
 				ctermFragInds2 = ArrayUtils.IndicesOf(ctermFrag2, true);
@@ -145,6 +143,8 @@ namespace MqUtil.Ms.Utils {
 				//ntermFragP2 = ntermFragP2.SubArray(ntermFragInds2);
 				//ctermFragP2 = ctermFragP2.SubArray(ctermFragInds2);
 			}
+			AddIntraLinks(ntermFrag1, ctermFrag1, ntermFragMass1, ctermFragMass1,
+				NTermFragInfo1, CTermFragInfo1, intraLinks1, crossLinker);
 			ntermFragInds1 = ArrayUtils.IndicesOf(ntermFrag1, true);
 			ctermFragInds1 = ArrayUtils.IndicesOf(ctermFrag1, true);
 			//ntermFragMass1 = ntermFragMass1.SubArray(ntermFragInds1);
@@ -310,6 +310,19 @@ namespace MqUtil.Ms.Utils {
 				int max = Math.Max(link1, link2);
 				
 				ProcessIntra( ntermFragMass, ctermFragMass, ntermInfo, ctermInfo, min, max, crosslinker);
+			}
+			if (crosslinker.IsMsCleavableCrosslinker){
+				return;
+			}
+			foreach (Tuple<int, int> intraLink in intraLinks){
+				int link1 = intraLink.Item1 == 0 ? intraLink.Item1 : intraLink.Item1 - 1;
+				int link2 = intraLink.Item2 == 0 ? intraLink.Item2 : intraLink.Item2 - 1;
+				int min = Math.Max(0, Math.Min(link1, link2));
+				int max = Math.Min(ntermFragMass.Count, Math.Max(link1, link2));
+				for (int i = min; i < max; i++){
+					ctermFragMass[ctermFragMass.Count - 1 - i] = -1;
+					ntermFragMass[i] = -1;
+				}
 			}
 		}
 

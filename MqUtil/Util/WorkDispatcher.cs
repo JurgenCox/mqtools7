@@ -167,24 +167,74 @@ namespace MqUtil.Util{
 			psi.RedirectStandardError = true;
 			psi.RedirectStandardOutput = true;
 			Process externalProcess = new Process{StartInfo = psi};
-			externalProcess.OutputDataReceived += (sender, eventArgs) => { Console.WriteLine(eventArgs.Data); };
-			externalProcess.ErrorDataReceived += (sender, eventArgs) => { Console.Error.WriteLine(eventArgs.Data); };
 			return externalProcess;
 		}
 		private void ProcessSingleRunExternalProcess(int taskIndex, int threadIndex){
 			IList<string> args = GetCommandLineArgs(taskIndex);
+			DateTime start = DateTime.Now;
 			Process externalProcess = GetProcess(args);
+			StringBuilder stdErr = new StringBuilder();
+			externalProcess.OutputDataReceived += (sender, eventArgs) =>{
+				if (eventArgs.Data != null){
+					Console.WriteLine(eventArgs.Data);
+				}
+			};
+			externalProcess.ErrorDataReceived += (sender, eventArgs) =>{
+				if (eventArgs.Data != null){
+					Console.Error.WriteLine(eventArgs.Data);
+					lock (stdErr){
+						stdErr.AppendLine(eventArgs.Data);
+					}
+				}
+			};
 			externalProcesses[threadIndex] = externalProcess;
-			externalProcesses[threadIndex].Start();
-			int processid = externalProcesses[threadIndex].Id;
-			externalProcesses[threadIndex].WaitForExit();
-			string stdErr = externalProcess.StandardError.ReadToEnd();
-			string stdOut = externalProcess.StandardOutput.ReadToEnd();
-			int exitcode = externalProcesses[threadIndex].ExitCode;
-			externalProcesses[threadIndex].Close();
+			externalProcess.Start();
+			externalProcess.BeginOutputReadLine();
+			externalProcess.BeginErrorReadLine();
+			externalProcess.WaitForExit();
+			int exitcode = externalProcess.ExitCode;
+			externalProcess.Close();
 			if (exitcode != 0){
-				//throw new Exception("Exception during execution of external process: " + processid + " " + stdErr);
+				string message;
+				lock (stdErr){
+					message = stdErr.ToString();
+				}
+				ReportAbnormalTermination(args, start, exitcode, message);
 			}
+		}
+		/// <summary>
+		/// A task process that dies without writing its own status file (killed, out of memory, unhandled
+		/// exception on a worker thread) would otherwise leave the job marked as still running and let the
+		/// workflow continue with missing output files. Write the error file on its behalf.
+		/// </summary>
+		private static void ReportAbnormalTermination(IList<string> args, DateTime start, int exitcode, string stdErr){
+			try{
+				string[] taskArgs = args.Skip(1).Select(Unwrap).ToArray();
+				if (taskArgs.Length < 5 || string.IsNullOrEmpty(taskArgs[0]) || !Directory.Exists(taskArgs[0])){
+					return;
+				}
+				string infoFolder = taskArgs[0];
+				string title = taskArgs[3];
+				string statusFile = Responder.GetStatusFile(title, infoFolder);
+				if (File.Exists(statusFile + ".error.txt") || File.Exists(statusFile + ".finished.txt")){
+					return;
+				}
+				string description = string.IsNullOrEmpty(taskArgs[4])
+					? StringUtils.Concat(" ", taskArgs)
+					: taskArgs[4];
+				string message = "The task process terminated unexpectedly with exit code " + exitcode + ".";
+				if (!string.IsNullOrEmpty(stdErr)){
+					message += " " + StringUtils.Replace(stdErr, new[]{"\r", "\n", "\t"}, "_");
+				}
+				MqProcessInfo.ErrorLog(infoFolder, title, description, start, DateTime.Now, message);
+			} catch (Exception){
+			}
+		}
+		private static string Unwrap(string arg){
+			if (arg.Length > 1 && arg.StartsWith("\"") && arg.EndsWith("\"")){
+				return arg.Substring(1, arg.Length - 2);
+			}
+			return arg;
 		}
 		private string GetName(int taskIndex){
 			return GetFilename() + " (" + IntString(taskIndex + 1, NTasksCached) + "/" + NTasksCached + ")";

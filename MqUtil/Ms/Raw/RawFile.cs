@@ -10,7 +10,7 @@ namespace MqUtil.Ms.Raw{
 		/// <summary>
 		/// Counter incremented when format used for index files is changed, to avoid using stale index files.
 		/// </summary>
-		private const int indexVersion = 32;
+		private const int indexVersion = 33;
 		/// <summary>
 		/// Backing field to the Path property.
 		/// </summary>

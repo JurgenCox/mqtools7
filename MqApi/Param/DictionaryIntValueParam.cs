@@ -44,9 +44,16 @@ namespace MqApi.Param{
 		}
 		public static Dictionary<string, int> DictionaryFromString(string s){
 			Dictionary<string, int> result = new Dictionary<string, int>();
-			foreach (string s1 in s.Split('\r')){
+			if (string.IsNullOrWhiteSpace(s)){
+				return result;
+			}
+			// ToString writes one AppendLine per entry, so the text is CRLF-separated and ends with a newline.
+			foreach (string s1 in s.Split('\r', '\n')){
 				string[] w = s1.Trim().Split('\t');
-				result.Add(w[0], Parser.Int(w[1]));
+				if (w.Length < 2 || w[0].Length == 0){
+					continue;
+				}
+				result[w[0]] = Parser.Int(w[1]);
 			}
 			return result;
 		}

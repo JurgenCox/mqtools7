@@ -1,4 +1,4 @@
-using MqApi.Num;
+﻿using MqApi.Num;
 using MqApi.Util;
 using MqUtil.Mol;
 using MqUtil.Ms.Enums;
@@ -217,9 +217,10 @@ namespace MqUtil.Data{
 		private int[] GetBestMatchesForCharge(int n, byte ch, double[] cmz, double[] intens, double isoPatternDiff,
 			bool checkMassDeficit){
 			int[] bestMatches = new int[0];
+			bool sortedCmz = IsNonDecreasing(cmz);
 			for (int i = 0; i < n; i++){
 				int[] matches = GetMatches(ch, i, correlationThreshold, tmpCorr, cmz, intens, isotopeValleyFactor,
-					matchTol, matchTolInPpm, isoPatternDiff, checkMassDeficit);
+					matchTol, matchTolInPpm, isoPatternDiff, checkMassDeficit, sortedCmz);
 				if (matches.Length > bestMatches.Length){
 					bestMatches = matches;
 				}
@@ -275,6 +276,8 @@ namespace MqUtil.Data{
 			const int ncheck = 1000000;
 			NeighbourList neighbourList = new NeighbourList(); // which elements are "neighbors" to which other elements
 			int npeaks = centerMz.Length;
+			int[] rangeStart = new int[maxCharge + 1];
+			int[] rangeEnd = new int[maxCharge + 1];
 			if (!emptyResults) {
 				for (int jOrdered = 0; jOrdered < npeaks; jOrdered++) {
 					if (jOrdered % 10000 == 0) {
@@ -289,7 +292,12 @@ namespace MqUtil.Data{
 					int timeMaxJ = maxRtIndsOrdered[jOrdered];
 					int start = ArrayUtils.CeilIndex(centerMzOrdered, massJ - 1.03);
 					int j = o[jOrdered];
-					for (int iOrdered = start; iOrdered < jOrdered; iOrdered++) {
+					int nRanges = start < 0
+						? 0
+						: CandidateRanges(massJ, me2, minCharge, maxCharge, centerMzOrdered, start, jOrdered,
+							rangeStart, rangeEnd);
+					for (int r = 0; r < nRanges; r++){
+					for (int iOrdered = rangeStart[r]; iOrdered < rangeEnd[r]; iOrdered++) {
 						int timeMinI = minRtIndsOrdered[iOrdered];
 						int timeMaxI = maxRtIndsOrdered[iOrdered];
 						if (isDia) {
@@ -319,6 +327,7 @@ namespace MqUtil.Data{
 						}
 						neighbourList.Add(i, j);
 					}
+					}
 					if (jOrdered > 0 && jOrdered % ncheck == 0) {
 						CalcClusters(neighbourList, clusterWriter, ref clusterCount, massJ - 2.2, centerMz);
 					}
@@ -329,6 +338,60 @@ namespace MqUtil.Data{
 			CalcClusters(neighbourList, clusterWriter, ref clusterCount, double.MaxValue, centerMz);
 			clusterWriter.Close();
 			return clusterCount;
+		}
+
+		/// <summary>
+		/// The index ranges that can contain a partner of massJ: one m/z window per charge, taken from the condition
+		/// in FitsMassDifference and widened by windowEps, merged where they touch. Ascending charge gives ascending
+		/// ranges, so peaks are still visited in the order a full scan of [start, jOrdered) would, and each one still
+		/// passes through the unchanged filters.
+		/// </summary>
+		private static int CandidateRanges(double massJ, double me2, byte minCharge, byte maxCharge,
+			double[] centerMzOrdered, int start, int jOrdered, int[] rangeStart, int[] rangeEnd){
+			int n = 0;
+			int firstCharge = Math.Max((int) minCharge, 1);
+			for (int charge = firstCharge; charge <= maxCharge; charge++){
+				double sigma = Math.Sqrt(s2 + me2 * charge * charge);
+				double lo = massJ - (MolUtil.isotopePatternDiff + sigma) / charge - windowEps;
+				double hi = massJ - (MolUtil.isotopePatternDiff - sigma) / charge + windowEps;
+				int a = LowerBound(centerMzOrdered, start, jOrdered, lo);
+				int b = UpperBound(centerMzOrdered, a, jOrdered, hi);
+				if (b <= a){
+					continue;
+				}
+				if (n > 0 && a <= rangeEnd[n - 1]){
+					rangeEnd[n - 1] = b;
+				} else{
+					rangeStart[n] = a;
+					rangeEnd[n] = b;
+					n++;
+				}
+			}
+			return n;
+		}
+
+		private static int LowerBound(double[] sorted, int from, int to, double value){
+			while (from < to){
+				int mid = (int) (((uint) from + (uint) to) >> 1);
+				if (sorted[mid] < value){
+					from = mid + 1;
+				} else{
+					to = mid;
+				}
+			}
+			return from;
+		}
+
+		private static int UpperBound(double[] sorted, int from, int to, double value){
+			while (from < to){
+				int mid = (int) (((uint) from + (uint) to) >> 1);
+				if (sorted[mid] > value){
+					to = mid;
+				} else{
+					from = mid + 1;
+				}
+			}
+			return from;
 		}
 
 		/// <summary>
@@ -462,16 +525,24 @@ namespace MqUtil.Data{
 		/// <param name="centerMz">the masses corresponding to the indices in neighborList</param>
 		public static void CalcClusters(NeighbourList neighbourList, BinaryWriter clusterWriter, ref int clusterCount,
 			double mlimit, IList<double> centerMz){
+			// A component that stays is disjoint from every component removed later in this pass, so reaching it
+			// again from another of its keys would recompute the same component and the same decision.
+			HashSet<int> staying = null;
 			foreach (int i in neighbourList.Keys){
-				if (!neighbourList.IsEmptyAt(i)){
+				if (!neighbourList.IsEmptyAt(i) && (staying == null || !staying.Contains(i))){
 					int[] currentCluster = neighbourList.GetClusterAtNoRemove(i);
 					int[] c = SortByMass(currentCluster, centerMz);
-					// currentCluster is now an int array of the indices which are neighbors, or neighbors of neighbors, 
+					// currentCluster is now an int array of the indices which are neighbors, or neighbors of neighbors,
 					// of index i, ordered by mass
 					if (centerMz[c[c.Length - 1]] < mlimit){
 						neighbourList.RemoveCluster(currentCluster);
 						FileUtils.Write(c, clusterWriter);
 						clusterCount++;
+					} else{
+						staying ??= new HashSet<int>();
+						foreach (int member in currentCluster){
+							staying.Add(member);
+						}
 					}
 				}
 			}
@@ -508,6 +579,7 @@ namespace MqUtil.Data{
 		}
 
 		private static readonly double s2 = Molecule.sulphurShift * Molecule.sulphurShift;
+		private const double windowEps = 1e-9;
 
 		/// <summary>
 		/// Whether there is some charge state (between minCharge and maxCharge) 
@@ -543,7 +615,65 @@ namespace MqUtil.Data{
 		/// <summary>
 		/// Time integral of the product of the smoothed intensities, normalized to the rms values.
 		/// </summary>
+		/// <summary>
+		/// The same three sums as the dense version below, taken over the scan indices only: a position where one
+		/// profile is zero contributes an exact zero to every sum, so the result is bit for bit identical. Repeated
+		/// scan indices keep the last value, as assigning into the dense profile did.
+		/// </summary>
 		private static double CalcCorrelation(SlimPeak1 pI, SlimPeak1 pJ){
+			int[] indI = pI.ScanIndices;
+			int[] indJ = pJ.ScanIndices;
+			float[] smintI = pI.SmoothIntensities;
+			float[] smintJ = pJ.SmoothIntensities;
+			if (indI.Length == 0 || indJ.Length == 0){
+				return CalcCorrelationDense(pI, pJ);
+			}
+			double xx = 0;
+			double yy = 0;
+			double xy = 0;
+			int a = 0;
+			int b = 0;
+			while (a < indI.Length || b < indJ.Length){
+				int ia = a < indI.Length ? indI[a] : int.MaxValue;
+				int ib = b < indJ.Length ? indJ[b] : int.MaxValue;
+				if (ia == ib){
+					while (a + 1 < indI.Length && indI[a + 1] == ia){
+						a++;
+					}
+					while (b + 1 < indJ.Length && indJ[b + 1] == ib){
+						b++;
+					}
+					double wx = smintI[a];
+					double wy = smintJ[b];
+					xx += wx * wx;
+					yy += wy * wy;
+					xy += wx * wy;
+					a++;
+					b++;
+				} else if (ia < ib){
+					while (a + 1 < indI.Length && indI[a + 1] == ia){
+						a++;
+					}
+					double wx = smintI[a];
+					xx += wx * wx;
+					a++;
+				} else{
+					while (b + 1 < indJ.Length && indJ[b + 1] == ib){
+						b++;
+					}
+					double wy = smintJ[b];
+					yy += wy * wy;
+					b++;
+				}
+				if (a < indI.Length && indI[a] < ia || b < indJ.Length && indJ[b] < ib){
+					return CalcCorrelationDense(pI, pJ);
+				}
+			}
+			double denom = xx * yy;
+			return denom > 0.0 ? xy / Math.Sqrt(denom) : 0;
+		}
+
+		private static double CalcCorrelationDense(SlimPeak1 pI, SlimPeak1 pJ){
 			int[] indI = pI.ScanIndices;
 			int[] indJ = pJ.ScanIndices;
 			float[] smintI = pI.SmoothIntensities;
@@ -562,17 +692,26 @@ namespace MqUtil.Data{
 			return ArrayUtils.Cosine(profileI, profileJ);
 		}
 
+		private static bool IsNonDecreasing(double[] values){
+			for (int i = 1; i < values.Length; i++){
+				if (values[i] < values[i - 1]){
+					return false;
+				}
+			}
+			return true;
+		}
+
 		public static int[] GetMatches(int charge, int startIndex, double threshold, double[][] corr, double[] masses,
 			double[] intensities, double isotopeValleyFactor, double matchTol, bool matchTolInPpm,
-			double isoPatternDiff, bool checkMassDeficit){
+			double isoPatternDiff, bool checkMassDeficit, bool sortedMasses = false){
 			double startMass = masses[startIndex];
 			if (checkMassDeficit && !MolUtil.IsSuitableMass((startMass - Molecule.massProton) * charge)){
 				return new int[0];
 			}
 			int[] upMatches = GetUpMatches(charge, startIndex, threshold, corr, masses, matchTol, matchTolInPpm,
-				isoPatternDiff);
+				isoPatternDiff, sortedMasses);
 			int[] downMatches = GetDownMatches(charge, startIndex, threshold, corr, masses, matchTol, matchTolInPpm,
-				isoPatternDiff);
+				isoPatternDiff, sortedMasses);
 			int[] result = MergeMatches(upMatches, downMatches, startIndex);
 			double[] profile = intensities.SubArray(result);
 			if (IsLocalMinimum(profile, downMatches.Length)){
@@ -631,14 +770,14 @@ namespace MqUtil.Data{
 		}
 
 		private static int[] GetDownMatches(int charge, int startIndex, double threshold, double[][] corr,
-			double[] masses, double matchTol, bool matchTolInPpm, double isoPatternDiff){
+			double[] masses, double matchTol, bool matchTolInPpm, double isoPatternDiff, bool sortedMasses){
 			double startMass = masses[startIndex];
 			int[] downMatches = new int[masses.Length];
 			int downMatchesLen = 0;
 			for (int i = 1;; i++){
 				double m = startMass - i * isoPatternDiff / charge;
 				double err = matchTolInPpm ? matchTol * m * 1e-6 : matchTol;
-				int[] fits = CollectFittingMasses(startIndex, m, masses, err, charge);
+				int[] fits = CollectFittingMasses(startIndex, m, masses, err, charge, sortedMasses);
 				if (fits.Length == 0){
 					break;
 				}
@@ -678,14 +817,14 @@ namespace MqUtil.Data{
 		}
 
 		private static int[] GetUpMatches(int charge, int startIndex, double threshold, double[][] corr,
-			double[] masses, double matchTol, bool matchTolInPpm, double isoPatternDiff){
+			double[] masses, double matchTol, bool matchTolInPpm, double isoPatternDiff, bool sortedMasses){
 			double startMass = masses[startIndex];
 			int[] upMatches = new int[masses.Length];
 			int upMatchesLen = 0;
 			for (int i = 1;; i++){
 				double m = startMass + i * isoPatternDiff / charge;
 				double err = matchTolInPpm ? matchTol * m * 1e-6 : matchTol;
-				int[] fits = CollectFittingMasses(startIndex, m, masses, err, charge);
+				int[] fits = CollectFittingMasses(startIndex, m, masses, err, charge, sortedMasses);
 				if (fits.Length == 0){
 					break;
 				}
@@ -724,14 +863,25 @@ namespace MqUtil.Data{
 			return upMatches;
 		}
 
-		private static int[] CollectFittingMasses(int index, double m, IList<double> masses, double ppmErr, int charge){
+		private static int[] CollectFittingMasses(int index, double m, IList<double> masses, double ppmErr, int charge,
+			bool sortedMasses){
+			double error = Math.Sqrt(Molecule.sulphurShift * Molecule.sulphurShift / charge / charge + ppmErr * ppmErr);
 			List<int> fits = new List<int>();
+			if (sortedMasses && masses is double[] sorted){
+				for (int i = LowerBound(sorted, 0, sorted.Length, m - error - windowEps); i < sorted.Length; i++){
+					if (sorted[i] > m + error + windowEps){
+						break;
+					}
+					if (i != index && Math.Abs(m - sorted[i]) <= error){
+						fits.Add(i);
+					}
+				}
+				return fits.ToArray();
+			}
 			for (int i = 0; i < masses.Count; i++){
 				if (i == index){
 					continue;
 				}
-				double error =
-					Math.Sqrt(Molecule.sulphurShift * Molecule.sulphurShift / charge / charge + ppmErr * ppmErr);
 				if (Math.Abs(m - masses[i]) <= error){
 					fits.Add(i);
 				}
@@ -1006,13 +1156,12 @@ namespace MqUtil.Data{
 		}
 
 		public static void PrecalcIntensities(int isotopeClusterCount, Func<int, IsotopeCluster> getIsotopeCluster,
-			float[] intensities, Func<HashSet<int>, Dictionary<int, GenericPeak>> getCache){
-			const int capacity = 500000;
+			float[] intensities, Func<HashSet<int>, Dictionary<int, GenericPeak>> getCache, int capacity = 500000){
 			Dictionary<int, GenericPeak> cache = new Dictionary<int, GenericPeak>();
 			for (int i = 0; i < isotopeClusterCount; i++){
 				IsotopeCluster ic = getIsotopeCluster(i);
 				int[] members = ic.Members;
-				GenericPeak[] ps = new Peak[members.Length];
+				GenericPeak[] ps = new GenericPeak[members.Length];
 				for (int j = 0; j < ps.Length; j++){
 					if (!cache.ContainsKey(members[j])){
 						cache.Clear();

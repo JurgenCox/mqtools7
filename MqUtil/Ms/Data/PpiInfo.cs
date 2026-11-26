@@ -57,7 +57,7 @@ namespace MqUtil.Ms.Data
                 string protId1 = reader.ReadString();
 				string protId2 = reader.ReadString();
                 Tuple<string, string> protIds = new Tuple<string, string>(protId1, protId2);
-				Tuple<string, string> protIds2 = new Tuple<string, string>(protId1, protId2);
+				Tuple<string, string> protIds2 = new Tuple<string, string>(protId2, protId1);
                 string[] peptides1 = FileUtils.ReadStringArray(reader);
 				string[] peptides2 = FileUtils.ReadStringArray(reader);
                 if (!map.ContainsKey(protIds)){
@@ -67,8 +67,10 @@ namespace MqUtil.Ms.Data
 					protIds = protIds2;
 					(peptides1, peptides2) = (peptides2, peptides1);
                 }
-                result.Add(protIds, new Dictionary<Tuple<string, string>, bool>());
-                Dictionary<Tuple<string, string>, bool> x = result[protIds];
+                if (!result.TryGetValue(protIds, out Dictionary<Tuple<string, string>, bool> x)){
+                    x = new Dictionary<Tuple<string, string>, bool>();
+                    result.Add(protIds, x);
+                }
                 HashSet<Tuple<string, string>> peptideSearch = map[protIds];
                 foreach (Tuple<string, string> s in peptideSearch)
                 {

@@ -1,0 +1,9 @@
+<Project>
+	<PropertyGroup>
+		<!-- Optimize in every configuration, Debug included. These assemblies are shipped as
+		     binaries (MaxQuant's net\DLLs, Perseus plugins), and the scripts that distribute them
+		     copy bin\Debug, so an unoptimized Debug build would otherwise reach users: correct
+		     results, but a large amount of speed lost with nothing to show that it happened. -->
+		<Optimize>true</Optimize>
+	</PropertyGroup>
+</Project>

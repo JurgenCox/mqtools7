@@ -1,3 +1,4 @@
+﻿using System.Runtime.ExceptionServices;
 namespace MqApi.Util{
 	public interface IThreadDistributor{
 		void Start();
@@ -15,6 +16,7 @@ namespace MqApi.Util{
         public Action<string> Comment { get; set; }
 		public int DelayMs{ get; set; }
 		private int tasksDone;
+		private ExceptionDispatchInfo workerException;
 		public ThreadDistributor(int nThreads, int nTasks, Action<int> calculation) : this(nThreads, nTasks,
 			(itask, ithread) => calculation(itask)){
 		}
@@ -50,6 +52,7 @@ namespace MqApi.Util{
 			for (int i = 0; i < nThreads; i++){
 				allWorkThreads[i].Join();
 			}
+			workerException?.Throw();
 		}
 		private void Work(object ithread){
 			ReportProgress?.Invoke(0);
@@ -77,7 +80,10 @@ namespace MqApi.Util{
                     foreach (CancellationTokenSource source in sources) {
                         source?.Cancel();
                     }
-                    throw e;
+					lock (locker){
+						workerException ??= ExceptionDispatchInfo.Capture(e);
+					}
+                    return;
                 }
                 lock (locker){
 					tasksDone++;

@@ -380,6 +380,10 @@ namespace MqUtil.Ms.Utils{
 		public static int[][] GetNonredGroupInds2(string[] proteinIds, string[][] peptideSeq,
 			bool splitTaxonomy, string[] taxIds)
 		{
+			if (peptideSeq.Length == 0)
+			{
+				return new int[0][];
+			}
 			string[] pepConcat = new string[peptideSeq.Length];
 			for (int i = 0; i < peptideSeq.Length; i++)
 			{

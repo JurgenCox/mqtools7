@@ -351,6 +351,33 @@ namespace MqUtil.Mol{
 					result.Add(Path.Combine(FileUtils.GetConfigPath(), file));
 				}
 			}
+			result.AddRange(GetExtraModificationFiles());
+			return result.ToArray();
+		}
+
+		public const string extraModificationsVariable = "MAXQUANT_MODIFICATIONS";
+
+		public static string[] GetExtraModificationFiles(){
+			string paths = Environment.GetEnvironmentVariable(extraModificationsVariable);
+			if (string.IsNullOrEmpty(paths)){
+				return new string[0];
+			}
+			List<string> result = new List<string>();
+			foreach (string path in paths.Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries)){
+				if (Directory.Exists(path)){
+					string[] files = Directory.GetFiles(path).Where(f => {
+						string name = Path.GetFileName(f).ToUpper();
+						return name.StartsWith("MODIFICATIONS") && name.EndsWith(".XML");
+					}).ToArray();
+					Array.Sort(files);
+					result.AddRange(files);
+				} else if (File.Exists(path)){
+					result.Add(path);
+				} else{
+					throw new Exception("Modification file or folder '" + path + "' given in " +
+					                    extraModificationsVariable + " does not exist.");
+				}
+			}
 			return result.ToArray();
 		}
 
