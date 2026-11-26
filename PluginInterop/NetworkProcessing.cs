@@ -32,7 +32,7 @@ namespace PluginInterop{
 			string inFolder = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 			FolderFormat.Write(ndata, inFolder);
 			string outFolder = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-			if (!ResolveCodeFile(param, out string codeFile, out string codeErrString))
+			if (!ResolveScriptToRun(param, out string codeFile, out string codeErrString))
 			{
 				processInfo.ErrString = codeErrString;
 				return;
@@ -50,11 +50,10 @@ namespace PluginInterop{
 			supplData = Utils.ReadSupplementaryData(suppFiles, SupplDataTypes, processInfo, ndata);
         }
 		/// <summary>
-		/// Create the parameters for the GUI with default of generic 'Code file'
-		/// and 'Additional arguments' parameters. Overwrite this function for custom structured parameters.
+		/// Specific parameters shown in the GUI. Override to provide custom parameters.
 		/// </summary>
 		protected virtual Parameter[] SpecificParameters(INetworkData data, ref string errString){
-			return new Parameter[]{CodeFileParam(null), AdditionalArgumentsParam()};
+			return DefaultScriptParameters(null);
 		}
 		/// <summary>
 		/// Create the parameters for the GUI with default of generic 'Executable', 'Code file' and 'Additional arguments' parameters.
@@ -63,7 +62,7 @@ namespace PluginInterop{
 		/// </summary>
 		public virtual Parameters GetParameters(INetworkData data, ref string errString){
 			Parameters parameters = new Parameters();
-			Parameter[] specificParameters = SpecificParameters(ref errString, null);
+			Parameter[] specificParameters = SpecificParameters(data, ref errString);
 			if (!string.IsNullOrEmpty(errString)){
 				return null;
 			}

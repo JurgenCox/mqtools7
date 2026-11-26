@@ -29,10 +29,16 @@ namespace PluginInterop{
 		/// </summary>
 		public virtual Parameters GetParameters(ref string errString){
 			Parameters parameters = new Parameters();
-			parameters.AddParameterGroup(SpecificParameters(ref errString, null), "Specific", false);
+			parameters.AddParameterGroup(SpecificParameters(ref errString), "Specific", false);
 			Parameter parametersPreviewButton = Utils.ParametersPreviewButton(parameters);
 			parameters.AddParameterGroup(new[]{ExecutableParam(), parametersPreviewButton}, "Generic", false);
 			return parameters;
+		}
+		/// <summary>
+		/// Specific parameters shown in the GUI. Override to provide custom parameters.
+		/// </summary>
+		protected virtual Parameter[] SpecificParameters(ref string errString){
+			return DefaultScriptParameters(null);
 		}
         public void LoadData(IMatrixData mdata, Parameters param, ref IMatrixData[] supplTables,
 			ref IDocumentData[] documents, ProcessInfo processInfo){
@@ -41,7 +47,7 @@ namespace PluginInterop{
 				return;
 			}
 			string outFile = Path.GetTempFileName();
-			if (!ResolveCodeFile(param, out string codeFile, out string codeErrString))
+			if (!ResolveScriptToRun(param, out string codeFile, out string codeErrString))
 			{
 				processInfo.ErrString = codeErrString;
 				return;

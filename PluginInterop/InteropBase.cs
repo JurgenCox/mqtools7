@@ -1,3 +1,4 @@
+using System.Reflection;
 using MqApi.Matrix;
 using MqApi.Param;
 using MqApi.Util;
@@ -86,6 +87,9 @@ namespace PluginInterop{
 				return false;
 			}
 		}
+		/// <summary>
+		/// Override to supply a built-in script. The script then runs as is, without the script parameters.
+		/// </summary>
 		protected virtual bool TryGetCodeFile(Parameters param, out string codeFile)
 		{
 			codeFile = param.GetParam<string>(CodeLabel).Value;
@@ -93,6 +97,31 @@ namespace PluginInterop{
 			{
 				return false;
 			}
+			return true;
+		}
+		/// <summary>
+		/// True if the activity overrides <see cref="TryGetCodeFile"/>. Checked by reflection so that
+		/// already compiled plugins work too.
+		/// </summary>
+		protected bool UsesBundledScript => usesBundledScript ??= OverridesTryGetCodeFile(GetType());
+		private bool? usesBundledScript;
+		private static bool OverridesTryGetCodeFile(Type type){
+			MethodInfo method = type.GetMethod(nameof(TryGetCodeFile), BindingFlags.Instance | BindingFlags.NonPublic,
+				null, [typeof(Parameters), typeof(string).MakeByRefType()], null);
+			return method != null && method.DeclaringType != typeof(InteropBase);
+		}
+		/// <summary>
+		/// The script to run: the built-in script if there is one, otherwise <see cref="ResolveCodeFile"/>.
+		/// </summary>
+		protected bool ResolveScriptToRun(Parameters param, out string codeFile, out string errString){
+			if (!UsesBundledScript){
+				return ResolveCodeFile(param, out codeFile, out errString);
+			}
+			if (!TryGetCodeFile(param, out codeFile)){
+				errString = $"Code file '{codeFile}' was not found";
+				return false;
+			}
+			errString = null;
 			return true;
 		}
 
@@ -165,13 +194,19 @@ namespace PluginInterop{
 			return new StringParam(AdditionalArgumentsLabel);
 		}
 		public abstract EditorType Edit { get; }
-		protected Parameter[] SpecificParameters(ref string errString, IMatrixData mdata)
+		/// <summary>
+		/// The standard script parameters: script file, hidden script text and additional arguments.
+		/// </summary>
+		protected Parameter[] DefaultScriptParameters(IMatrixData mdata)
 		{
 			return [CodeFileParam(mdata), ScriptTextParam(), AdditionalArgumentsParam()];
 		}
-		protected virtual Parameter[] SpecificParameters(IMatrixData mdata,ref string errString)
+		/// <summary>
+		/// Specific parameters shown in the GUI. Override to provide custom parameters.
+		/// </summary>
+		protected virtual Parameter[] SpecificParameters(IMatrixData mdata, ref string errString)
 		{
-			return [CodeFileParam(mdata), ScriptTextParam(), AdditionalArgumentsParam()];
+			return DefaultScriptParameters(mdata);
 		}
 		/// <summary>
 		/// Hidden copy of the script text, kept beside the script path so a session stays runnable when

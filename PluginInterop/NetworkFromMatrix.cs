@@ -33,7 +33,7 @@ namespace PluginInterop{
 			string inFile = Path.GetTempFileName();
 			PerseusUtils.WriteMatrixToFile(inData, inFile);
 			string outFolder = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-			if (!ResolveCodeFile(param, out string codeFile, out string codeErrString))
+			if (!ResolveScriptToRun(param, out string codeFile, out string codeErrString))
 			{
 				processInfo.ErrString = codeErrString;
 				return;
@@ -56,7 +56,7 @@ namespace PluginInterop{
 		/// </summary>
 		public virtual Parameters GetParameters(IMatrixData data, ref string errString){
 			Parameters parameters = new Parameters();
-			Parameter[] specificParameters = SpecificParameters(ref errString, data);
+			Parameter[] specificParameters = SpecificParameters(data, ref errString);
 			if (!string.IsNullOrEmpty(errString)){
 				return null;
 			}
