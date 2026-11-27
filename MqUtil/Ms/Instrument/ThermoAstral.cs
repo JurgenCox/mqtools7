@@ -5,7 +5,7 @@ namespace MqUtil.Ms.Instrument{
 		}
 		public override string Name => "Astral";
 		public override double DiaInitialPrecMassTolPpmDefault => 10;
-		public override double DiaInitialFragMassTolPpmDefault => 15;
+		public override double DiaInitialFragMassTolPpmDefault => 7;
 		public override DiaQuantMethod DiaQuantMethodDefault => DiaQuantMethod.TopFragmentsAnnotLfqSplit;
 		public override bool UseMs1CentroidsDefault => true;
 		public override double DiaFragIntensityThreshold1Default => 0;
